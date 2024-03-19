@@ -31,7 +31,7 @@ void runFirstPass(char *fileName,
 
 
 
-    fclose(filePointer);
+    fclose(filePointer);s
     /*deallocateLabelListElements(labelList);
     deallocateLabelListElements(definitionList);*/
 }
