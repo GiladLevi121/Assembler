@@ -1,0 +1,3 @@
+D:/Gilad/labCourse/ASSEMBLER/cmake-build-debug/CMakeFiles/ASSEMBLER.dir
+D:/Gilad/labCourse/ASSEMBLER/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/Gilad/labCourse/ASSEMBLER/cmake-build-debug/CMakeFiles/rebuild_cache.dir
