@@ -27,7 +27,7 @@
 #define MAX_LABEL_LENGTH_AFTER_EXTERN 73
 #define MAX_NUMBER_LENGTH 74
 #define MAX_NUMBER_LENGTH_IN_DEFINE 72
-#define LINE_LENGTH 80
+#define INPUT_LINE_LENGTH 80
 #define LINE_LENGTH_WITH_N 81
 #define MAX_CHARS_IN_LINE 82
 
@@ -73,7 +73,7 @@ typedef enum {
         toMannyOperands,
         twoConsecutiveCommasFound,
         labelUsedIsNotDeclared,/*label used but not connected to any memory*/
-        lineLengthIsTooBIG
+        lineLengthIsTooLong
 } errorType;
 
 

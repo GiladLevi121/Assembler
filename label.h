@@ -28,10 +28,10 @@ typedef enum{
 typedef struct /*labelNode*/ {
     int PC;
     errorType labelError;
-    char title[LABEL_MAX_LENGTH_WITH_PADDING_CELL];
+    char title[MAX_CHARS_IN_LINE];
     propertyType thisLabelType;
     union {
-        int value;
+        char value[MEMORY_WORD_LENGTH];
         char codeImag[CHARS_TO_REPRESENT_LINE_IN_MEMORY];
         char dataImag[CHARS_TO_REPRESENT_LINE_IN_MEMORY];
     }content;
@@ -60,11 +60,12 @@ void setLabelTitle(labelOrDefinitionNode *, const assemblyLineCode* );
 size_t getLabelLengthWithLabelIdentifier(const labelOrDefinitionNode*);
 
 
+labelOrDefinitionNode* definitionNodeConstructor(const char *, const char *);
 /*------------------------------list functions------------------------------*/
 
 labelOrDefinitionList* labelOrDefinitionListConstructor();
 
-void addLabelNodeAtTheEnd(labelOrDefinitionList *, labelOrDefinitionNode *);
+void addLabelOrDefinitionNodeAtTheEnd(labelOrDefinitionList *, labelOrDefinitionNode *);
 
 /*linked list: labels, definitions, macros*/
 

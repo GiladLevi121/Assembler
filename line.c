@@ -18,7 +18,7 @@ lineStatus getContentStatus(assemblyLineCode *thisAssemblyLineCode){
     /*case that there are 80 char + /n in the 81nt => status is valid*/
     if((lineLength == LINE_LENGTH_WITH_N) && (thisAssemblyLineCode->content[lineLength]) == '\n')
         return thisLineStatus;
-    if(lineLength > LINE_LENGTH)
+    if(lineLength > INPUT_LINE_LENGTH)
         thisLineStatus = lineOutOfBounds;
     while (counter <= lineLength){
         if(!isspace(thisAssemblyLineCode->content[counter]))

@@ -93,10 +93,12 @@ char * getTokensUpToChar(const char* str, char knot){
 char* getTokenUpToWhiteSpace(const char* str){
     char *token = (char*)malloc(sizeof (char) * MAX_CHARS_IN_LINE);
     int counter = ZEROISE_COUNTER;
-    while(true){
+
+    while(counter < MAX_CHARS_IN_LINE){
         if(str[counter] == END_OF_STRING || isspace(str[counter]))
             break;
         if(!isspace(str[counter])){
+            /*if (counter == )*/
             token[counter] = str[counter];
             token[counter + ANOTHER_CELL] = END_OF_STRING;
         }

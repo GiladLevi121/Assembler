@@ -54,6 +54,14 @@ size_t getLabelLengthWithLabelIdentifier(const labelOrDefinitionNode* thisLabelN
 }
 
 
+labelOrDefinitionNode* definitionNodeConstructor(const char *enteredTitle, const char* enteredValue){
+    labelOrDefinitionNode *newDefinition = (labelOrDefinitionNode *) malloc(sizeof(labelOrDefinitionNode));
+    strcpy(newDefinition->title, enteredTitle);
+    strcpy(newDefinition->content.value, enteredValue);
+    newDefinition->thisLabelType = definitionSymbol;
+    return newDefinition;
+}
+
 
 /*------------------------------list functions------------------------------*/
 
@@ -63,7 +71,7 @@ labelOrDefinitionList * labelOrDefinitionListConstructor(){
     return newList;
 }
 
-void addLabelNodeAtTheEnd(labelOrDefinitionList * thisList, labelOrDefinitionNode *nodeToAdd){
+void addLabelOrDefinitionNodeAtTheEnd(labelOrDefinitionList * thisList, labelOrDefinitionNode *nodeToAdd){
     labelOrDefinitionNode *current = thisList->head;
     nodeToAdd->next = NULL;
     if (thisList->head == NULL) {
@@ -87,16 +95,11 @@ boolean areEqualNames(labelOrDefinitionNode* newNode, labelOrDefinitionNode* oth
 
 
 
-
-
-
-
-/*
 void deallocateLabelListElements(labelOrDefinitionList *thisList) {
     labelOrDefinitionNode *currentHead = thisList->head;
     while (currentHead != NULL) {
-        labelOrDefinitionNode *temp = currentHead->next;
+        labelOrDefinitionNode *temp = (labelOrDefinitionNode *) currentHead->next;
         free(currentHead);
         currentHead = temp;
     }
-}*/
+}

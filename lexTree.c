@@ -20,6 +20,10 @@ const char* opcodeString[] =          {"mov", "cmp","add","sub",
 lexTree *lexTreeConstructor(const assemblyLineCode *inputAssemblyLine, int pc){
     lexTree *newLexTree = (lexTree*)malloc(sizeof (lexTree));
     newLexTree->PC = pc;
+    if(inputAssemblyLine->status == lineOutOfBounds){
+        newLexTree->error = lineLengthIsTooLong;
+        return newLexTree;
+    }
     newLexTree->potentialLabel = labelNodeConstructor(inputAssemblyLine);
     newLexTree->rawLine = inputAssemblyLine;
     newLexTree->rawLineInnerIndex = ZEROISE_COUNTER;

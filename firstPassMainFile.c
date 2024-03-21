@@ -8,6 +8,8 @@
 #include "globaldefinitionsNStructures.h"
 #include "line.h"
 #include "lexTree.h"
+#include "lexTreeValidation.h"
+/*#include "label.h"*/
 
 void runFirstPass(char *fileName,
                   labelOrDefinitionList* openingLabelNDefinitionList,
@@ -22,22 +24,34 @@ void runFirstPass(char *fileName,
     }
     while ((newAssemblyLine = getNextAssemblyLine(filePointer)) != NULL){
         lexTree *thisLexTree = lexTreeConstructor(newAssemblyLine, ++programCounter);
-        /*lexTreeInnerValidation*/
+        validateLexTree(thisLexTree);
         listsUpdating(openingLabelNDefinitionList, thisLexTree);
         /*codingToImage*/
         free(newAssemblyLine);
         free(thisLexTree);
     }
+    /* ppppprrriiinnnttttinnnggg lliisstt
+    labelOrDefinitionNode *current = openingLabelNDefinitionList->head;
+    while(current->next != NULL){
+        printf("%s\n", current->title);
+        current = (labelOrDefinitionNode *) current->next;
+    }*/
 
-
-
-    fclose(filePointer);s
-    /*deallocateLabelListElements(labelList);
-    deallocateLabelListElements(definitionList);*/
+    fclose(filePointer);
+    /*deallocateLabelListElements(openingLabelNDefinitionList);*/
+    labelOrDefinitionNode *current = openingLabelNDefinitionList->head;
+    while(current->next != NULL){
+        printf("%s\n", current->title);
+        current = (labelOrDefinitionNode *) current->next;
+    }
 }
 
 void listsUpdating(labelOrDefinitionList* labelNDefinitionList, lexTree* thisLexTree){
-    if(thisLexTree->potentialLabel != NULL){
-        addLabelNodeAtTheEnd(labelNDefinitionList, thisLexTree->potentialLabel);
+    if(thisLexTree->potentialLabel != NULL)
+        addLabelOrDefinitionNodeAtTheEnd(labelNDefinitionList, thisLexTree->potentialLabel);
+    if (thisLexTree->type == definition){
+        labelOrDefinitionNode * newDefinitionNode = definitionNodeConstructor(
+                thisLexTree->content.definitionContent.name, thisLexTree->content.definitionContent.value);
+        addLabelOrDefinitionNodeAtTheEnd(labelNDefinitionList, newDefinitionNode);
     }
 }
