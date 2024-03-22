@@ -30,5 +30,15 @@ boolean isThereMandatoryWhiteSpace(const char*);
 /*return token up to white space. null if there isn't white space*/
 char* getTokenUpToWhiteSpace(const char*);
 
+/*return true if string is legal number according to the instructions.
+ * ignoring beginning n ending white spaces. gets min and max rang,
+ * if the number isn't in the rang or not a number, returns false.*/
+boolean isLegalXBitsNumber(const char*, int , int );
+
+
+boolean is14BitsLegalNumber(const char*);
+
+boolean is12BitsLegalNumber(const char*);
+
 void trimLeadingNEndingWhitespaceFromStr(char *);
 #endif

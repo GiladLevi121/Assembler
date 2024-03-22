@@ -20,6 +20,8 @@
 #define ORDER_MAX_WORD_IN_MEMORY 4 /*5,: 0 to 4 = 5*/
 #define MAX_OPCODE_LENGTH 3
 
+#define DECIMAL 10
+
 
 #define MAX_NUMBERS_IN_DATA_DECLARATION 35 /*36 actually but starts from index 0 therefor 35*/
 #define MAX_STRING_LENGTH 73
@@ -31,6 +33,12 @@
 #define LINE_LENGTH_WITH_N 81
 #define MAX_CHARS_IN_LINE 82
 
+#define TWELVE_BITS_MAX_NUMBER 2047
+#define TWELVE_BITS_MIN_NUMBER (-2048)
+
+#define FOURTEEN_BITS_MAX_NUMBER 8191
+#define FOURTEEN_BITS_MIN_NUMBER (-8192)
+
 #define DIRECTION_OR_DEFINITION_SENTENCE_KNOT '.'
 
 
@@ -38,48 +46,51 @@
 /*------------------------------structs------------------------------*/
 
 typedef enum {
-    false = FALSE,
+    false = FALSE,/* = 0*/
     true
 }boolean;
 
 
 typedef enum {
-        valid,
-        firstLabelLetterMustBeAlphabetic,
-        labelsTooLong,
-        labelCantBeAKeyWord,
-        notAllCharactersAreAlphabeticOrNumbers,
-        firstDefinedLetterMustBeAlphabetic,
-        labelCantBeDefinedNumber,
-        labelAlreadyExist,
-        /**/
-        mandatoryWhiteCharAfterKeyWord,
-        undefinedCommand,
-        missingStringQuotationMarks,
-        missingArgument, /*missing string, data or label (to entry or extern)*/
-        undefinedDirection,/*printf("Error: undefined direction: %s.", .....) */
-        argumentIsNotANumber,/*using when want to check if .data arguments are numbers*/
-        invalidEntryLabel,
-        invalidExternLabel,
-        labelTitleAlreadyUsed,
-        problemInLabelDefinition,
-        commaIsTheLastChar,
-        commaCantBeTheFirsCharAfterDirectionDeclaration,
-        firstAllowedCharAfterStringDeclarationIsQuotationMarks,
-        lastAllowedCharAfterStringDeclarationIsQuotationMarks,
-        needTowQuotationMarksInStringDeclaration,
-        inCompatibleOperand,
-        missingOperand,
-        toMannyOperands,
-        twoConsecutiveCommasFound,
-        labelUsedIsNotDeclared,/*label used but not connected to any memory*/
-        lineLengthIsTooLong
+    valid,
+    firstLabelLetterMustBeAlphabetic,
+    labelsTooLong,
+    labelCantBeAKeyWord,
+    notAllCharactersAreAlphabeticOrNumbers,
+    firstDefinedLetterMustBeAlphabetic,
+    labelCantBeDefinedNumber,
+    labelAlreadyExist,
+    /**/
+    mandatoryWhiteCharAfterKeyWord,
+    undefinedCommand,
+    missingStringQuotationMarks,
+    missingArgument, /*missing string, data or label (to entry or extern)*/
+    undefinedDirection,/*printf("Error: undefined direction: %s.", .....) */
+    argumentIsNotANumber,/*using when want to check if .data arguments are numbers*/
+    invalidEntryLabel,
+    invalidExternLabel,
+    labelTitleAlreadyUsed,
+    illegalDefinitionTitle,
+    definitionCantHaveALabel,
+    commaIsTheLastChar,
+    commaCantBeTheFirsCharAfterDirectionDeclaration,
+    firstAllowedCharAfterStringDeclarationIsQuotationMarks,
+    lastAllowedCharAfterStringDeclarationIsQuotationMarks,
+    needTowQuotationMarksInStringDeclaration,
+    illegalNumber,
+    inCompatibleOperand,
+    missingOperand,
+    toMannyOperands,
+    twoConsecutiveCommasFound,
+    labelUsedIsNotDeclared,/*label used but not connected to any memory*/
+    lineLengthIsTooLong
 } errorType;
 
 
 
 /*returns true if reserved word. false if not*/
 boolean isAReservedWord(const char*);
+
 
 
 #endif

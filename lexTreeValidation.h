@@ -1,6 +1,4 @@
-//
-// Created by Levi Gila'ad on 21/03/2024.
-//
+
 
 #ifndef ASSEMBLER_LEXTREEVALIDATION_H
 #define ASSEMBLER_LEXTREEVALIDATION_H
@@ -9,10 +7,19 @@
 
 void validateLexTree(lexTree *);
 
-void validateDirectionLexTree(lexTree *);
-
-void validateOrderLexTree(lexTree *);
+/*------------------------------definition validation functions------------------------------*/
 
 void validateDefinitionLexTree(lexTree *);
 
-#endif //ASSEMBLER_LEXTREEVALIDATION_H
+void checkForForbiddenOpeningLabel(lexTree*);
+
+
+/*------------------------------order validation functions------------------------------*/
+
+void validateOrderLexTree(lexTree *);
+
+/*------------------------------direction validation functions------------------------------*/
+
+void validateDirectionLexTree(lexTree *);
+
+#endif

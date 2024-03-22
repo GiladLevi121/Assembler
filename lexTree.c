@@ -139,7 +139,7 @@ void setEntryNExternContent(lexTree * newLexTree){
     int contentEndingIndex = findFirstNonWhitespaceIndexFromEnd(relevantRawLine);
     int charactersInContent = contentEndingIndex - contentStartingIndex;
     if(charactersInContent < ZERO_CHARACTERS){
-        newLexTree->error = problemInLabelDefinition;
+        newLexTree->error = illegalDefinitionTitle;
         return;
     }
     if (newLexTree->content.directionSentence.type == entryDirection){

@@ -107,6 +107,42 @@ char* getTokenUpToWhiteSpace(const char* str){
     return token;
 }
 
+boolean isLegalXBitsNumber(const char* potentialNumber, int minRang, int maxRang){
+    int beginning = findFirstNonWhitespaceIndex(potentialNumber);
+    char *endingPointer;
+    int counter = ZEROISE_COUNTER;
+    long thisNumber;
+    thisNumber = strtol(&potentialNumber[beginning], &endingPointer, DECIMAL);
+    if (potentialNumber[beginning] == '+' || potentialNumber[beginning] == '-') {
+        if (potentialNumber[beginning + LAST_CELL] == END_OF_STRING) {
+            return END_OF_STRING;
+        }
+        potentialNumber++;
+    }
+    while (*potentialNumber != END_OF_STRING) {
+        if (!isdigit(potentialNumber[counter + beginning])) {
+            return false;
+        }
+        counter++;
+    }
+    if (thisNumber >= minRang && thisNumber <= maxRang) {
+        return true;
+    }
+    return false;
+}
+
+boolean is14BitsLegalNumber(const char* potentialNumber){
+    return isLegalXBitsNumber(potentialNumber,
+                              FOURTEEN_BITS_MIN_NUMBER,
+                              FOURTEEN_BITS_MAX_NUMBER);
+}
+
+boolean is12BitsLegalNumber(const char* potentialNumber){
+    return isLegalXBitsNumber(potentialNumber,
+                              TWELVE_BITS_MIN_NUMBER,
+                              TWELVE_BITS_MAX_NUMBER);
+}
+
 void trimLeadingNEndingWhitespaceFromStr(char *str) {
     int start = FIRST_INDEX;
     size_t end = strlen(str) - LAST_CELL;
