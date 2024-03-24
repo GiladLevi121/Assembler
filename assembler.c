@@ -6,7 +6,7 @@
 
 int main(int argc, char *argv[]) {
     labelOrDefinitionList *openingLabelList = labelOrDefinitionListConstructor();
-    labelOrDefinitionList *definitionList = labelOrDefinitionListConstructor();
-    runFirstPass(argv[1], openingLabelList, definitionList);
+    labelOrDefinitionList *entryNExternalList = labelOrDefinitionListConstructor();
+    runFirstPass(argv[1], openingLabelList, entryNExternalList);
     return 0;
 }

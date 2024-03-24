@@ -20,8 +20,10 @@
 
 /*------------------------------Node------------------------------*/
 typedef enum{
-    codeSymbol,
-    dataSymbol,
+    data,
+    assemblyString,
+    entryLabel,
+    externLabel,
     definitionSymbol,
 }propertyType;
 
@@ -32,7 +34,7 @@ typedef struct /*labelNode*/ {
     propertyType thisLabelType;
     union {
         char value[MEMORY_WORD_LENGTH];
-        char codeImag[CHARS_TO_REPRESENT_LINE_IN_MEMORY];
+        char *assemblyString;
         char dataImag[CHARS_TO_REPRESENT_LINE_IN_MEMORY];
     }content;
     struct labelOrDefinitionNode *next;
@@ -67,7 +69,6 @@ labelOrDefinitionList* labelOrDefinitionListConstructor();
 
 void addLabelOrDefinitionNodeAtTheEnd(labelOrDefinitionList *, labelOrDefinitionNode *);
 
-/*linked list: labels, definitions, macros*/
 
 void deallocateLabelListElements(labelOrDefinitionList *);
 

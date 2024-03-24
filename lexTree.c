@@ -5,7 +5,7 @@
 
 #include "lexTree.h"
 #include "label.h"
-#include "parrser.h"
+#include "parser.h"
 
 /*order match DirectionSentence struct in lexTree.h*/
 const char* directionsTypeIdentifier[] = {".string",".data",
@@ -20,6 +20,7 @@ const char* opcodeString[] =          {"mov", "cmp","add","sub",
 lexTree *lexTreeConstructor(const assemblyLineCode *inputAssemblyLine, int pc){
     lexTree *newLexTree = (lexTree*)malloc(sizeof (lexTree));
     newLexTree->PC = pc;
+    newLexTree->error = valid;
     if(inputAssemblyLine->status == lineOutOfBounds){
         newLexTree->error = lineLengthIsTooLong;
         return newLexTree;
@@ -29,12 +30,7 @@ lexTree *lexTreeConstructor(const assemblyLineCode *inputAssemblyLine, int pc){
     newLexTree->rawLineInnerIndex = ZEROISE_COUNTER;
     setLexTreeType(newLexTree);
     setLexTreeContent(newLexTree);
-    setLabelContent(newLexTree/*, CI, DI*/);
     return newLexTree;
-}
-
-void setLabelContent(lexTree *newLexTree){
-
 }
 
 void resetInnerIndex(lexTree* thisLexTree, size_t plusIndex){
@@ -306,14 +302,16 @@ void setDefinitionLexTreeContent(lexTree *newLexTree){
         newLexTree->error = mandatoryWhiteCharAfterKeyWord;
         return;
     }
+    if(definitionName == NULL){
+        newLexTree->error = misiingEqualKnotInDefineSentence;
+        return;
+    }
     resetInnerIndex(newLexTree, strlen(definitionName) + FIRST_CELL + LAST_CELL);
     strcpy(newLexTree->content.definitionContent.name, definitionName);
     for(counter = ZEROISE_COUNTER; counter <= strlen(newLexTree->rawLine->content); counter++){
         newLexTree->content.definitionContent.value[counter] =
                 newLexTree->rawLine->content[newLexTree->rawLineInnerIndex + counter];
     }
-    /*trimLeadingNEndingWhitespaceFromStr(newLexTree->content.definitionContent.value);
-    trimLeadingNEndingWhitespaceFromStr(newLexTree->content.definitionContent.name);*/
 }
 
 

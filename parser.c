@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "parrser.h"
+#include "parser.h"
 #include "globaldefinitionsNStructures.h"
 
 
@@ -13,7 +13,7 @@ int findFirstNonWhitespaceIndexFromEnd(const char* str) {
     int counter = stringLength;
     for (; counter != FIRST_INDEX || str[counter] != END_OF_STRING; --counter) {
         if (!isspace(str[counter])) {
-            return counter;
+            return --counter;
         }
     }
     return ALL_WHITE_SPACES;
@@ -75,6 +75,8 @@ boolean isThereMandatoryWhiteSpace(const char* line){
 char * getTokensUpToChar(const char* str, char knot){
     char *token = (char*)malloc(sizeof (char) * MAX_CHARS_IN_LINE);
     size_t tokenLength = ZEROISE_COUNTER;
+    if(strchr(str, knot) == NULL)
+        return NULL;
     if (strlen(str) == ZEROISE_COUNTER || str[FIRST_INDEX] == END_OF_STRING)
         return NULL;
     while (!isEndOfLine(&str[tokenLength])){
@@ -82,7 +84,7 @@ char * getTokensUpToChar(const char* str, char knot){
             tokenLength++;
         break;
     }
-    if(tokenLength == ZEROISE_COUNTER)
+    if(tokenLength == strlen(str))
         return NULL;
 
     memcpy(token, str, tokenLength);
@@ -109,6 +111,7 @@ char* getTokenUpToWhiteSpace(const char* str){
 
 boolean isLegalXBitsNumber(const char* potentialNumber, int minRang, int maxRang){
     int beginning = findFirstNonWhitespaceIndex(potentialNumber);
+    int endingIndex = findFirstNonWhitespaceIndexFromEnd(potentialNumber);
     char *endingPointer;
     int counter = ZEROISE_COUNTER;
     long thisNumber;
@@ -119,11 +122,11 @@ boolean isLegalXBitsNumber(const char* potentialNumber, int minRang, int maxRang
         }
         potentialNumber++;
     }
-    while (*potentialNumber != END_OF_STRING) {
+    while (potentialNumber[counter + beginning] != END_OF_STRING && (counter + beginning < endingIndex - LAST_CELL)) {
         if (!isdigit(potentialNumber[counter + beginning])) {
             return false;
         }
-        counter++;
+          counter++;
     }
     if (thisNumber >= minRang && thisNumber <= maxRang) {
         return true;
@@ -163,6 +166,9 @@ void trimLeadingNEndingWhitespaceFromStr(char *str) {
 }
 
 
+boolean isValidAssemblyArray(const char * str, int beginning, int ending){
+
+}
 
 
 

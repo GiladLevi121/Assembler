@@ -10,7 +10,7 @@ const char* reservedAssemblyWords[] = {"mov", "cmp","add","sub",
                                        "dec","jmp","bne","red",
                                        "prn","jsr","rts","hlt",
                                        "string","data","entry",
-                                       "define","extern"};
+                                       "define","extern", "r0"};
 
 boolean isAReservedWord(const char* inputString){
     size_t numberOfReservedWords = sizeof(reservedAssemblyWords) /

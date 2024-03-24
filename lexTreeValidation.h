@@ -11,7 +11,6 @@ void validateLexTree(lexTree *);
 
 void validateDefinitionLexTree(lexTree *);
 
-void checkForForbiddenOpeningLabel(lexTree*);
 
 
 /*------------------------------order validation functions------------------------------*/

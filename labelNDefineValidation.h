@@ -13,13 +13,10 @@
 #define DEFINED_IN_ASSEMBLY_PADDING 4
 
 
-typedef enum{
-    label = LABEL_PADDING,
-    definedNumber = DEFINED_IN_ASSEMBLY_PADDING
-}titleTypeErrorIncrement;
+
 
 /*gets title, and title type (label/define) and returns errorType*/
-errorType isLegalTitle(const char* ,titleTypeErrorIncrement);
+errorType isLegalTitle(const char*);
 
 /*return true if all chars are allowed chars for label/defined number.
  *false if not*/

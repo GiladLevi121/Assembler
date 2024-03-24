@@ -24,11 +24,11 @@
 
 
 #define MAX_NUMBERS_IN_DATA_DECLARATION 35 /*36 actually but starts from index 0 therefor 35*/
+#define MAX_NUMBER_LENGTH_IN_DEFINE 72
 #define MAX_STRING_LENGTH 73
 #define MAX_LABEL_LENGTH_AFTER_ENTRY 74
 #define MAX_LABEL_LENGTH_AFTER_EXTERN 73
 #define MAX_NUMBER_LENGTH 74
-#define MAX_NUMBER_LENGTH_IN_DEFINE 72
 #define INPUT_LINE_LENGTH 80
 #define LINE_LENGTH_WITH_N 81
 #define MAX_CHARS_IN_LINE 82
@@ -53,17 +53,12 @@ typedef enum {
 
 typedef enum {
     valid,
-    firstLabelLetterMustBeAlphabetic,
-    labelsTooLong,
-    labelCantBeAKeyWord,
+    firstLetterOfDefinitionOrLabelTitleMustBeAlphabetic,
+    labelOrDefinitionTitleTooLong,
+    titleOfLabelOrDefinitionCantBeAKeyWord,
     notAllCharactersAreAlphabeticOrNumbers,
-    firstDefinedLetterMustBeAlphabetic,
-    labelCantBeDefinedNumber,
-    labelAlreadyExist,
-    /**/
     mandatoryWhiteCharAfterKeyWord,
     undefinedCommand,
-    missingStringQuotationMarks,
     missingArgument, /*missing string, data or label (to entry or extern)*/
     undefinedDirection,/*printf("Error: undefined direction: %s.", .....) */
     argumentIsNotANumber,/*using when want to check if .data arguments are numbers*/
@@ -78,6 +73,8 @@ typedef enum {
     lastAllowedCharAfterStringDeclarationIsQuotationMarks,
     needTowQuotationMarksInStringDeclaration,
     illegalNumber,
+    definitionNamingIsIllegal,
+    misiingEqualKnotInDefineSentence,
     inCompatibleOperand,
     missingOperand,
     toMannyOperands,

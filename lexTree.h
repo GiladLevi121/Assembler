@@ -147,8 +147,6 @@ void commasValidation(lexTree *);
 /*set lex tree if direction sentence*/
 void setDirectionLexTreeContent(lexTree *);
 
-/*sets label's value- data, code, definition*/
-void setLabelContent(lexTree*);
 
 /*------------------------------directions functions------------------------------*/
 

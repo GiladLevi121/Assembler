@@ -1,9 +1,8 @@
-//
-// Created by Levi Gila'ad on 21/03/2024.
-//
+
 
 #include "lexTreeValidation.h"
-#include "parrser.h"
+#include "parser.h"
+#include "labelNDefineValidation.h"
 
 
 void validateLexTree(lexTree * thisLexTree){
@@ -29,19 +28,15 @@ void validateLexTree(lexTree * thisLexTree){
 
 
 void validateDefinitionLexTree(lexTree *thisLexTree){
-    checkForForbiddenOpeningLabel(thisLexTree);
-    if(!is14BitsLegalNumber(thisLexTree->content.definitionContent.value)){
-        thisLexTree->error = illegalNumber;
-        return;
-    }
-
-}
-
-void checkForForbiddenOpeningLabel(lexTree* thisLexTree){
     if (thisLexTree->potentialLabel != NULL)
         thisLexTree->error = definitionCantHaveALabel;
+    if(!is14BitsLegalNumber(thisLexTree->content.definitionContent.value))
+        thisLexTree->error = illegalNumber;
+    if (!isLegalTitle(thisLexTree->content.definitionContent.name))
+        thisLexTree->error = definitionNamingIsIllegal;
+    if(thisLexTree->content.definitionContent.value[FIRST_INDEX] == END_OF_STRING)
+        thisLexTree->error = missingArgument;
 }
-
 
 
 /*------------------------------order validation functions------------------------------*/

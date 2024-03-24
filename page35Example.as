@@ -1,4 +1,4 @@
-.define sz = 2   2       
+.define sz = 22
 MAIN: mov r3, LIST[sz]
 LOOP: jmp L1
 prn #-5
@@ -14,5 +14,5 @@ END: hlt
 .define len = 4
 rts
 STR: .string "abcdef"
-LIST: .data 6, -9, len
+LIST: .data 6333333, -9, len
 K: .data 22

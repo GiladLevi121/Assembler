@@ -9,11 +9,11 @@
 #include "line.h"
 #include "lexTree.h"
 #include "lexTreeValidation.h"
-/*#include "label.h"*/
+#include "label.h"
 
 void runFirstPass(char *fileName,
                   labelOrDefinitionList* openingLabelNDefinitionList,
-                  labelOrDefinitionList* definitionList){
+                  labelOrDefinitionList* entryNExternalList){
     FILE *filePointer = openFileByName(fileName, AS_ENDING, "r");
     assemblyLineCode *newAssemblyLine;
     int programCounter = ZEROISE_COUNTER;
@@ -25,7 +25,7 @@ void runFirstPass(char *fileName,
     while ((newAssemblyLine = getNextAssemblyLine(filePointer)) != NULL){
         lexTree *thisLexTree = lexTreeConstructor(newAssemblyLine, ++programCounter);
         validateLexTree(thisLexTree);
-        listsUpdating(openingLabelNDefinitionList, thisLexTree);
+        listsUpdating(openingLabelNDefinitionList, entryNExternalList, thisLexTree);
         /*codingToImage*/
         free(newAssemblyLine);
         free(thisLexTree);
@@ -39,19 +39,21 @@ void runFirstPass(char *fileName,
 
     fclose(filePointer);
     /*deallocateLabelListElements(openingLabelNDefinitionList);*/
-    labelOrDefinitionNode *current = openingLabelNDefinitionList->head;
-    while(current->next != NULL){
-        printf("%s\n", current->title);
-        current = (labelOrDefinitionNode *) current->next;
-    }
+
 }
 
-void listsUpdating(labelOrDefinitionList* labelNDefinitionList, lexTree* thisLexTree){
+void listsUpdating(labelOrDefinitionList* labelNDefinitionList, labelOrDefinitionList* entryNExternalList, lexTree* thisLexTree){
     if(thisLexTree->potentialLabel != NULL)
         addLabelOrDefinitionNodeAtTheEnd(labelNDefinitionList, thisLexTree->potentialLabel);
     if (thisLexTree->type == definition){
         labelOrDefinitionNode * newDefinitionNode = definitionNodeConstructor(
                 thisLexTree->content.definitionContent.name, thisLexTree->content.definitionContent.value);
         addLabelOrDefinitionNodeAtTheEnd(labelNDefinitionList, newDefinitionNode);
+        return;
     }
+    if(thisLexTree->type == direction)
+        if(thisLexTree->content.directionSentence.type == entryDirection ||
+           thisLexTree->content.directionSentence.type == externDirection)
+            printf("hi");
+            /*addLabelOrDefinitionNodeAtTheEnd(entryNExternalList, )*/
 }
