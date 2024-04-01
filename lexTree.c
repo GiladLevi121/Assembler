@@ -289,7 +289,7 @@ void setOpCode(lexTree* newLexTree){
     resetInnerIndex(newLexTree, firstNonWhiteIndex);
     relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
     opCode = getTokenUpToWhiteSpace(relevantRawLine);
-    resetInnerIndex(newLexTree, strlen(opCode) + findFirstNonWhitespaceIndex(&relevantRawLine[strlen(opCode)]));
+    resetInnerIndex(newLexTree, strlen(opCode)/* + findFirstNonWhitespaceIndex(&relevantRawLine[strlen(opCode)])*/);
     while(opcodeCounter < iteration){
         if (!strcmp(opCode, opcodeString[opcodeCounter])) {
             newLexTree->content.orderContent.opcode = opcodeCounter;
@@ -298,8 +298,8 @@ void setOpCode(lexTree* newLexTree){
         opcodeCounter++;
     }
     newLexTree->content.orderContent.opcode = opcodeCounter;
-    if (firstNonWhiteIndex == FIRST_INDEX)
-        resetInnerIndex(newLexTree, ANOTHER_CELL);
+    /*if (firstNonWhiteIndex == FIRST_INDEX)
+        resetInnerIndex(newLexTree, ANOTHER_CELL);*/
 }
 
 void setDefinitionLexTreeContent(lexTree *newLexTree){
