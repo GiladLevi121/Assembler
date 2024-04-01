@@ -5,11 +5,11 @@
 #include "labelNDefineValidation.h"
 #include "globaldefinitionsNStructures.h"
 
-errorType isLegalTitle(const char* thisTitle){
+errorType isNotLegalTitle(const char* thisTitle){
     errorType thisError = valid;
     if(isAReservedWord(thisTitle))
         thisError = titleOfLabelOrDefinitionCantBeAKeyWord;
-    if(!thisTitle[FIRST_INDEX])
+    if(!isalpha(thisTitle[FIRST_INDEX]))
         thisError = firstLetterOfDefinitionOrLabelTitleMustBeAlphabetic;
     if(strlen(thisTitle) > TITLE_MAX_LENGTH)
         thisError = labelOrDefinitionTitleTooLong;

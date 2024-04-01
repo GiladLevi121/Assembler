@@ -40,5 +40,7 @@ boolean is14BitsLegalNumber(const char*);
 
 boolean is12BitsLegalNumber(const char*);
 
-void trimLeadingNEndingWhitespaceFromStr(char *);
+char* trimLeadingNEndingWhitespace(const char*);
+
+
 #endif

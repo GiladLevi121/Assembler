@@ -41,7 +41,7 @@ labelOrDefinitionNode *labelNodeConstructor(const assemblyLineCode* thisAssembly
         free(newLabel);
         return NULL;
     }
-    newLabel->labelError = isLegalTitle(newLabel->title);
+    newLabel->labelError = isNotLegalTitle(newLabel->title);
     newLabel->next = NULL;
     return newLabel;
 }

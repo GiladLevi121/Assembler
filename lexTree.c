@@ -2,6 +2,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "lexTree.h"
 #include "label.h"
@@ -234,24 +235,32 @@ void setUndefinedGroup(lexTree* newLexTree){
 
 void setFirstGroup(lexTree* newLexTree){
     const char* relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
-    strcpy(newLexTree->content.orderContent.firstOperand, getTokensUpToChar(relevantRawLine, ','));
-    resetInnerIndex(newLexTree,
-                    strlen(newLexTree->content.orderContent.firstOperand) + ANOTHER_CELL + LAST_CELL);
+    char *token = getTokensUpToChar(relevantRawLine, ',');
+    char *firstOperand, *secondOperand;
+    if(token == NULL){
+        newLexTree->content.orderContent.firstOperand[FIRST_INDEX] = END_OF_STRING;
+        newLexTree->content.orderContent.secondOperand[FIRST_INDEX] = END_OF_STRING;
+        return;
+    }
+    firstOperand = trimLeadingNEndingWhitespace(token);
+    strcpy(newLexTree->content.orderContent.firstOperand, firstOperand);
+    resetInnerIndex(newLexTree,strlen(token) + LAST_CELL);
     relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
-    strcpy(newLexTree->content.orderContent.secondOperand, relevantRawLine);
+    secondOperand = trimLeadingNEndingWhitespace(relevantRawLine);
+    strcpy(newLexTree->content.orderContent.secondOperand, secondOperand);
 }
 
 void setSecondGroup(lexTree* newLexTree){
     const char* relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
-    strcpy(newLexTree->content.orderContent.firstOperand, relevantRawLine);
+    char *firstOperand = trimLeadingNEndingWhitespace(relevantRawLine);
+    strcpy(newLexTree->content.orderContent.firstOperand, firstOperand);
     newLexTree->content.orderContent.secondOperand[FIRST_INDEX] = END_OF_STRING;
 }
 
 void setThirdGroup(lexTree *newLexTree){
     const char * relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
-    resetInnerIndex(newLexTree, ANOTHER_CELL);
-    relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
-    strcpy(newLexTree->content.orderContent.firstOperand, relevantRawLine);
+    char* axes = trimLeadingNEndingWhitespace(relevantRawLine);
+    strcpy(newLexTree->content.orderContent.firstOperand, axes);
     newLexTree->content.orderContent.secondOperand[FIRST_INDEX] = END_OF_STRING;
 }
 
@@ -284,16 +293,23 @@ void setOpCode(lexTree* newLexTree){
     while(opcodeCounter < iteration){
         if (!strcmp(opCode, opcodeString[opcodeCounter])) {
             newLexTree->content.orderContent.opcode = opcodeCounter;
-            return;
+            break;
         }
         opcodeCounter++;
     }
     newLexTree->content.orderContent.opcode = opcodeCounter;
+    if (firstNonWhiteIndex == FIRST_INDEX)
+        resetInnerIndex(newLexTree, ANOTHER_CELL);
 }
 
 void setDefinitionLexTreeContent(lexTree *newLexTree){
+    setDefinitionName(newLexTree);
+    setDefinitionValue(newLexTree);
+}
+
+void setDefinitionName(lexTree* newLexTree){
     const char *relevantRawLine, *definitionName;
-    int definitionNameStartingIndex, counter;
+    int definitionNameStartingIndex, definitionNameEndIndex, charsToCopy;
     resetInnerIndex(newLexTree, DEFINE_SENTENCE_IDENTIFIER_LENGTH);
     relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
     definitionNameStartingIndex = findFirstNonWhitespaceIndex(relevantRawLine);
@@ -306,13 +322,27 @@ void setDefinitionLexTreeContent(lexTree *newLexTree){
         newLexTree->error = misiingEqualKnotInDefineSentence;
         return;
     }
-    resetInnerIndex(newLexTree, strlen(definitionName) + FIRST_CELL + LAST_CELL);
-    strcpy(newLexTree->content.definitionContent.name, definitionName);
-    for(counter = ZEROISE_COUNTER; counter <= strlen(newLexTree->rawLine->content); counter++){
-        newLexTree->content.definitionContent.value[counter] =
-                newLexTree->rawLine->content[newLexTree->rawLineInnerIndex + counter];
-    }
+    definitionNameEndIndex = findFirstNonWhitespaceIndexFromEnd(definitionName);
+    charsToCopy = definitionNameEndIndex + LAST_CELL;
+    memcpy(newLexTree->content.definitionContent.name, definitionName, charsToCopy);
+    newLexTree->content.definitionContent.name[charsToCopy] = END_OF_STRING;
+    resetInnerIndex(newLexTree, strlen(definitionName) + LAST_CELL + definitionNameStartingIndex);
 }
+
+void setDefinitionValue(lexTree* newLexTree){
+    const char *relevantRawLine, *definitionValue;
+    int definitionValueStartingIndex, definitionValueEndIndex, charsToCopy;
+    relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
+    definitionValueStartingIndex = findFirstNonWhitespaceIndex(relevantRawLine);
+    definitionValueEndIndex = findFirstNonWhitespaceIndexFromEnd(relevantRawLine);
+    definitionValue = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
+    charsToCopy = definitionValueEndIndex + LAST_CELL - definitionValueStartingIndex;
+    memcpy(newLexTree->content.definitionContent.value,
+           &definitionValue[definitionValueStartingIndex],
+           charsToCopy);
+    newLexTree->content.definitionContent.value[charsToCopy] = END_OF_STRING;
+}
+
 
 
 

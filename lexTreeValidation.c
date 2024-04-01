@@ -32,7 +32,7 @@ void validateDefinitionLexTree(lexTree *thisLexTree){
         thisLexTree->error = definitionCantHaveALabel;
     if(!is14BitsLegalNumber(thisLexTree->content.definitionContent.value))
         thisLexTree->error = illegalNumber;
-    if (!isLegalTitle(thisLexTree->content.definitionContent.name))
+    if (isNotLegalTitle(thisLexTree->content.definitionContent.name))
         thisLexTree->error = definitionNamingIsIllegal;
     if(thisLexTree->content.definitionContent.value[FIRST_INDEX] == END_OF_STRING)
         thisLexTree->error = missingArgument;

@@ -10,11 +10,12 @@
 
 int findFirstNonWhitespaceIndexFromEnd(const char* str) {
     size_t stringLength = strlen(str);
-    int counter = stringLength;
-    for (; counter != FIRST_INDEX || str[counter] != END_OF_STRING; --counter) {
-        if (!isspace(str[counter])) {
-            return --counter;
+    int counter = (int)stringLength;
+    while (counter != FIRST_INDEX || str[counter] != END_OF_STRING) {
+        if (!isspace(str[counter]) && counter < stringLength) {
+            return counter;
         }
+        counter--;
     }
     return ALL_WHITE_SPACES;
 }
@@ -122,7 +123,7 @@ boolean isLegalXBitsNumber(const char* potentialNumber, int minRang, int maxRang
         }
         potentialNumber++;
     }
-    while (potentialNumber[counter + beginning] != END_OF_STRING && (counter + beginning < endingIndex - LAST_CELL)) {
+    while (potentialNumber[counter + beginning] != END_OF_STRING && (counter + beginning <= endingIndex )) {
         if (!isdigit(potentialNumber[counter + beginning])) {
             return false;
         }
@@ -146,25 +147,29 @@ boolean is12BitsLegalNumber(const char* potentialNumber){
                               TWELVE_BITS_MAX_NUMBER);
 }
 
-void trimLeadingNEndingWhitespaceFromStr(char *str) {
-    int start = FIRST_INDEX;
-    size_t end = strlen(str) - LAST_CELL;
-    size_t length;
 
-    /*Trim leading white spaces*/
-    while (isspace((unsigned char) str[start]))
+
+
+char* trimLeadingNEndingWhitespace(const char* str) {
+    size_t start = FIRST_INDEX;
+    size_t len = strlen(str);
+    size_t end = len - LAST_CELL;
+    size_t trimmedLen = end - start + ANOTHER_CELL;
+    char* trimmedStr = (char*)malloc((trimmedLen + ANOTHER_CELL) * sizeof(char));
+    if (str == NULL)
+        return NULL;
+    if (len == ZERO_CHARACTERS)
+        return "";
+    while (isspace(str[start]))
         start++;
-
-    /*Trim trailing white spaces*/
-    while (end > start && isspace((unsigned char) str[end]))
+    while (end > start && isspace(str[end]))
         end--;
+    trimmedLen = end - start + ANOTHER_CELL;
+    memcpy(trimmedStr, &str[start], trimmedLen);
+    trimmedStr[trimmedLen] = END_OF_STRING;
 
-    /*Shift the remaining characters to the beginning of the string*/
-    length = end - start + 1;
-    memmove(str, str + start, length);
-    str[length] = END_OF_STRING;
+    return trimmedStr;
 }
-
 
 boolean isValidAssemblyArray(const char * str, int beginning, int ending){
 

@@ -16,7 +16,7 @@
 
 
 /*gets title, and title type (label/define) and returns errorType*/
-errorType isLegalTitle(const char*);
+errorType isNotLegalTitle(const char*);
 
 /*return true if all chars are allowed chars for label/defined number.
  *false if not*/

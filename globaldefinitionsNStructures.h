@@ -52,7 +52,7 @@ typedef enum {
 
 
 typedef enum {
-    valid,
+    valid = 0,
     firstLetterOfDefinitionOrLabelTitleMustBeAlphabetic,
     labelOrDefinitionTitleTooLong,
     titleOfLabelOrDefinitionCantBeAKeyWord,

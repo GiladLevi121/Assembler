@@ -25,17 +25,13 @@ void runFirstPass(char *fileName,
     while ((newAssemblyLine = getNextAssemblyLine(filePointer)) != NULL){
         lexTree *thisLexTree = lexTreeConstructor(newAssemblyLine, ++programCounter);
         validateLexTree(thisLexTree);
-        listsUpdating(openingLabelNDefinitionList, entryNExternalList, thisLexTree);
+        /*listsUpdating(openingLabelNDefinitionList, entryNExternalList, thisLexTree);*/
+
         /*codingToImage*/
         free(newAssemblyLine);
         free(thisLexTree);
     }
-    /* ppppprrriiinnnttttinnnggg lliisstt
-    labelOrDefinitionNode *current = openingLabelNDefinitionList->head;
-    while(current->next != NULL){
-        printf("%s\n", current->title);
-        current = (labelOrDefinitionNode *) current->next;
-    }*/
+
 
     fclose(filePointer);
     /*deallocateLabelListElements(openingLabelNDefinitionList);*/

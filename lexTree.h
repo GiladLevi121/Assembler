@@ -192,4 +192,8 @@ void setUndefinedGroup(lexTree*);
 /*set definition sentence content*/
 void setDefinitionLexTreeContent(lexTree*);
 
+void setDefinitionName(lexTree*);
+
+void setDefinitionValue(lexTree*);
+
 #endif
