@@ -1,6 +1,15 @@
+STR: .string "abcd ef" 
+LIST:           .data      6, -9  3, len 
+LIST: .data    6 ,   -9  3, len     
+
 MAIN:	mov   r3   ,   LIST[sz]   32
-LOOP: 	jmp    W    5
+MAIN:	mov   r3   ,   LIST[sz] ,  32
+mov   r3  dvdv ,   LIST[sz]   32
+LOOP: 	jmp    W    5, 
+LOOP: 	jmp    W   , 5
 	prn #-5   
+prn #-5 , dfg
+prn #-5, 4
 	mov    STR[5]  ,   STR[2]    
 	sub r1  ,   r4   
 	cmp K, #sz

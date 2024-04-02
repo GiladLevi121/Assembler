@@ -116,16 +116,13 @@ void setDirectionSentenceType(lexTree *newLexTree){
 }
 
 void setDirectionContent(lexTree *newLexTree){
-    if(newLexTree->content.directionSentence.type == dataDirection){
+    if(newLexTree->content.directionSentence.type == dataDirection)
         setDataDirectionContent(newLexTree);
-        /*trim starting and ending white spaces, validation*/
-    }
     else if (newLexTree->content.directionSentence.type == stringDirection)
         setStringDirectionContent(newLexTree);
     else if(newLexTree->content.directionSentence.type == entryDirection ||
-             newLexTree->content.directionSentence.type == externDirection){
+             newLexTree->content.directionSentence.type == externDirection)
         setEntryNExternContent(newLexTree);
-    }
     else
         newLexTree->error = undefinedDirection;
 }
@@ -156,19 +153,22 @@ void setEntryNExternContent(lexTree * newLexTree){
 
 void setDataDirectionContent(lexTree* newLexTree){
     size_t counter = ZEROISE_COUNTER;
+    size_t tokenLength;
     const char* rawLine = newLexTree->rawLine->content;
     char* token;
     do {
         size_t rawLineIndex = newLexTree->rawLineInnerIndex;
         if(strchr(&rawLine[rawLineIndex], ',') != NULL){
             token = getTokensUpToChar(&rawLine[rawLineIndex], ',');
-            /*trimLeadingNEndingWhitespaceFromStr(token);*/
+            tokenLength = strlen(token) + ANOTHER_CELL; /* ANOTHER_CELL = len(',')*/
+            token = trimLeadingNEndingWhitespace(token);
             strcpy(newLexTree->content.directionSentence.content.dataDirection[counter],token);
             counter++;
-            resetInnerIndex(newLexTree, strlen(token) + ANOTHER_CELL);
+            resetInnerIndex(newLexTree, tokenLength);
         }
         else{
-            strcpy(newLexTree->content.directionSentence.content.dataDirection[counter], &rawLine[rawLineIndex]);
+            token = trimLeadingNEndingWhitespace(&rawLine [rawLineIndex]);
+            strcpy(newLexTree->content.directionSentence.content.dataDirection[counter], token);
             break;
         }
     }while(token != NULL);
@@ -289,7 +289,7 @@ void setOpCode(lexTree* newLexTree){
     resetInnerIndex(newLexTree, firstNonWhiteIndex);
     relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
     opCode = getTokenUpToWhiteSpace(relevantRawLine);
-    resetInnerIndex(newLexTree, strlen(opCode)/* + findFirstNonWhitespaceIndex(&relevantRawLine[strlen(opCode)])*/);
+    resetInnerIndex(newLexTree, strlen(opCode));
     while(opcodeCounter < iteration){
         if (!strcmp(opCode, opcodeString[opcodeCounter])) {
             newLexTree->content.orderContent.opcode = opcodeCounter;
@@ -298,8 +298,6 @@ void setOpCode(lexTree* newLexTree){
         opcodeCounter++;
     }
     newLexTree->content.orderContent.opcode = opcodeCounter;
-    /*if (firstNonWhiteIndex == FIRST_INDEX)
-        resetInnerIndex(newLexTree, ANOTHER_CELL);*/
 }
 
 void setDefinitionLexTreeContent(lexTree *newLexTree){

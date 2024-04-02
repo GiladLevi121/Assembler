@@ -3,6 +3,7 @@
 .define sz =12
 .define sz= 12
 
+.define sz= 12 20
 dff: .define sz = -819
 .define sz = 81;
 .define sz 12
