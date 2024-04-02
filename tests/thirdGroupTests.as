@@ -6,6 +6,6 @@ gg:  rts
     rts    
 hlt
 
-hlt    3
-END: hlt    3
+hlt    3  6f
+END: hlt    3 f
 rts 7   
