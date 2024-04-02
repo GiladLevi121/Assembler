@@ -85,17 +85,16 @@ void directionDeclarationCheck(lexTree* newLexTree){
     const char *lineAfterDirection = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
     int firstNonWhitespaceIndex = findFirstNonWhitespaceIndex(lineAfterDirection);
     char firstNonWhiteSpaceAfterDirectionChar;
-    if(!isThereMandatoryWhiteSpace(lineAfterDirection)){
+    if(!isThereMandatoryWhiteSpace(lineAfterDirection) && lineAfterDirection[FIRST_INDEX] != END_OF_STRING)
         newLexTree->error = mandatoryWhiteCharAfterKeyWord;
-        return;
-    }
     if(firstNonWhitespaceIndex != ALL_WHITE_SPACES){
         firstNonWhiteSpaceAfterDirectionChar =  newLexTree->rawLine->content[firstNonWhitespaceIndex];
-        if( firstNonWhiteSpaceAfterDirectionChar == ','){
+        if( firstNonWhiteSpaceAfterDirectionChar == ',')
             newLexTree->error = commaCantBeTheFirsCharAfterDirectionDeclaration;
-            return;
-        }
     }
+    if (firstNonWhitespaceIndex == ALL_WHITE_SPACES)
+        newLexTree->error = missingArgumentAfterDirection;
+
 }
 
 void setDirectionSentenceType(lexTree *newLexTree){
@@ -175,26 +174,18 @@ void setDataDirectionContent(lexTree* newLexTree){
 }
 
 void setStringDirectionContent(lexTree *newLexTree){
-    const char* rawLine = newLexTree->rawLine->content;
+    char* token;
+    const char* relevantRawLine = newLexTree->rawLine->content;
     size_t rawLineIndex = newLexTree->rawLineInnerIndex;
-    size_t firstNonWhitespaceIndex = findFirstNonWhitespaceIndex(&rawLine[rawLineIndex]);
-    size_t firstFromLastNonWhitespaceIndex = findFirstNonWhitespaceIndexFromEnd(&rawLine[rawLineIndex]);
+    size_t firstNonWhitespaceIndex = findFirstNonWhitespaceIndex(&relevantRawLine[rawLineIndex]);
     resetInnerIndex(newLexTree, firstNonWhitespaceIndex);
-    int counter = ZEROISE_COUNTER;
-    assemblyStringValidation(newLexTree,
-             firstNonWhitespaceIndex,
-             firstFromLastNonWhitespaceIndex);
-    for(; (counter + newLexTree->rawLineInnerIndex + ANOTHER_CELL) <
-          (firstFromLastNonWhitespaceIndex + newLexTree->rawLineInnerIndex - LAST_CELL);
-          counter++){
-        newLexTree->content.directionSentence.content.stringContent[counter] =
-                rawLine[counter + newLexTree->rawLineInnerIndex + ANOTHER_CELL];
-    }
-    newLexTree->content.directionSentence.content.stringContent[counter - LAST_CELL] = END_OF_STRING;
+    relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
+    token = trimLeadingNEndingWhitespace(relevantRawLine);
+    strcpy(newLexTree->content.directionSentence.content.stringContent, token);
 }
 
 void assemblyStringValidation(lexTree *newLexTree, size_t firstQuotationMarks, size_t lastQuotationMarks){
-    const char* rawLine = newLexTree->rawLine->content;
+    const char* rawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
     if(rawLine[newLexTree->rawLineInnerIndex] != '"'){
         newLexTree->error = firstAllowedCharAfterStringDeclarationIsQuotationMarks;
         return;

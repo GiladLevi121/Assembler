@@ -61,6 +61,7 @@ typedef enum {
     undefinedCommand,
     missingArgument, /*missing string, data or label (to entry or extern)*/
     undefinedDirection,/*printf("Error: undefined direction: %s.", .....) */
+    missingArgumentAfterDirection,
     argumentIsNotANumber,/*using when want to check if .data arguments are numbers*/
     invalidEntryLabel,
     invalidExternLabel,
