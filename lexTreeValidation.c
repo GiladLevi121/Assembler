@@ -5,7 +5,7 @@
 #include "labelNDefineValidation.h"
 
 
-void validateLexTree(lexTree * thisLexTree){
+void validateLexTree(lexTree * thisLexTree/*, definition list*/){
     if (thisLexTree->error != valid)
         return;
     switch (thisLexTree->type) {
@@ -30,7 +30,7 @@ void validateLexTree(lexTree * thisLexTree){
 void validateDefinitionLexTree(lexTree *thisLexTree){
     if (thisLexTree->potentialLabel != NULL)
         thisLexTree->error = definitionCantHaveALabel;
-    if(!is14BitsLegalNumber(thisLexTree->content.definitionContent.value))
+    if(!is14BitsLegalNumberIgnoreWhiteSpaces(thisLexTree->content.definitionContent.value))
         thisLexTree->error = illegalNumber;
     if (isNotLegalTitle(thisLexTree->content.definitionContent.name))
         thisLexTree->error = definitionNamingIsIllegal;
@@ -43,9 +43,25 @@ void validateDefinitionLexTree(lexTree *thisLexTree){
 
 
 void validateOrderLexTree(lexTree *thisLexTree){
-
+    OrderSentence thisOrderSentence = thisLexTree->content.orderContent;
+    addressMethod firstOperandAddressMethod = determineAddressMethod(thisOrderSentence.firstOperand);
+    addressMethod secondOperandAddressMethod = determineAddressMethod(thisOrderSentence.secondOperand);
 }
 
+
+addressMethod determineAddressMethod(const char * operand){
+    if(operand[FIRST_INDEX] == '#' && isKnownLabelOrLegalNumber(&operand[SECOND_CELL_INDEX]/*, */))
+        return immediate;
+    //  if(legal label (steted already or will be stat) => return direct
+    //  if (defined sentence
+    //    directRegister = 3
+}
+
+boolean isKnownLabelOrLegalNumber(const char * restOfTheOperand/*, labelOrDefinitionList* definitionList*/){
+    if(is12BitsLegalNumberAsIs(restOfTheOperand))
+        return true;
+    return false;
+}
 
 /*------------------------------direction validation functions------------------------------*/
 

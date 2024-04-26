@@ -102,6 +102,7 @@ typedef struct {
     }coding;
 } lexTree;
 
+
 /*------------------------------lexTree functions structure------------------------------*/
 /*
 

@@ -10,6 +10,7 @@
 #include "lexTree.h"
 #include "lexTreeValidation.h"
 #include "label.h"
+#include "codingToCodeImageFirstPass.h"
 
 void runFirstPass(char *fileName,
                   labelOrDefinitionList* openingLabelNDefinitionList,
@@ -23,23 +24,31 @@ void runFirstPass(char *fileName,
         return;
     }
     while ((newAssemblyLine = getNextAssemblyLine(filePointer)) != NULL){
-        lexTree *thisLexTree = lexTreeConstructor(newAssemblyLine, ++programCounter);
-        validateLexTree(thisLexTree);
-        /*listsUpdating(openingLabelNDefinitionList, entryNExternalList, thisLexTree);*/
-
-        /*codingToImage*/
-        free(newAssemblyLine);
-        free(thisLexTree);
+        firstPassEveryLineOfAssemblyOperations(newAssemblyLine, programCounter, openingLabelNDefinitionList,
+                            entryNExternalList);
     }
-
 
     fclose(filePointer);
     /*deallocateLabelListElements(openingLabelNDefinitionList);*/
 
 }
 
+
+void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *newAssemblyLine, int programCounter,
+                         labelOrDefinitionList* openingLabelNDefinitionList,
+                         labelOrDefinitionList* entryNExternalList){
+    lexTree *thisLexTree = lexTreeConstructor(newAssemblyLine, ++programCounter);
+    validateLexTree(thisLexTree);
+    listsUpdating(openingLabelNDefinitionList, entryNExternalList, thisLexTree);
+
+    codingThisLexTree(thisLexTree);
+
+    free(newAssemblyLine);
+    free(thisLexTree);
+}
+
 void listsUpdating(labelOrDefinitionList* labelNDefinitionList, labelOrDefinitionList* entryNExternalList, lexTree* thisLexTree){
-    if(thisLexTree->potentialLabel != NULL)
+    /*if(thisLexTree->potentialLabel != NULL)
         addLabelOrDefinitionNodeAtTheEnd(labelNDefinitionList, thisLexTree->potentialLabel);
     if (thisLexTree->type == definition){
         labelOrDefinitionNode * newDefinitionNode = definitionNodeConstructor(
@@ -51,5 +60,36 @@ void listsUpdating(labelOrDefinitionList* labelNDefinitionList, labelOrDefinitio
         if(thisLexTree->content.directionSentence.type == entryDirection ||
            thisLexTree->content.directionSentence.type == externDirection)
             printf("hi");
-            /*addLabelOrDefinitionNodeAtTheEnd(entryNExternalList, )*/
+            addLabelOrDefinitionNodeAtTheEnd(entryNExternalList, )*/
 }
+
+
+
+void codingThisLexTree(lexTree* thisLexTree){
+    if(thisLexTree->type == order)
+        codeToCodeImage(thisLexTree);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

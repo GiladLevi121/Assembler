@@ -110,44 +110,56 @@ char* getTokenUpToWhiteSpace(const char* str){
     return token;
 }
 
-boolean isLegalXBitsNumber(const char* potentialNumber, int minRang, int maxRang){
-    int beginning = findFirstNonWhitespaceIndex(potentialNumber);
-    int endingIndex = findFirstNonWhitespaceIndexFromEnd(potentialNumber);
+boolean isLegalXBitsNumber(const char* potentialNumber, int minRang, int maxRang, boolean ignoreFlag){
+    int beginning, endingIndex, counter = ZEROISE_COUNTER;
     char *endingPointer;
-    int counter = ZEROISE_COUNTER;
     long thisNumber;
+    if(ignoreFlag){/*true <=> ignore beginning and ending white spaces*/
+        beginning = findFirstNonWhitespaceIndex(potentialNumber);
+        endingIndex = findFirstNonWhitespaceIndexFromEnd(potentialNumber);
+    }else{
+        beginning = ZEROISE_COUNTER;
+        endingIndex = (int)strlen(potentialNumber) - LAST_CELL;
+    }
     thisNumber = strtol(&potentialNumber[beginning], &endingPointer, DECIMAL);
     if (potentialNumber[beginning] == '+' || potentialNumber[beginning] == '-') {
-        if (potentialNumber[beginning + LAST_CELL] == END_OF_STRING) {
+        if (potentialNumber[beginning + LAST_CELL] == END_OF_STRING)
             return END_OF_STRING;
-        }
         potentialNumber++;
     }
     while (potentialNumber[counter + beginning] != END_OF_STRING && (counter + beginning <= endingIndex )) {
-        if (!isdigit(potentialNumber[counter + beginning])) {
+        if (!isdigit(potentialNumber[counter + beginning]))
             return false;
-        }
-          counter++;
+      counter++;
     }
-    if (thisNumber >= minRang && thisNumber <= maxRang) {
+    if (thisNumber >= minRang && thisNumber <= maxRang)
         return true;
-    }
     return false;
 }
 
-boolean is14BitsLegalNumber(const char* potentialNumber){
+boolean is14BitsLegalNumberIgnoreWhiteSpaces(const char* potentialNumber){
     return isLegalXBitsNumber(potentialNumber,
                               FOURTEEN_BITS_MIN_NUMBER,
-                              FOURTEEN_BITS_MAX_NUMBER);
+                              FOURTEEN_BITS_MAX_NUMBER, true);
 }
 
-boolean is12BitsLegalNumber(const char* potentialNumber){
+boolean is12BitsLegalNumberIgnoreWhiteSpaces(const char* potentialNumber){
     return isLegalXBitsNumber(potentialNumber,
                               TWELVE_BITS_MIN_NUMBER,
-                              TWELVE_BITS_MAX_NUMBER);
+                              TWELVE_BITS_MAX_NUMBER, true);
 }
 
+boolean is14BitsLegalNumberAsIs(const char* potentialNumber){
+    return isLegalXBitsNumber(potentialNumber,
+                              FOURTEEN_BITS_MIN_NUMBER,
+                              FOURTEEN_BITS_MAX_NUMBER, false);
+}
 
+boolean is12BitsLegalNumberAsIs(const char* potentialNumber){
+    return isLegalXBitsNumber(potentialNumber,
+                              TWELVE_BITS_MIN_NUMBER,
+                              TWELVE_BITS_MAX_NUMBER, false);
+}
 
 
 char* trimLeadingNEndingWhitespace(const char* str) {
