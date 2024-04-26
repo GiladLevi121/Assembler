@@ -109,12 +109,6 @@ build CMakeFiles/ASSEMBLER.dir/lexTreeValidation.c.obj: C_COMPILER__ASSEMBLER_De
   OBJECT_DIR = CMakeFiles\ASSEMBLER.dir
   OBJECT_FILE_DIR = CMakeFiles\ASSEMBLER.dir
 
-build CMakeFiles/ASSEMBLER.dir/sem.c.obj: C_COMPILER__ASSEMBLER_Debug D$:/Gilad/labCourse/ASSEMBLER/sem.c || cmake_object_order_depends_target_ASSEMBLER
-  DEP_FILE = CMakeFiles\ASSEMBLER.dir\sem.c.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu99
-  OBJECT_DIR = CMakeFiles\ASSEMBLER.dir
-  OBJECT_FILE_DIR = CMakeFiles\ASSEMBLER.dir
-
 
 # =============================================================================
 # Link build statements for EXECUTABLE target ASSEMBLER
@@ -123,7 +117,7 @@ build CMakeFiles/ASSEMBLER.dir/sem.c.obj: C_COMPILER__ASSEMBLER_Debug D$:/Gilad/
 #############################################
 # Link the executable ASSEMBLER.exe
 
-build ASSEMBLER.exe: C_EXECUTABLE_LINKER__ASSEMBLER_Debug CMakeFiles/ASSEMBLER.dir/assembler.c.obj CMakeFiles/ASSEMBLER.dir/label.c.obj CMakeFiles/ASSEMBLER.dir/filesUtil.c.obj CMakeFiles/ASSEMBLER.dir/firstPassMainFile.c.obj CMakeFiles/ASSEMBLER.dir/line.c.obj CMakeFiles/ASSEMBLER.dir/lexTree.c.obj CMakeFiles/ASSEMBLER.dir/globaldefinitionsNStructures.c.obj CMakeFiles/ASSEMBLER.dir/labelNDefineValidation.c.obj CMakeFiles/ASSEMBLER.dir/parser.c.obj CMakeFiles/ASSEMBLER.dir/lexTreeValidation.c.obj CMakeFiles/ASSEMBLER.dir/sem.c.obj
+build ASSEMBLER.exe: C_EXECUTABLE_LINKER__ASSEMBLER_Debug CMakeFiles/ASSEMBLER.dir/assembler.c.obj CMakeFiles/ASSEMBLER.dir/label.c.obj CMakeFiles/ASSEMBLER.dir/filesUtil.c.obj CMakeFiles/ASSEMBLER.dir/firstPassMainFile.c.obj CMakeFiles/ASSEMBLER.dir/line.c.obj CMakeFiles/ASSEMBLER.dir/lexTree.c.obj CMakeFiles/ASSEMBLER.dir/globaldefinitionsNStructures.c.obj CMakeFiles/ASSEMBLER.dir/labelNDefineValidation.c.obj CMakeFiles/ASSEMBLER.dir/parser.c.obj CMakeFiles/ASSEMBLER.dir/lexTreeValidation.c.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\ASSEMBLER.dir

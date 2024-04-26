@@ -1,15 +1,8 @@
-STR: .string "abcd ef" 
-STR: .string   "abcd ef"    
-
-.string
-.string         
-STR: .string "abcd ef" d
-STR: .string s "abcd ef" 
-STR: .string "abcd ef"s
-STR: .string f"abcd ef" 
- 
-LIST:           .data      6, -9  3, len 
-LIST: .data    6 ,   -9  3, len     
+.entry LIS  T 
+.extern   W   
+.define    sz = 2
+STR: .string "abcdef" 
+LIST: .data    6 , -9  3, len     
 
 MAIN:	mov   r3   ,   LIST[sz]   32
 MAIN:	mov   r3   ,   LIST[sz] ,  32
@@ -35,6 +28,3 @@ K: .data 22
 
 
 ; file ps.as
-.entry LIST 
-.extern W 
-.define    sz = 2

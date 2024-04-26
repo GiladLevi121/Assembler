@@ -127,27 +127,17 @@ void setDirectionContent(lexTree *newLexTree){
 }
 
 void setEntryNExternContent(lexTree * newLexTree){
-    const char *relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
-    int contentStartingIndex = findFirstNonWhitespaceIndex(relevantRawLine);
-    int contentEndingIndex = findFirstNonWhitespaceIndexFromEnd(relevantRawLine);
-    int charactersInContent = contentEndingIndex - contentStartingIndex;
-    if(charactersInContent < ZERO_CHARACTERS){
-        newLexTree->error = illegalDefinitionTitle;
-        return;
-    }
-    if (newLexTree->content.directionSentence.type == entryDirection){
-        memcpy(newLexTree->content.directionSentence.content.entryLabel,
-               &relevantRawLine[contentStartingIndex],
-               charactersInContent);
-        newLexTree->content.directionSentence.content.entryLabel[charactersInContent] = END_OF_STRING;
-    }
-    else{
-        memcpy(newLexTree->content.directionSentence.content.externLabel,
-               &relevantRawLine[contentStartingIndex],
-               charactersInContent);
-        newLexTree->content.directionSentence.content.externLabel[charactersInContent] = END_OF_STRING;
-    }
-    resetInnerIndex(newLexTree, contentEndingIndex);
+    char* token;
+    const char* relevantRawLine = newLexTree->rawLine->content;
+    size_t rawLineIndex = newLexTree->rawLineInnerIndex;
+    size_t firstNonWhitespaceIndex = findFirstNonWhitespaceIndex(&relevantRawLine[rawLineIndex]);
+    resetInnerIndex(newLexTree, firstNonWhitespaceIndex);
+    relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
+    token = trimLeadingNEndingWhitespace(relevantRawLine);
+    if(newLexTree->content.directionSentence.type == externDirection)
+        strcpy(newLexTree->content.directionSentence.content.externLabel, token);
+    else
+        strcpy(newLexTree->content.directionSentence.content.entryLabel, token);
 }
 
 void setDataDirectionContent(lexTree* newLexTree){
