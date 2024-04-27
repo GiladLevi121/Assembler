@@ -86,9 +86,9 @@ typedef enum {
 typedef struct {
     size_t rawLineInnerIndex;
     const assemblyLineCode *rawLine;
-    int PC;
+    int InstructionCounter;
     errorType error;
-    labelOrDefinitionNode *potentialLabel;
+    labelNode *potentialLabel;
     lexTreeType type;
     union {
         OrderSentence orderContent;

@@ -17,14 +17,14 @@ void runFirstPass(char *fileName,
                   labelOrDefinitionList* entryNExternalList){
     FILE *filePointer = openFileByName(fileName, AS_ENDING, "r");
     assemblyLineCode *newAssemblyLine;
-    int programCounter = ZEROISE_COUNTER;
+    int instructionCounter = ZEROISE_COUNTER;
     if(filePointer == NULL){
         printf("Failed to open file %s, please make sure that file with exact"
                " name is in the project file", fileName);
         return;
     }
     while ((newAssemblyLine = getNextAssemblyLine(filePointer)) != NULL){
-        firstPassEveryLineOfAssemblyOperations(newAssemblyLine, programCounter, openingLabelNDefinitionList,
+        firstPassEveryLineOfAssemblyOperations(newAssemblyLine, ++instructionCounter, openingLabelNDefinitionList,
                             entryNExternalList);
     }
 
@@ -34,10 +34,10 @@ void runFirstPass(char *fileName,
 }
 
 
-void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *newAssemblyLine, int programCounter,
+void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *newAssemblyLine, int instructionCounter,
                          labelOrDefinitionList* openingLabelNDefinitionList,
                          labelOrDefinitionList* entryNExternalList){
-    lexTree *thisLexTree = lexTreeConstructor(newAssemblyLine, ++programCounter);
+    lexTree *thisLexTree = lexTreeConstructor(newAssemblyLine, instructionCounter);
     validateLexTree(thisLexTree);
     listsUpdating(openingLabelNDefinitionList, entryNExternalList, thisLexTree);
 
@@ -47,20 +47,24 @@ void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *newAssemblyLine, i
     free(thisLexTree);
 }
 
-void listsUpdating(labelOrDefinitionList* labelNDefinitionList, labelOrDefinitionList* entryNExternalList, lexTree* thisLexTree){
-    /*if(thisLexTree->potentialLabel != NULL)
+void listsUpdating(labelOrDefinitionList* labelNDefinitionList,
+                   labelOrDefinitionList* entryNExternalList, lexTree* thisLexTree){
+    if(thisLexTree->potentialLabel != NULL){
         addLabelOrDefinitionNodeAtTheEnd(labelNDefinitionList, thisLexTree->potentialLabel);
+    }
     if (thisLexTree->type == definition){
-        labelOrDefinitionNode * newDefinitionNode = definitionNodeConstructor(
-                thisLexTree->content.definitionContent.name, thisLexTree->content.definitionContent.value);
+        labelNode * newDefinitionNode = labelDefinitionNodeConstructor(
+                thisLexTree->content.definitionContent.name,
+                thisLexTree->content.definitionContent.value);
         addLabelOrDefinitionNodeAtTheEnd(labelNDefinitionList, newDefinitionNode);
         return;
     }
+    /*
     if(thisLexTree->type == direction)
         if(thisLexTree->content.directionSentence.type == entryDirection ||
            thisLexTree->content.directionSentence.type == externDirection)
-            printf("hi");
-            addLabelOrDefinitionNodeAtTheEnd(entryNExternalList, )*/
+            printf("hi");*/
+            /*addLabelOrDefinitionNodeAtTheEnd(entryNExternalList, )*/
 }
 
 

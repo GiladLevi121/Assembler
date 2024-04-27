@@ -10,7 +10,11 @@ const char* reservedAssemblyWords[] = {"mov", "cmp","add","sub",
                                        "dec","jmp","bne","red",
                                        "prn","jsr","rts","hlt",
                                        "string","data","entry",
-                                       "define","extern", "r0"};
+                                       "define","extern", "r0",
+                                       "r1", "r2", "r3","r4",
+                                       "r5","r6","r7"};
+
+
 
 boolean isAReservedWord(const char* inputString){
     size_t numberOfReservedWords = sizeof(reservedAssemblyWords) /
@@ -23,5 +27,13 @@ boolean isAReservedWord(const char* inputString){
     return false;
 }
 
+boolean isARegisterName(const char * str){
+    int i = ZEROISE_COUNTER;
+    for(; i < REGISTERS_AMOUNT; i++){
+        if(!strcmp(str, reservedAssemblyWords[REGISTERS_FIRST_INDEX_IN_KEY_WORDS + i]))
+            return true;
+    }
+    return false;
+}
 
 

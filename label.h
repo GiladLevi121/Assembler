@@ -21,29 +21,25 @@
 /*------------------------------Node------------------------------*/
 typedef enum{
     data,
-    assemblyString,
-    entryLabel,
-    externLabel,
-    definitionSymbol,
-}propertyType;
+    code,
+    mDefine
+}labelCharacteristics;
 
 typedef struct /*labelNode*/ {
-    int PC;
     errorType labelError;
     char title[MAX_CHARS_IN_LINE];
-    propertyType thisLabelType;
+    labelCharacteristics labelType;
     union {
-        char value[MEMORY_WORD_LENGTH];
-        char *assemblyString;
-        char dataImag[CHARS_TO_REPRESENT_LINE_IN_MEMORY];
-    }content;
+        char* PC;
+        char* definitionValue;
+    }value;
     struct labelOrDefinitionNode *next;
-} labelOrDefinitionNode;
+} labelNode;
 
 /*------------------------------list------------------------------*/
 
 typedef struct {
-    labelOrDefinitionNode * head;
+    labelNode * head;
 }labelOrDefinitionList;
 
 /*------------------------------node functions------------------------------*/
@@ -53,26 +49,27 @@ typedef struct {
 char *extractOpeningLabelTitle(const assemblyLineCode *assemblyLine);
 
 /*construct and set label node*/
-labelOrDefinitionNode *labelNodeConstructor(const assemblyLineCode*);
+labelNode *labelNodeConstructor(const assemblyLineCode*);
 
 /*sets title*/
-void setLabelTitle(labelOrDefinitionNode *, const assemblyLineCode* );
+void setLabelTitle(labelNode *, const assemblyLineCode* );
 
 /*return label length with ":"*/
-size_t getLabelLengthWithLabelIdentifier(const labelOrDefinitionNode*);
+size_t getLabelLengthWithLabelIdentifier(const labelNode*);
 
-
-labelOrDefinitionNode* definitionNodeConstructor(const char *, const char *);
+/*Construct labelNode based on definition sentence*/
+labelNode* labelDefinitionNodeConstructor(const char *, const char *);
 /*------------------------------list functions------------------------------*/
 
 labelOrDefinitionList* labelOrDefinitionListConstructor();
 
-void addLabelOrDefinitionNodeAtTheEnd(labelOrDefinitionList *, labelOrDefinitionNode *);
+void addLabelOrDefinitionNodeAtTheEnd(labelOrDefinitionList *, labelNode *);
 
+boolean isLabelAppearInList(labelNode*, labelOrDefinitionList*);
 
-void deallocateLabelListElements(labelOrDefinitionList *);
+void deallocateLabelListElements(labelOrDefinitionList *  );
 
 /*return true if names are equal, newNode.errorType = labelTitleAlreadyUsed*/
-boolean areEqualNames(labelOrDefinitionNode* newNode, labelOrDefinitionNode* );
+boolean areEqualNames(labelNode* newNode, labelNode* );
 
 #endif

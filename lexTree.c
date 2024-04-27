@@ -2,7 +2,6 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include <ctype.h>
 
 #include "lexTree.h"
 #include "label.h"
@@ -17,10 +16,10 @@ const char* opcodeString[] =          {"mov", "cmp","add","sub",
                                        "lea","not","clr","inc",
                                        "dec","jmp","bne","red",
                                        "prn","jsr","rts","hlt"};
-
+//TODO: Set labelType.pc
 lexTree *lexTreeConstructor(const assemblyLineCode *inputAssemblyLine, int pc){
     lexTree *newLexTree = (lexTree*)malloc(sizeof (lexTree));
-    newLexTree->PC = pc;
+    newLexTree->InstructionCounter = pc;
     newLexTree->error = valid;
     if(inputAssemblyLine->status == lineOutOfBounds){
         newLexTree->error = lineLengthIsTooLong;

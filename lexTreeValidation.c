@@ -50,11 +50,16 @@ void validateOrderLexTree(lexTree *thisLexTree){
 
 
 addressMethod determineAddressMethod(const char * operand){
-    if(operand[FIRST_INDEX] == '#' && isKnownLabelOrLegalNumber(&operand[SECOND_CELL_INDEX]/*, */))
-        return immediate;
+    if(operand[FIRST_INDEX] == '#') {
+        if(isKnownLabelOrLegalNumber(&operand[SECOND_CELL_INDEX]/*, */))
+            return immediate;
+        else
+            return errorInImmediateAddressMethod;
+    }
     //  if(legal label (steted already or will be stat) => return direct
     //  if (defined sentence
-    //    directRegister = 3
+    if(isARegisterName(operand))
+        return directRegister;
 }
 
 boolean isKnownLabelOrLegalNumber(const char * restOfTheOperand/*, labelOrDefinitionList* definitionList*/){

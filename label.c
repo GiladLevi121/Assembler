@@ -22,7 +22,7 @@ char *extractOpeningLabelTitle(const assemblyLineCode* assemblyLine){
     return NULL;
 }
 
-void setLabelTitle(labelOrDefinitionNode * thisLabelNode, const assemblyLineCode* thisAssemblyLineCode) {
+void setLabelTitle(labelNode * thisLabelNode, const assemblyLineCode* thisAssemblyLineCode) {
     char *thisTitle = extractOpeningLabelTitle(thisAssemblyLineCode);
     if (thisTitle == NULL) {
         thisLabelNode->title[FIRST_INDEX] = NO_LABEL;
@@ -32,8 +32,8 @@ void setLabelTitle(labelOrDefinitionNode * thisLabelNode, const assemblyLineCode
     free(thisTitle);
 }
 
-labelOrDefinitionNode *labelNodeConstructor(const assemblyLineCode* thisAssemblyLineCode){
-    labelOrDefinitionNode *newLabel = (labelOrDefinitionNode *) malloc(sizeof(labelOrDefinitionNode));
+labelNode *labelNodeConstructor(const assemblyLineCode* thisAssemblyLineCode){
+    labelNode *newLabel = (labelNode *) malloc(sizeof(labelNode));
     setLabelTitle(newLabel, thisAssemblyLineCode);
     if (newLabel == NULL)
         printf("failed to construct labelNode");
@@ -46,7 +46,7 @@ labelOrDefinitionNode *labelNodeConstructor(const assemblyLineCode* thisAssembly
     return newLabel;
 }
 
-size_t getLabelLengthWithLabelIdentifier(const labelOrDefinitionNode* thisLabelNode) {
+size_t getLabelLengthWithLabelIdentifier(const labelNode* thisLabelNode) {
     size_t labelFinalLength = ZEROISE_COUNTER;
     if(thisLabelNode != NULL)
         labelFinalLength = strlen(thisLabelNode->title) + LABEL_IDENTIFIER_LENGTH;
@@ -54,11 +54,11 @@ size_t getLabelLengthWithLabelIdentifier(const labelOrDefinitionNode* thisLabelN
 }
 
 
-labelOrDefinitionNode* definitionNodeConstructor(const char *enteredTitle, const char* enteredValue){
-    labelOrDefinitionNode *newDefinition = (labelOrDefinitionNode *) malloc(sizeof(labelOrDefinitionNode));
+labelNode* labelDefinitionNodeConstructor(const char *enteredTitle, const char* enteredValue){
+    labelNode *newDefinition = (labelNode *) malloc(sizeof(labelNode));
     strcpy(newDefinition->title, enteredTitle);
-    strcpy(newDefinition->content.value, enteredValue);
-    newDefinition->thisLabelType = definitionSymbol;
+    strcpy(newDefinition->value.definitionValue, enteredValue);
+    newDefinition->labelType = mDefine;
     return newDefinition;
 }
 
@@ -71,8 +71,8 @@ labelOrDefinitionList * labelOrDefinitionListConstructor(){
     return newList;
 }
 
-void addLabelOrDefinitionNodeAtTheEnd(labelOrDefinitionList * thisList, labelOrDefinitionNode *nodeToAdd){
-    labelOrDefinitionNode *current = thisList->head;
+void addLabelOrDefinitionNodeAtTheEnd(labelOrDefinitionList * thisList, labelNode *nodeToAdd){
+    labelNode *current = thisList->head;
     nodeToAdd->next = NULL;
     if (thisList->head == NULL) {
         thisList->head = nodeToAdd;
@@ -80,12 +80,12 @@ void addLabelOrDefinitionNodeAtTheEnd(labelOrDefinitionList * thisList, labelOrD
     }
     while(current->next != NULL){
         areEqualNames(nodeToAdd, current);
-        current = (labelOrDefinitionNode *) current->next;
+        current = (labelNode *) current->next;
     }
     current->next = (struct labelOrDefinitionNode *) nodeToAdd;
 }
 
-boolean areEqualNames(labelOrDefinitionNode* newNode, labelOrDefinitionNode* otherNode){
+boolean areEqualNames(labelNode* newNode, labelNode* otherNode){
     if (!strcmp(newNode->title, otherNode->title)) {
         newNode->labelError = labelTitleAlreadyUsed;
         return true;
@@ -96,9 +96,9 @@ boolean areEqualNames(labelOrDefinitionNode* newNode, labelOrDefinitionNode* oth
 
 
 void deallocateLabelListElements(labelOrDefinitionList *thisList) {
-    labelOrDefinitionNode *currentHead = thisList->head;
+    labelNode *currentHead = thisList->head;
     while (currentHead != NULL) {
-        labelOrDefinitionNode *temp = (labelOrDefinitionNode *) currentHead->next;
+        labelNode *temp = (labelNode *) currentHead->next;
         free(currentHead);
         currentHead = temp;
     }

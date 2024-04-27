@@ -9,7 +9,8 @@ typedef enum{
     immediate = 0,
     direct = 1,
     fixedIndex = 2,
-    directRegister = 3
+    directRegister = 3,
+    errorInImmediateAddressMethod = 4
 }addressMethod;
 
 void validateLexTree(lexTree *);

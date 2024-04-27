@@ -16,12 +16,16 @@
 #define SECOND_CELL_INDEX 1
 #define LAST_CELL 1
 
+
 #define CHARS_TO_REPRESENT_LINE_IN_MEMORY 4
 #define ORDER_MAX_WORD_IN_MEMORY 4 /*5,: 0 to 4 = 5*/
 #define MAX_OPCODE_LENGTH 3
+#define REGISTERS_AMOUNT 8
 
 #define DECIMAL 10
 
+/*in .c file*/
+#define REGISTERS_FIRST_INDEX_IN_KEY_WORDS 21
 
 #define MAX_NUMBERS_IN_DATA_DECLARATION 35 /*36 actually but starts from index 0 therefor 35*/
 #define MAX_NUMBER_LENGTH_IN_DEFINE 72
@@ -40,7 +44,6 @@
 #define FOURTEEN_BITS_MIN_NUMBER (-8192)
 
 #define DIRECTION_OR_DEFINITION_SENTENCE_KNOT '.'
-
 
 
 /*------------------------------structs------------------------------*/
@@ -89,6 +92,7 @@ typedef enum {
 /*returns true if reserved word. false if not*/
 boolean isAReservedWord(const char*);
 
-
+/*Return true if str is one of the registers name*/
+boolean isARegisterName(const char *);
 
 #endif
