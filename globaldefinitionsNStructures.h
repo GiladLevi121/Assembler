@@ -66,6 +66,14 @@ typedef enum {
     missingArgument, /*missing string, data or label (to entry or extern)*/
     undefinedDirection,/*printf("Error: undefined direction: %s.", .....) */
     missingArgumentAfterDirection,
+
+    /* Order sentence errors*/
+    sourceOperandAddressMethodError,
+    destinationOperandAddressMethodError,
+    missingOperand,
+    inCompatibleOperand,
+    toMannyOperands,
+
     argumentIsNotANumber,/*using when want to check if .data arguments are numbers*/
     invalidEntryLabel,
     invalidExternLabel,
@@ -80,9 +88,7 @@ typedef enum {
     illegalNumber,
     definitionNamingIsIllegal,
     MissingEqualKnotInDefineSentence,
-    inCompatibleOperand,
-    missingOperand,
-    toMannyOperands,
+
     twoConsecutiveCommasFound,
     labelUsedIsNotDeclared,/*label used but not connected to any memory*/
     lineLengthIsTooLong

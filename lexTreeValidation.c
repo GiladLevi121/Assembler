@@ -49,7 +49,8 @@ void validateOrderLexTree(lexTree *thisLexTree, labelOrDefinitionList *openingLa
             thisOrderSentence.sourceOperand, openingLabelNDefinitionList);
     addressMethod destinationOperandAddressMethod = determineAddressMethod(
             thisOrderSentence.destinationOperand, openingLabelNDefinitionList);
-
+    setErrorForInCompatibleAddressingMethods(thisLexTree, sourceOperandAddressMethod,
+                    destinationOperandAddressMethod);
 }
 
 
@@ -70,6 +71,7 @@ addressMethod determineAddressMethod(const char * operand, labelOrDefinitionList
         return fixedIndexAddressing;
     if(isARegisterName(operand))
         return directRegisterAddressing;
+    return criticalError;
 }
 
 
@@ -110,13 +112,119 @@ boolean setNCheckAssemblyArrayNIndex(const char* operand, const char* indexOfSqu
     return false;
 }
 
+void setErrorForInCompatibleAddressingMethods(lexTree* thisLexTree,
+                                              addressMethod sourceOperandAddressMethod,
+                                              addressMethod destinationOperandAddressMethod) {
+    commandOpcode thisOpcode = thisLexTree->content.orderContent.opcode;
+    setErrorForImmediateErrorIfNeeded(thisLexTree, sourceOperandAddressMethod,
+                                      destinationOperandAddressMethod);
+    /* AddressMethods are legal, check combination*/
+    if (thisOpcode == mov || thisOpcode == add || thisOpcode == sub)
+        setErrorForMovAddSubIfNeeded(thisLexTree, sourceOperandAddressMethod,
+                destinationOperandAddressMethod);
+
+    else if (thisOpcode == cmp){
+        if (sourceOperandAddressMethod == emptyOperand ||
+            destinationOperandAddressMethod == emptyOperand)
+            thisLexTree->error = missingOperand;
+    }
+    else if (thisOpcode == not || thisOpcode == clr ||
+    thisOpcode == inc || thisOpcode == dec || thisOpcode == red)
+        setErrorForNotClrIncDecRedIfNeeded(thisLexTree, sourceOperandAddressMethod,
+                                           destinationOperandAddressMethod);
+    else if(thisOpcode == lea)
+        setErrorForLeaIfNeeded(thisLexTree, sourceOperandAddressMethod,
+                               destinationOperandAddressMethod);
+
+    else if(thisOpcode == jmp || thisOpcode == bne || thisOpcode == jsr)
+        setErrorForJmpBneJsrIfNeeded(thisLexTree, sourceOperandAddressMethod,
+                               destinationOperandAddressMethod);
+    else if(thisOpcode == prn)
+        setErrorForPrnJsrIfNeeded(thisLexTree, sourceOperandAddressMethod,
+                                  destinationOperandAddressMethod);
+    else if (thisOpcode == rts || thisOpcode == hlt) {
+        if (sourceOperandAddressMethod != emptyOperand ||
+            destinationOperandAddressMethod != emptyOperand)
+            thisLexTree->error = toMannyOperands;
+    }else
+        return;
+}
+
+/* Checker for "setErrorForInCompatibleAddressingMethods" case*/
+void setErrorForImmediateErrorIfNeeded(lexTree* thisLexTree,
+                                       addressMethod sourceOperandAddressMethod,
+                                       addressMethod destinationOperandAddressMethod){
+    if (sourceOperandAddressMethod == errorInImmediateAddressMethod ||
+        sourceOperandAddressMethod == criticalError)
+        thisLexTree->error = sourceOperandAddressMethodError;
+    if (destinationOperandAddressMethod == errorInImmediateAddressMethod ||
+        destinationOperandAddressMethod == criticalError)
+        thisLexTree->error = destinationOperandAddressMethodError;
+}
+
+void setErrorForMovAddSubIfNeeded(lexTree* thisLexTree,
+                                  addressMethod sourceOperandAddressMethod,
+                                  addressMethod destinationOperandAddressMethod){
+    if (sourceOperandAddressMethod == emptyOperand)  /* !allowed methods*/
+        thisLexTree->error = missingOperand;
+
+    if (destinationOperandAddressMethod == emptyOperand ||
+    destinationOperandAddressMethod == immediateAddressing)
+        thisLexTree->error = destinationOperandAddressMethodError;
+}
+
+void setErrorForNotClrIncDecRedIfNeeded(lexTree* thisLexTree,
+                                        addressMethod sourceOperandAddressMethod,
+                                        addressMethod destinationOperandAddressMethod){
+    if (sourceOperandAddressMethod != emptyOperand)
+        thisLexTree->error = inCompatibleOperand;
+    if(destinationOperandAddressMethod == immediateAddressing ||
+       destinationOperandAddressMethod == emptyOperand)
+        thisLexTree->error = destinationOperandAddressMethodError;
+}
+
+void setErrorForLeaIfNeeded(lexTree* thisLexTree,
+                            addressMethod sourceOperandAddressMethod,
+                            addressMethod destinationOperandAddressMethod){
+    if(sourceOperandAddressMethod != directAddressing &&
+       sourceOperandAddressMethod != fixedIndexAddressing)
+        thisLexTree->error = sourceOperandAddressMethodError;
+    if(destinationOperandAddressMethod == emptyOperand ||
+       destinationOperandAddressMethod == immediateAddressing)
+        thisLexTree->error = destinationOperandAddressMethodError;
+}
+
+void setErrorForJmpBneJsrIfNeeded(lexTree* thisLexTree,
+                                  addressMethod sourceOperandAddressMethod,
+                                  addressMethod destinationOperandAddressMethod){
+    if(sourceOperandAddressMethod != emptyOperand)
+        thisLexTree->error = sourceOperandAddressMethodError;
+    if(destinationOperandAddressMethod != directAddressing &&
+       destinationOperandAddressMethod != directRegisterAddressing)
+        thisLexTree->error = destinationOperandAddressMethodError;
+}
+
+void setErrorForPrnJsrIfNeeded(lexTree* thisLexTree,
+                               addressMethod sourceOperandAddressMethod,
+                               addressMethod destinationOperandAddressMethod){
+    if(sourceOperandAddressMethod != emptyOperand)
+        thisLexTree->error = inCompatibleOperand;
+    if(destinationOperandAddressMethod == emptyOperand)
+        thisLexTree->error = missingOperand;
+}
+
 /*------------------------------direction validation functions------------------------------*/
 
 void validateDirectionLexTree(lexTree *thisLexTree){
-
+    if(thisLexTree->content.directionSentence.type == dataDirection)
+        validateDataDirectionSentence(thisLexTree);
+    else
+        validateStringDirection(thisLexTree);
 }
 
+void validateDataDirectionSentence(lexTree *thisLexTree){}
 
+void validateStringDirection(lexTree *thisLexTree){}
 
 
 

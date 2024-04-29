@@ -234,7 +234,7 @@ void setSecondGroup(lexTree* newLexTree){
     const char* relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
     char *firstOperand = trimLeadingNEndingWhitespace(relevantRawLine);
     strcpy(newLexTree->content.orderContent.destinationOperand, firstOperand);
-    newLexTree->content.orderContent.destinationOperand[FIRST_INDEX] = END_OF_STRING;
+    newLexTree->content.orderContent.sourceOperand[FIRST_INDEX] = END_OF_STRING;
 }
 
 void setThirdGroup(lexTree *newLexTree){
