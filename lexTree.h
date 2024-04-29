@@ -43,8 +43,8 @@ typedef enum {
 }opcodeGroup;
 
 typedef struct {
-    char firstOperand[MAX_CHARS_IN_LINE];
-    char secondOperand[MAX_CHARS_IN_LINE];
+    char sourceOperand[MAX_CHARS_IN_LINE];
+    char destinationOperand[MAX_CHARS_IN_LINE];
     commandOpcode opcode;
     opcodeGroup group;
 }OrderSentence;
@@ -95,11 +95,11 @@ typedef struct {
         DirectionSentence directionSentence;
         DefinitionSentence definitionContent;
     } content;
-    union {
+    /*union {
         char codeImag[ORDER_MAX_WORD_IN_MEMORY][MEMORY_WORD_LENGTH];
         char dataImag[MAX_CHARS_IN_LINE][MEMORY_WORD_LENGTH];
         boolean nonCoding;
-    }coding;
+    }coding;*/
 } lexTree;
 
 

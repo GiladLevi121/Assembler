@@ -30,8 +30,8 @@ typedef struct /*labelNode*/ {
     char title[MAX_CHARS_IN_LINE];
     labelCharacteristics labelType;
     union {
-        char* PC;
-        char* definitionValue;
+        char PC;
+        char definitionValue[MAX_NUMBER_LENGTH_IN_DEFINE];
     }value;
     struct labelOrDefinitionNode *next;
 } labelNode;
@@ -67,9 +67,15 @@ void addLabelOrDefinitionNodeAtTheEnd(labelOrDefinitionList *, labelNode *);
 
 boolean isLabelAppearInList(labelNode*, labelOrDefinitionList*);
 
-void deallocateLabelListElements(labelOrDefinitionList *  );
+void deallocateLabelListElements(labelOrDefinitionList *);
 
 /*return true if names are equal, newNode.errorType = labelTitleAlreadyUsed*/
 boolean areEqualNames(labelNode* newNode, labelNode* );
 
+/* Return definition value if found in list, null if didn't.
+ * Searching by name. Assuming nodes.labelType already mDefine*/
+char* getDefinitionValueFromList(labelOrDefinitionList *, const char*);
+
+/* Same as "getDefinitionValueFromList" function only ignore beginning and closing white spaces*/
+char* getDefinitionValueFromListIgnoreWhiteSpaces(labelOrDefinitionList *t, const char*);
 #endif

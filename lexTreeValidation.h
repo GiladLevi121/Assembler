@@ -6,14 +6,15 @@
 #include "lexTree.h"
 
 typedef enum{
-    immediate = 0,
-    direct = 1,
-    fixedIndex = 2,
-    directRegister = 3,
-    errorInImmediateAddressMethod = 4
+    immediateAddressing = 0,
+    directAddressing = 1,
+    fixedIndexAddressing = 2,
+    directRegisterAddressing = 3,
+    emptyOperand,
+    errorInImmediateAddressMethod
 }addressMethod;
 
-void validateLexTree(lexTree *);
+void validateLexTree(lexTree *, labelOrDefinitionList*);
 
 /*------------------------------definition validation functions------------------------------*/
 
@@ -23,16 +24,18 @@ void validateDefinitionLexTree(lexTree *);
 
 /*------------------------------order validation functions------------------------------*/
 
-void validateOrderLexTree(lexTree *);
+void validateOrderLexTree(lexTree *, labelOrDefinitionList*);
 
 /*gets operand as string and return addressMethod*/
-addressMethod determineAddressMethod(const char *);
+addressMethod determineAddressMethod(const char *, labelOrDefinitionList*);
 
-/* Return true if the rest of the operand is known label
- * or legal 12 bits number without white spaces.
- * Assuming '#' is in front of rest of the operand.*/
-boolean isKnownLabelOrLegalNumber(const char* /*, labelOrDefinitionList**/);
+/* Return true if there is a label followed by [, then a number or already defined
+ * variable, and at last: ], and nothing else follows.*/
+boolean isFixedIndexAddressMethod(const char*, labelOrDefinitionList*);
 
+/* Helper function for case of fixed-index-address-method*/
+boolean setNCheckAssemblyArrayNIndex(const char* , const char*, labelOrDefinitionList*,
+                                     int, int );
 /*------------------------------direction validation functions------------------------------*/
 
 void validateDirectionLexTree(lexTree *);

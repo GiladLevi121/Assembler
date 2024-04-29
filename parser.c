@@ -187,6 +187,17 @@ boolean isValidAssemblyArray(const char * str, int beginning, int ending){
 
 }
 
+boolean isEmptyString(const char *str) {
+    if (str == NULL)
+        return true;
+    while (*str != '\0') {
+        if (!isspace(*str))
+            return false;
+        str++;
+    }
+    return true;
+}
+
 
 
 

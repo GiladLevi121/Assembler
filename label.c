@@ -93,8 +93,6 @@ boolean areEqualNames(labelNode* newNode, labelNode* otherNode){
     return false;
 }
 
-
-
 void deallocateLabelListElements(labelOrDefinitionList *thisList) {
     labelNode *currentHead = thisList->head;
     while (currentHead != NULL) {
@@ -102,4 +100,23 @@ void deallocateLabelListElements(labelOrDefinitionList *thisList) {
         free(currentHead);
         currentHead = temp;
     }
+}
+
+char* getDefinitionValueFromList(labelOrDefinitionList *thisList, const char* defineName){
+    labelNode *current = thisList->head;
+    while(current->next != NULL){
+        if (current->labelType == mDefine && !strcmp(current->title, defineName))
+            return current->value.definitionValue;
+        current = (labelNode *) current->next;
+    }
+    if (current->labelType == mDefine && !strcmp(current->title, defineName))
+        return current->value.definitionValue;
+    return NULL;
+}
+
+char* getDefinitionValueFromListIgnoreWhiteSpaces(labelOrDefinitionList *thisList, const char* defineNameWithWhiteSpaces){
+    char * defineName = trimLeadingNEndingWhitespace(defineNameWithWhiteSpaces);
+    char* value = getDefinitionValueFromList(thisList, defineName);
+    free(defineName);
+    return value;
 }

@@ -209,8 +209,8 @@ void setOperands(lexTree* newLexTree){
 
 void setUndefinedGroup(lexTree* newLexTree){
     newLexTree->error = undefinedCommand;
-    newLexTree->content.orderContent.firstOperand[FIRST_INDEX] = END_OF_STRING;
-    newLexTree->content.orderContent.secondOperand[FIRST_INDEX] = END_OF_STRING;
+    newLexTree->content.orderContent.sourceOperand[FIRST_INDEX] = END_OF_STRING;
+    newLexTree->content.orderContent.destinationOperand[FIRST_INDEX] = END_OF_STRING;
 }
 
 void setFirstGroup(lexTree* newLexTree){
@@ -218,30 +218,30 @@ void setFirstGroup(lexTree* newLexTree){
     char *token = getTokensUpToChar(relevantRawLine, ',');
     char *firstOperand, *secondOperand;
     if(token == NULL){
-        newLexTree->content.orderContent.firstOperand[FIRST_INDEX] = END_OF_STRING;
-        newLexTree->content.orderContent.secondOperand[FIRST_INDEX] = END_OF_STRING;
+        newLexTree->content.orderContent.sourceOperand[FIRST_INDEX] = END_OF_STRING;
+        newLexTree->content.orderContent.destinationOperand[FIRST_INDEX] = END_OF_STRING;
         return;
     }
     firstOperand = trimLeadingNEndingWhitespace(token);
-    strcpy(newLexTree->content.orderContent.firstOperand, firstOperand);
+    strcpy(newLexTree->content.orderContent.sourceOperand, firstOperand);
     resetInnerIndex(newLexTree,strlen(token) + LAST_CELL);
     relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
     secondOperand = trimLeadingNEndingWhitespace(relevantRawLine);
-    strcpy(newLexTree->content.orderContent.secondOperand, secondOperand);
+    strcpy(newLexTree->content.orderContent.destinationOperand, secondOperand);
 }
 
 void setSecondGroup(lexTree* newLexTree){
     const char* relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
     char *firstOperand = trimLeadingNEndingWhitespace(relevantRawLine);
-    strcpy(newLexTree->content.orderContent.firstOperand, firstOperand);
-    newLexTree->content.orderContent.secondOperand[FIRST_INDEX] = END_OF_STRING;
+    strcpy(newLexTree->content.orderContent.destinationOperand, firstOperand);
+    newLexTree->content.orderContent.destinationOperand[FIRST_INDEX] = END_OF_STRING;
 }
 
 void setThirdGroup(lexTree *newLexTree){
     const char * relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
     char* axes = trimLeadingNEndingWhitespace(relevantRawLine);
-    strcpy(newLexTree->content.orderContent.firstOperand, axes);
-    newLexTree->content.orderContent.secondOperand[FIRST_INDEX] = END_OF_STRING;
+    strcpy(newLexTree->content.orderContent.sourceOperand, axes);
+    newLexTree->content.orderContent.destinationOperand[FIRST_INDEX] = END_OF_STRING;
 }
 
 void setGroup(lexTree* newLexTree){
@@ -297,7 +297,7 @@ void setDefinitionName(lexTree* newLexTree){
         return;
     }
     if(definitionName == NULL){
-        newLexTree->error = misiingEqualKnotInDefineSentence;
+        newLexTree->error = MissingEqualKnotInDefineSentence;
         return;
     }
     definitionNameEndIndex = findFirstNonWhitespaceIndexFromEnd(definitionName);

@@ -24,12 +24,15 @@ void runFirstPass(char *fileName,
         return;
     }
     while ((newAssemblyLine = getNextAssemblyLine(filePointer)) != NULL){
-        firstPassEveryLineOfAssemblyOperations(newAssemblyLine, ++instructionCounter, openingLabelNDefinitionList,
-                            entryNExternalList);
+        firstPassEveryLineOfAssemblyOperations(newAssemblyLine,
+                                               ++instructionCounter,
+                                               openingLabelNDefinitionList,
+                                               entryNExternalList);
     }
 
+
     fclose(filePointer);
-    /*deallocateLabelListElements(openingLabelNDefinitionList);*/
+    deallocateLabelListElements(openingLabelNDefinitionList);
 
 }
 
@@ -38,7 +41,7 @@ void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *newAssemblyLine, i
                          labelOrDefinitionList* openingLabelNDefinitionList,
                          labelOrDefinitionList* entryNExternalList){
     lexTree *thisLexTree = lexTreeConstructor(newAssemblyLine, instructionCounter);
-    validateLexTree(thisLexTree);
+    validateLexTree(thisLexTree, openingLabelNDefinitionList);
     listsUpdating(openingLabelNDefinitionList, entryNExternalList, thisLexTree);
 
     codingThisLexTree(thisLexTree);
@@ -80,12 +83,14 @@ void codingThisLexTree(lexTree* thisLexTree){
 
 
 
-
-
-
-
-
-
+/*
+labelNode *current = openingLabelNDefinitionList->head;
+while(current->next != NULL){
+    printf("%s  \n",current->title);
+    current = (labelNode *) current->next;
+}
+printf("%s  \n",current->title);
+*/
 
 
 

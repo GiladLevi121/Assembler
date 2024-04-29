@@ -1,9 +1,18 @@
 
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 #include "labelNDefineValidation.h"
 #include "globaldefinitionsNStructures.h"
+#include "parser.h"
+
+errorType isNotLegalTitleWithoutBeginningNEndingWhiteSpaces(const char* potentialTitle){
+    char * rawPotentialTitle = trimLeadingNEndingWhitespace(potentialTitle);
+    errorType thisError = isNotLegalTitle(rawPotentialTitle);
+    free(rawPotentialTitle);
+    return thisError;
+}
 
 errorType isNotLegalTitle(const char* thisTitle){
     errorType thisError = valid;

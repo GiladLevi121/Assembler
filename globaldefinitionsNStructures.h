@@ -11,6 +11,7 @@
 #define FIRST_INDEX 0
 #define ZEROISE_COUNTER 0
 #define ZERO_CHARACTERS 0
+#define BEGINNING_ASSEMBLY_ARRAY_INDEX 0
 #define END_OF_STRING '\0'
 #define ANOTHER_CELL 1
 #define SECOND_CELL_INDEX 1
@@ -78,7 +79,7 @@ typedef enum {
     needTowQuotationMarksInStringDeclaration,
     illegalNumber,
     definitionNamingIsIllegal,
-    misiingEqualKnotInDefineSentence,
+    MissingEqualKnotInDefineSentence,
     inCompatibleOperand,
     missingOperand,
     toMannyOperands,
