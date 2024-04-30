@@ -3,7 +3,7 @@
 #ifndef ASSEMBLER_LEXTREEVALIDATION_H
 #define ASSEMBLER_LEXTREEVALIDATION_H
 
-#include "lexTree.h"
+#include "SettingLexTree.h"
 
 typedef enum{
     immediateAddressing = 0,
@@ -68,5 +68,9 @@ void validateDataDirectionSentence(lexTree *);
 
 /* Main function for string direction validation*/
 void validateStringDirection(lexTree *);
+
+/* Main function for extern & entry direction validation*/
+void validateExternOrEntry(lexTree *thisLexTree);
+
 
 #endif

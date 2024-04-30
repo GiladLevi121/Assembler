@@ -2,7 +2,7 @@
 #ifndef ASSEMBLER_CODINGTOCODEIMAGEFIRSTPASS_H
 #define ASSEMBLER_CODINGTOCODEIMAGEFIRSTPASS_H
 
-#include "lexTree.h"
+#include "SettingLexTree.h"
 
 
 #define BINARY_OPCODE_LENGTH 4

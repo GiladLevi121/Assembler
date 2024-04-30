@@ -216,16 +216,23 @@ void setErrorForPrnJsrIfNeeded(lexTree* thisLexTree,
 /*------------------------------direction validation functions------------------------------*/
 
 void validateDirectionLexTree(lexTree *thisLexTree){
-    if(thisLexTree->content.directionSentence.type == dataDirection)
+    DirectionSentence thisDirectionSentence;
+    thisDirectionSentence = thisLexTree->content.directionSentence;
+    if(thisDirectionSentence.type == dataDirection)
         validateDataDirectionSentence(thisLexTree);
-    else
+    else if (thisDirectionSentence.type == stringDirection)
         validateStringDirection(thisLexTree);
+    else
+        validateExternOrEntry(thisLexTree);
 }
 
-void validateDataDirectionSentence(lexTree *thisLexTree){}
+void validateDataDirectionSentence(lexTree *thisLexTree){
+    /*printf("%d \n", strlen(thisLexTree->content.directionSentence.content.dataDirection));*/
+}
 
 void validateStringDirection(lexTree *thisLexTree){}
 
+void validateExternOrEntry(lexTree *thisLexTree){}
 
 
 

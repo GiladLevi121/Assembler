@@ -1,6 +1,6 @@
 
 #include "codingToCodeImageFirstPass.h"
-#include "lexTree.h"
+#include "SettingLexTree.h"
 #include "baseTransitionUtiles.h"
 
 void codeToCodeImage(lexTree* thisLexTree) {

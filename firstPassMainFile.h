@@ -4,7 +4,7 @@
 #define ASSEMBLER_FIRSTPASSMAINFILE_H
 
 #include "label.h"
-#include "lexTree.h"
+#include "SettingLexTree.h"
 
 /*this function activates first pass on a file. it gets
  *file's name (without ending),  */

@@ -7,7 +7,7 @@
 #include "filesUtil.h"
 #include "globaldefinitionsNStructures.h"
 #include "line.h"
-#include "lexTree.h"
+#include "SettingLexTree.h"
 #include "lexTreeValidation.h"
 #include "label.h"
 #include "codingToCodeImageFirstPass.h"
@@ -45,13 +45,17 @@ void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *newAssemblyLine, i
     listsUpdating(openingLabelNDefinitionList, entryNExternalList, thisLexTree);
 
     codingThisLexTree(thisLexTree);
+    printf("Line of assembly: %d.    error type: %d\n", instructionCounter, thisLexTree->error);
 
     free(newAssemblyLine);
-    free(thisLexTree);
+    freeLexTree(thisLexTree);
+    /*free(thisLexTree);*/
 }
 
 void listsUpdating(labelOrDefinitionList* labelNDefinitionList,
                    labelOrDefinitionList* entryNExternalList, lexTree* thisLexTree){
+    if(thisLexTree->error != valid)
+        return;
     if(thisLexTree->potentialLabel != NULL){
         addLabelOrDefinitionNodeAtTheEnd(labelNDefinitionList, thisLexTree->potentialLabel);
     }
