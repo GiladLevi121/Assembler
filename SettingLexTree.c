@@ -26,7 +26,9 @@ lexTree *lexTreeConstructor(const assemblyLineCode *inputAssemblyLine, int pc){
         newLexTree->error = lineLengthIsTooLong;
         return newLexTree;
     }
+    printf("ssssssssssssssssssssssssssssssprint please\n");
     newLexTree->potentialLabel = labelNodeConstructor(inputAssemblyLine);
+    printf("print please\n");
     newLexTree->rawLine = inputAssemblyLine;
     newLexTree->rawLineInnerIndex = ZEROISE_COUNTER;
     setLexTreeType(newLexTree);
@@ -34,9 +36,6 @@ lexTree *lexTreeConstructor(const assemblyLineCode *inputAssemblyLine, int pc){
     return newLexTree;
 }
 
-void resetInnerIndex(lexTree* thisLexTree, size_t plusIndex){
-    thisLexTree->rawLineInnerIndex = thisLexTree->rawLineInnerIndex + plusIndex;
-}
 
 void setLexTreeType(lexTree* thisLexTree){
     const char *rawLineContent = thisLexTree->rawLine->content;
@@ -62,8 +61,10 @@ void setLexTreeContent(lexTree *newLexTree){
         setDirectionLexTreeContent(newLexTree);
     else if(newLexTree->type == order)
         setOrderLexTreeContent(newLexTree);
-    else
+    else {
+        printf("just print");
         setDefinitionLexTreeContent(newLexTree);
+    }
 }
 
 void commasValidation(lexTree *newLexTree){
@@ -135,9 +136,9 @@ void setEntryNExternContent(lexTree * newLexTree){
     relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
     token = trimLeadingNEndingWhitespace(relevantRawLine);
     if(newLexTree->content.directionSentence.type == externDirection)
-        strcpy(newLexTree->content.directionSentence.content.externLabel, token);
+        initNSetExternDeclaration(newLexTree, token);
     else
-        strcpy(newLexTree->content.directionSentence.content.entryLabel, token);
+        initNSetEntryDeclaration(newLexTree, token);
 }
 
 void setDataDirectionContent(lexTree* newLexTree){
@@ -171,7 +172,7 @@ void setStringDirectionContent(lexTree *newLexTree){
     resetInnerIndex(newLexTree, firstNonWhitespaceIndex);
     relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
     token = trimLeadingNEndingWhitespace(relevantRawLine);
-    strcpy(newLexTree->content.directionSentence.content.stringContent, token);
+    initNSetStringDeclaration(newLexTree, token);
 }
 
 void assemblyStringValidation(lexTree *newLexTree, size_t firstQuotationMarks, size_t lastQuotationMarks){
@@ -282,6 +283,7 @@ void setOpCode(lexTree* newLexTree){
 }
 
 void setDefinitionLexTreeContent(lexTree *newLexTree){
+    printf("Reached setDefinitionLexTreeContent beginning for line %d\n", newLexTree->InstructionCounter);
     setDefinitionName(newLexTree);
     setDefinitionValue(newLexTree);
 }
@@ -295,10 +297,12 @@ void setDefinitionName(lexTree* newLexTree){
     definitionName = getTokensUpToChar(&relevantRawLine[definitionNameStartingIndex], '=');
     if(!isThereMandatoryWhiteSpace(relevantRawLine)){
         newLexTree->error = mandatoryWhiteCharAfterKeyWord;
+        initNSetDefinitionName(newLexTree, ZEROISE_COUNTER, NULL);
         return;
     }
     if(definitionName == NULL){
         newLexTree->error = MissingEqualKnotInDefineSentence;
+        initNSetDefinitionName(newLexTree, ZEROISE_COUNTER, NULL);
         return;
     }
     definitionNameEndIndex = findFirstNonWhitespaceIndexFromEnd(definitionName);
@@ -310,6 +314,10 @@ void setDefinitionName(lexTree* newLexTree){
 void setDefinitionValue(lexTree* newLexTree){
     const char *relevantRawLine, *definitionValue;
     int definitionValueStartingIndex, definitionValueEndIndex, definitionValueLength;
+    if(newLexTree->content.definitionContent.name == NULL){
+        initNSetDefinitionValue(newLexTree, ZEROISE_COUNTER, NULL);
+        return;
+    }
     relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
     definitionValueStartingIndex = findFirstNonWhitespaceIndex(relevantRawLine);
     definitionValueEndIndex = findFirstNonWhitespaceIndexFromEnd(relevantRawLine);
@@ -317,70 +325,12 @@ void setDefinitionValue(lexTree* newLexTree){
     definitionValue = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
     definitionValueLength = definitionValueEndIndex + LAST_CELL - definitionValueStartingIndex;
     initNSetDefinitionValue(newLexTree, definitionValueLength, definitionValue);
-
 }
 
 
 
 
 
-void initNSetDestinationOperand(lexTree* thisLexTree, const char* destinationOperand){
-    thisLexTree->content.orderContent.destinationOperand = (char*) malloc(
-            strlen(destinationOperand) * sizeof(char));
-    strcpy(thisLexTree->content.orderContent.destinationOperand, destinationOperand);
-}
-
-void initNSetSourceOperand(lexTree* thisLexTree, const char* sourceOperand){
-    thisLexTree->content.orderContent.sourceOperand = (char*) malloc(
-            strlen(sourceOperand) * sizeof(char));
-    strcpy(thisLexTree->content.orderContent.sourceOperand, sourceOperand);
-}
-
-
-
-void initNSetDefinitionName(lexTree* thisLexTree, int definitionNameLength,
-                             const char* definitionName){
-    if(definitionName == NULL)
-        thisLexTree->content.definitionContent.name = NULL;
-    else{
-        thisLexTree->content.definitionContent.name = (char*) malloc(definitionNameLength * sizeof(char));
-        memcpy(thisLexTree->content.definitionContent.name, definitionName, definitionNameLength);
-        thisLexTree->content.definitionContent.name[definitionNameLength] = END_OF_STRING;
-    }
-}
-
-void initNSetDefinitionValue(lexTree* thisLexTree, int definitionValueLength,
-                             const char* definitionValue){
-    if(definitionValue == NULL)
-        thisLexTree->content.definitionContent.value = NULL;
-    else{
-        thisLexTree->content.definitionContent.value = (char*)malloc(definitionValueLength * sizeof (char));
-        memcpy(thisLexTree->content.definitionContent.value,
-               definitionValue,/*definitionValueStartingIndex*/
-               definitionValueLength);
-        thisLexTree->content.definitionContent.value[definitionValueLength] = END_OF_STRING;
-    }
-}
-
-
-
-
-
-
-void freeLexTree(lexTree* thisLexTree) {
-    if (thisLexTree->type == definition){
-        if (thisLexTree->content.definitionContent.value != NULL)
-            free(thisLexTree->content.definitionContent.value);
-        if (thisLexTree->content.definitionContent.name != NULL)
-            free(thisLexTree->content.definitionContent.name);
-    }else if(thisLexTree->type == order){
-        if(thisLexTree->content.orderContent.destinationOperand != NULL)
-            free(thisLexTree->content.orderContent.destinationOperand);
-        if (thisLexTree->content.orderContent.sourceOperand != NULL)
-            free(thisLexTree->content.orderContent.sourceOperand);
-    }
-    free(thisLexTree);
-}
 
 
 

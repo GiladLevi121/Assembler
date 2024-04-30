@@ -5,103 +5,11 @@
 
 #include <stdio.h>
 
+#include "lexTree.h"
 #include "label.h"
 
 #define DEFINE_SENTENCE_IDENTIFIER ".define"
 #define DEFINE_SENTENCE_IDENTIFIER_LENGTH 7
-
-
-/*------------------------------structs------------------------------*/
-
-/*------------------------------order sentence------------------------------*/
-
-typedef enum  {
-    mov = 0,
-    cmp = 1,
-    add = 2,
-    sub = 3,
-    lea = 4,
-    not = 5,
-    clr = 6,
-    inc = 7,
-    dec = 8,
-    jmp = 9,
-    bne = 10,
-    red = 11,
-    prn = 12,
-    jsr = 13,
-    rts = 14,
-    hlt = 15,
-    UnfamiliarCommand = 16
-}commandOpcode;
-
-typedef enum {
-    undefinedGroup,
-    firstGroup,
-    secondGroup,
-    thirdGroup
-}opcodeGroup;
-
-typedef struct {
-    char *sourceOperand;
-    char *destinationOperand;
-    commandOpcode opcode;
-    opcodeGroup group;
-}OrderSentence;
-
-/*------------------------------definition sentence------------------------------*/
-
-typedef struct {
-    char *name;
-    char *value;
-}DefinitionSentence;
-
-/*------------------------------direction sentence------------------------------*/
-typedef struct {
-    /*order match directionsTypeIdentifier in lexTree.c*/
-    enum {
-        stringDirection,
-        dataDirection,
-        entryDirection,
-        externDirection,
-        unfamiliarDirection
-    } type;
-    union {
-        char stringContent[MAX_STRING_LENGTH];
-        char dataDirection[MAX_NUMBERS_IN_DATA_DECLARATION][MAX_NUMBER_LENGTH];
-        char entryLabel[MAX_LABEL_LENGTH_AFTER_ENTRY];
-        char externLabel[MAX_LABEL_LENGTH_AFTER_EXTERN];
-    } content;
-} DirectionSentence;
-
-/*------------------------------lexTree------------------------------*/
-
-typedef enum {
-    order,
-    direction,
-    definition
-} lexTreeType;
-
-
-typedef struct {
-    size_t rawLineInnerIndex;
-    const assemblyLineCode *rawLine;
-    int InstructionCounter;
-    errorType error;
-    labelNode *potentialLabel;
-    lexTreeType type;
-    union {
-        OrderSentence orderContent;
-        DirectionSentence directionSentence;
-        DefinitionSentence definitionContent;
-    } content;
-    /*union {
-        char codeImag[ORDER_MAX_WORD_IN_MEMORY][MEMORY_WORD_LENGTH];
-        char dataImag[MAX_CHARS_IN_LINE][MEMORY_WORD_LENGTH];
-        boolean nonCoding;
-    }coding;*/
-} lexTree;
-
 
 /*------------------------------lexTree functions structure------------------------------*/
 /*
@@ -136,9 +44,6 @@ lexTree *lexTreeConstructor(const assemblyLineCode *, int);
 /*sets lex tree sentence type*/
 void setLexTreeType(lexTree*);
 
-/*set current index to plus size_t*/
-void resetInnerIndex(lexTree*, size_t);
-
 /*set lex tree content*/
 void setLexTreeContent(lexTree *);
 
@@ -147,7 +52,6 @@ void commasValidation(lexTree *);
 
 /*set lex tree if direction sentence*/
 void setDirectionLexTreeContent(lexTree *);
-
 
 /*------------------------------directions functions------------------------------*/
 
@@ -196,29 +100,4 @@ void setDefinitionLexTreeContent(lexTree*);
 void setDefinitionName(lexTree*);
 
 void setDefinitionValue(lexTree*);
-
-
-
-
-/* Allocating memory for lexTree...destinationOperand, according to const char* .len,
- * and copy it */
-void initNSetDestinationOperand(lexTree*, const char* );
-
-/* Allocating memory for lexTree...sourceOperand, according to const char* .len,
- * and copy it */
-void initNSetSourceOperand(lexTree*, const char*);
-
-
-
-/* Allocating memory for lexTree...value, according to definitionValueLength,
- * and copy definitionValue */
-void initNSetDefinitionValue(lexTree* thisLexTree, int definitionValueLength,
-                             const char* definitionValue);
-
-/* Allocating memory for lexTree...name, according to definitionValueLength,
- * and copy definitionName */
-void initNSetDefinitionName(lexTree*, int, const char* );
-
-/* Free allocated memory*/
-void freeLexTree(lexTree* );
 #endif

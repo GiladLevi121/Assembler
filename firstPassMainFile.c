@@ -29,11 +29,8 @@ void runFirstPass(char *fileName,
                                                openingLabelNDefinitionList,
                                                entryNExternalList);
     }
-
-
     fclose(filePointer);
     deallocateLabelListElements(openingLabelNDefinitionList);
-
 }
 
 
@@ -41,15 +38,16 @@ void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *newAssemblyLine, i
                          labelOrDefinitionList* openingLabelNDefinitionList,
                          labelOrDefinitionList* entryNExternalList){
     lexTree *thisLexTree = lexTreeConstructor(newAssemblyLine, instructionCounter);
+    printf("Initiated line %d\n", instructionCounter);
     validateLexTree(thisLexTree, openingLabelNDefinitionList);
+    printf("Validated line %d\n", instructionCounter);
     listsUpdating(openingLabelNDefinitionList, entryNExternalList, thisLexTree);
 
     codingThisLexTree(thisLexTree);
-    printf("Line of assembly: %d.    error type: %d\n", instructionCounter, thisLexTree->error);
+    //printf("Line of assembly: %d.    error type: %d\n", instructionCounter, thisLexTree->error);
 
     free(newAssemblyLine);
     freeLexTree(thisLexTree);
-    /*free(thisLexTree);*/
 }
 
 void listsUpdating(labelOrDefinitionList* labelNDefinitionList,
@@ -77,6 +75,8 @@ void listsUpdating(labelOrDefinitionList* labelNDefinitionList,
 
 
 void codingThisLexTree(lexTree* thisLexTree){
+    if(thisLexTree->error != valid)
+        return;
     if(thisLexTree->type == order)
         codeToCodeImage(thisLexTree);
 }
