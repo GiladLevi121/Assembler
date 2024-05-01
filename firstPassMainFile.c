@@ -38,13 +38,11 @@ void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *newAssemblyLine, i
                          labelOrDefinitionList* openingLabelNDefinitionList,
                          labelOrDefinitionList* entryNExternalList){
     lexTree *thisLexTree = lexTreeConstructor(newAssemblyLine, instructionCounter);
-    printf("Initiated line %d\n", instructionCounter);
     validateLexTree(thisLexTree, openingLabelNDefinitionList);
-    printf("Validated line %d\n", instructionCounter);
     listsUpdating(openingLabelNDefinitionList, entryNExternalList, thisLexTree);
 
     codingThisLexTree(thisLexTree);
-    //printf("Line of assembly: %d.    error type: %d\n", instructionCounter, thisLexTree->error);
+    printf("Line of assembly: %d.    error type: %d\n", instructionCounter, thisLexTree->error);
 
     free(newAssemblyLine);
     freeLexTree(thisLexTree);

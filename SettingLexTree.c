@@ -26,9 +26,7 @@ lexTree *lexTreeConstructor(const assemblyLineCode *inputAssemblyLine, int pc){
         newLexTree->error = lineLengthIsTooLong;
         return newLexTree;
     }
-    printf("ssssssssssssssssssssssssssssssprint please\n");
     newLexTree->potentialLabel = labelNodeConstructor(inputAssemblyLine);
-    printf("print please\n");
     newLexTree->rawLine = inputAssemblyLine;
     newLexTree->rawLineInnerIndex = ZEROISE_COUNTER;
     setLexTreeType(newLexTree);
@@ -62,7 +60,6 @@ void setLexTreeContent(lexTree *newLexTree){
     else if(newLexTree->type == order)
         setOrderLexTreeContent(newLexTree);
     else {
-        printf("just print");
         setDefinitionLexTreeContent(newLexTree);
     }
 }
@@ -283,7 +280,6 @@ void setOpCode(lexTree* newLexTree){
 }
 
 void setDefinitionLexTreeContent(lexTree *newLexTree){
-    printf("Reached setDefinitionLexTreeContent beginning for line %d\n", newLexTree->InstructionCounter);
     setDefinitionName(newLexTree);
     setDefinitionValue(newLexTree);
 }

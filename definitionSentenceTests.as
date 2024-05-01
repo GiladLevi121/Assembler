@@ -1,5 +1,4 @@
 dff .define = -819
-.define vjfvj3ffjfjgfkdgkdfgmnl6  = -819
 .define
 dff: .define = -819
 .define sz= 12 20

@@ -14,30 +14,21 @@ char *extractOpeningLabelTitle(const assemblyLineCode* assemblyLine){
     char *potentialLabel = (char*)malloc(sizeof(char) * LABEL_MAX_LENGTH_WITH_PADDING_CELL);
     int counter = ZEROISE_COUNTER;
     size_t lineLength = strlen(assemblyLine->content);
-    for (; (counter < lineLength) && (assemblyLine->content[counter] != ':'); ++counter)
+    for (;(counter < lineLength) && (counter < LABEL_MAX_LENGTH_WITH_PADDING_CELL) && (assemblyLine->content[counter] != ':'); ++counter)
         potentialLabel[counter] = assemblyLine->content[counter];
     potentialLabel[counter] = END_OF_STRING;
     if (assemblyLine->content[counter] == LABEL_IDENTIFIER)
         return potentialLabel;
-    return NULL;
-}
-
-void setLabelTitle(labelNode * thisLabelNode, const assemblyLineCode* thisAssemblyLineCode) {
-    char *thisTitle = extractOpeningLabelTitle(thisAssemblyLineCode);
-    if (thisTitle == NULL) {
-        thisLabelNode->title[FIRST_INDEX] = NO_LABEL;
-        return;
+    else{
+        free(potentialLabel);
+        return NULL;
     }
-    strcpy(thisLabelNode->title, thisTitle);
-    free(thisTitle);
 }
 
 labelNode *labelNodeConstructor(const assemblyLineCode* thisAssemblyLineCode){
     labelNode *newLabel = (labelNode *) malloc(sizeof(labelNode));
-    setLabelTitle(newLabel, thisAssemblyLineCode);
-    if (newLabel == NULL)
-        printf("failed to construct labelNode");
-    if(!newLabel->title[FIRST_INDEX]){
+    newLabel->title = extractOpeningLabelTitle(thisAssemblyLineCode);
+    if (newLabel->title == NULL){
         free(newLabel);
         return NULL;
     }
@@ -56,6 +47,8 @@ size_t getLabelLengthWithLabelIdentifier(const labelNode* thisLabelNode) {
 
 labelNode* labelDefinitionNodeConstructor(const char *enteredTitle, const char* enteredValue){
     labelNode *newDefinition = (labelNode *) malloc(sizeof(labelNode));
+    newDefinition->title = (char*) malloc(strlen(enteredTitle) * sizeof (char));
+    newDefinition->value.definitionValue = (char*) malloc(strlen(enteredValue) * sizeof (char ));
     strcpy(newDefinition->title, enteredTitle);
     strcpy(newDefinition->value.definitionValue, enteredValue);
     newDefinition->labelType = mDefine;

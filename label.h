@@ -27,11 +27,11 @@ typedef enum{
 
 typedef struct /*labelNode*/ {
     errorType labelError;
-    char title[MAX_CHARS_IN_LINE];
+    char *title;
     labelCharacteristics labelType;
     union {
         char PC;
-        char definitionValue[MAX_NUMBER_LENGTH_IN_DEFINE];
+        char *definitionValue;
     }value;
     struct labelOrDefinitionNode *next;
 } labelNode;
@@ -44,15 +44,14 @@ typedef struct {
 
 /*------------------------------node functions------------------------------*/
 
-/*this function gets an assembly line code and returns opening label if existed,
- *by searching ':'. returns NULL if doesn't fond*/
+/*this function gets an assembly line code and allocate memory for label.title,
+ * sets there the opening label if existed by searching ':'. Or
+ * free the title if doesn't fond*/
 char *extractOpeningLabelTitle(const assemblyLineCode *assemblyLine);
 
 /*construct and set label node*/
 labelNode *labelNodeConstructor(const assemblyLineCode*);
 
-/*sets title*/
-void setLabelTitle(labelNode *, const assemblyLineCode* );
 
 /*return label length with ":"*/
 size_t getLabelLengthWithLabelIdentifier(const labelNode*);
