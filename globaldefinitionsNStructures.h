@@ -74,16 +74,16 @@ typedef enum {
     inCompatibleOperand,
     toMannyOperands,
 
-    argumentIsNotANumber,/*using when want to check if .data arguments are numbers*/
+    incompatibleArgumentForDataDeclaration,/*using when want to check if .data arguments are numbers*/
+
     invalidNameForEntryOrExternDeclaration,
     labelTitleAlreadyUsed,
     illegalDefinitionTitle,
     definitionCantHaveALabel,
     commaIsTheLastChar,
     commaCantBeTheFirsCharAfterDirectionDeclaration,
-    firstAllowedCharAfterStringDeclarationIsQuotationMarks,
-    lastAllowedCharAfterStringDeclarationIsQuotationMarks,
-    needTowQuotationMarksInStringDeclaration,
+    missingQuotationMarksInStringDeclaration,
+
     illegalNumber,
     definitionNamingIsIllegal,
     MissingEqualKnotInDefineSentence,

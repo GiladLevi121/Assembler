@@ -10,7 +10,7 @@
 #include "SettingLexTree.h"
 #include "lexTreeValidation.h"
 #include "label.h"
-#include "codingToCodeImageFirstPass.h"
+#include "memoryImage.h"
 
 void runFirstPass(char *fileName,
                   labelOrDefinitionList* openingLabelNDefinitionList,

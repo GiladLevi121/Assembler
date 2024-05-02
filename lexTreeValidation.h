@@ -61,10 +61,11 @@ void setErrorForPrnJsrIfNeeded(lexTree*, addressMethod, addressMethod);
 /*------------------------------direction validation functions------------------------------*/
 
 /* Main function for direction validation*/
-void validateDirectionLexTree(lexTree *);
+void validateDirectionLexTree(lexTree * , labelOrDefinitionList*);
 
-/* Main function for data direction validation*/
-void validateDataDirectionSentence(lexTree *);
+/* Main function for data direction validation, check also in case
+ * of already defined definition as argument*/
+void validateDataDirectionSentence(lexTree *, labelOrDefinitionList*);
 
 /* Main function for string direction validation*/
 void validateStringDirection(lexTree *);

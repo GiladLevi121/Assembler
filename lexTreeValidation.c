@@ -17,7 +17,7 @@ void validateLexTree(lexTree * thisLexTree, labelOrDefinitionList *openingLabelN
             validateOrderLexTree(thisLexTree, openingLabelNDefinitionList);
             break;
         case direction:
-            validateDirectionLexTree(thisLexTree);
+            validateDirectionLexTree(thisLexTree, openingLabelNDefinitionList);
             break;
         default:
             if (thisLexTree->error != undefinedCommand)
@@ -215,23 +215,38 @@ void setErrorForPrnJsrIfNeeded(lexTree* thisLexTree,
 
 /*------------------------------direction validation functions------------------------------*/
 
-void validateDirectionLexTree(lexTree *thisLexTree){
+void validateDirectionLexTree(lexTree *thisLexTree, labelOrDefinitionList* openingNDefinitionList){
     DirectionSentence thisDirectionSentence;
     thisDirectionSentence = thisLexTree->content.directionSentence;
     if(thisDirectionSentence.type == dataDirection)
-        validateDataDirectionSentence(thisLexTree);
+        validateDataDirectionSentence(thisLexTree, openingNDefinitionList);
     else if (thisDirectionSentence.type == stringDirection)
         validateStringDirection(thisLexTree);
     else
         validateExternOrEntry(thisLexTree);
 }
 
-void validateDataDirectionSentence(lexTree *thisLexTree){
-    /*printf("%d \n", strlen(thisLexTree->content.directionSentence.content.dataDirection));*/
+void validateDataDirectionSentence(lexTree *thisLexTree, labelOrDefinitionList* openingNDefinitionList){
+    char ** dataArguments = thisLexTree->content.directionSentence.content.dataDirection;
+    int i = ZEROISE_COUNTER;
+    /*how many pointers*/
+    size_t pointersInDoublePointer = sizeof (dataArguments)/ sizeof (dataArguments[i]);
+    while(i < pointersInDoublePointer){
+        if (!is14BitsLegalNumberIgnoreWhiteSpaces(dataArguments[i]) ||
+                getDefinitionValueFromListIgnoreWhiteSpaces(
+                        openingNDefinitionList, dataArguments[i]) == NULL){
+        /* not legal number and not defined already*/
+        thisLexTree->error = incompatibleArgumentForDataDeclaration;
+        }
+        i++;
+    }
 }
 
 void validateStringDirection(lexTree *thisLexTree){
-
+    const char * assemblyStr = thisLexTree->content.directionSentence.content.stringContent;
+    size_t lastIndex = strlen(assemblyStr) - LAST_CELL;
+    if(assemblyStr[FIRST_INDEX] != '"' || assemblyStr[lastIndex] != '"' || lastIndex == FIRST_INDEX)
+        thisLexTree->error = missingQuotationMarksInStringDeclaration;
 }
 
 void validateExternOrEntry(lexTree *thisLexTree){
@@ -249,24 +264,7 @@ void validateExternOrEntry(lexTree *thisLexTree){
 
 
 
-void assemblyStringValidation(lexTree *newLexTree, size_t, size_t);
 
-
-void assemblyStringValidation(lexTree *newLexTree, size_t firstQuotationMarks, size_t lastQuotationMarks){
-    const char* rawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
-    if(rawLine[newLexTree->rawLineInnerIndex] != '"'){
-        newLexTree->error = firstAllowedCharAfterStringDeclarationIsQuotationMarks;
-        return;
-    }
-    if (rawLine[newLexTree->rawLineInnerIndex + lastQuotationMarks] != '"'){
-        newLexTree->error = lastAllowedCharAfterStringDeclarationIsQuotationMarks;
-        return;
-    }
-    if (firstQuotationMarks >= lastQuotationMarks){
-        newLexTree->error = needTowQuotationMarksInStringDeclaration;
-        return;
-    }
-}
 
 
 
