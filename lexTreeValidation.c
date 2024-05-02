@@ -230,18 +230,43 @@ void validateDataDirectionSentence(lexTree *thisLexTree){
     /*printf("%d \n", strlen(thisLexTree->content.directionSentence.content.dataDirection));*/
 }
 
-void validateStringDirection(lexTree *thisLexTree){}
+void validateStringDirection(lexTree *thisLexTree){
 
-void validateExternOrEntry(lexTree *thisLexTree){}
+}
+
+void validateExternOrEntry(lexTree *thisLexTree){
+    const char* title;
+    if (thisLexTree->content.directionSentence.type == entryDirection)
+        title = thisLexTree->content.directionSentence.content.entryLabel;
+    else
+        title = thisLexTree->content.directionSentence.content.externLabel;
+    if(isNotLegalTitle(title))
+        thisLexTree->error = invalidNameForEntryOrExternDeclaration;
+}
 
 
 
 
 
 
+void assemblyStringValidation(lexTree *newLexTree, size_t, size_t);
 
 
-
+void assemblyStringValidation(lexTree *newLexTree, size_t firstQuotationMarks, size_t lastQuotationMarks){
+    const char* rawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
+    if(rawLine[newLexTree->rawLineInnerIndex] != '"'){
+        newLexTree->error = firstAllowedCharAfterStringDeclarationIsQuotationMarks;
+        return;
+    }
+    if (rawLine[newLexTree->rawLineInnerIndex + lastQuotationMarks] != '"'){
+        newLexTree->error = lastAllowedCharAfterStringDeclarationIsQuotationMarks;
+        return;
+    }
+    if (firstQuotationMarks >= lastQuotationMarks){
+        newLexTree->error = needTowQuotationMarksInStringDeclaration;
+        return;
+    }
+}
 
 
 

@@ -2,6 +2,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "SettingLexTree.h"
 #include "lexTree.h"
@@ -139,7 +140,8 @@ void setEntryNExternContent(lexTree * newLexTree){
 }
 
 void setDataDirectionContent(lexTree* newLexTree){
-    size_t counter = ZEROISE_COUNTER;
+    size_t tokensAmount = getDataArgumentAmount(newLexTree);
+    initDataDeclarationDoublePointer(newLexTree, tokensAmount);
     size_t tokenLength;
     const char* rawLine = newLexTree->rawLine->content;
     char* token;
@@ -149,16 +151,35 @@ void setDataDirectionContent(lexTree* newLexTree){
             token = getTokensUpToChar(&rawLine[rawLineIndex], ',');
             tokenLength = strlen(token) + ANOTHER_CELL; /* ANOTHER_CELL = len(',')*/
             token = trimLeadingNEndingWhitespace(token);
-            strcpy(newLexTree->content.directionSentence.content.dataDirection[counter],token);
-            counter++;
+            addTokenToDataDirection(newLexTree, token);
             resetInnerIndex(newLexTree, tokenLength);
         }
         else{
             token = trimLeadingNEndingWhitespace(&rawLine [rawLineIndex]);
-            strcpy(newLexTree->content.directionSentence.content.dataDirection[counter], token);
+            addTokenToDataDirection(newLexTree, token);
             break;
         }
     }while(token != NULL);
+}
+
+size_t getDataArgumentAmount(lexTree* newLexTree){
+    const char* relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
+    size_t index = ZEROISE_COUNTER;
+    size_t tokensAmount = ZEROISE_COUNTER;
+    boolean foundToken = false;
+    if(newLexTree->error != valid)
+        return ZEROISE_COUNTER;
+
+    while(relevantRawLine[index] != END_OF_STRING){
+        if(!isspace(relevantRawLine[index]))/*Empty line check*/
+            foundToken = true;
+        if(relevantRawLine[index] == ',')
+            tokensAmount++;
+        index ++;
+    }
+    if(foundToken)
+        tokensAmount++;
+    return tokensAmount;
 }
 
 void setStringDirectionContent(lexTree *newLexTree){
@@ -172,21 +193,7 @@ void setStringDirectionContent(lexTree *newLexTree){
     initNSetStringDeclaration(newLexTree, token);
 }
 
-void assemblyStringValidation(lexTree *newLexTree, size_t firstQuotationMarks, size_t lastQuotationMarks){
-    const char* rawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
-    if(rawLine[newLexTree->rawLineInnerIndex] != '"'){
-        newLexTree->error = firstAllowedCharAfterStringDeclarationIsQuotationMarks;
-        return;
-    }
-    if (rawLine[newLexTree->rawLineInnerIndex + lastQuotationMarks] != '"'){
-        newLexTree->error = lastAllowedCharAfterStringDeclarationIsQuotationMarks;
-        return;
-    }
-    if (firstQuotationMarks >= lastQuotationMarks){
-        newLexTree->error = needTowQuotationMarksInStringDeclaration;
-        return;
-    }
-}
+
 
 void setOrderLexTreeContent(lexTree *newLexTree){
     setOpCode(newLexTree);

@@ -75,8 +75,7 @@ typedef enum {
     toMannyOperands,
 
     argumentIsNotANumber,/*using when want to check if .data arguments are numbers*/
-    invalidEntryLabel,
-    invalidExternLabel,
+    invalidNameForEntryOrExternDeclaration,
     labelTitleAlreadyUsed,
     illegalDefinitionTitle,
     definitionCantHaveALabel,

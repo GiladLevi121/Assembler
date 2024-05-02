@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "label.h"
 
+#define ZERO_TOKENS 0
 /*------------------------------order sentence------------------------------*/
 
 typedef enum  {
@@ -60,7 +61,8 @@ typedef struct {
     } type;
     union {
         char *stringContent;
-        char dataDirection[MAX_NUMBERS_IN_DATA_DECLARATION][MAX_NUMBER_LENGTH];
+        /*[MAX_NUMBERS_IN_DATA_DECLARATION][MAX_NUMBER_LENGTH];*/
+        char **dataDirection;
         char *entryLabel;
         char *externLabel;
     } content;
@@ -90,12 +92,27 @@ typedef struct {
 } lexTree;
 
 /*------------------------------directions functions------------------------------*/
+/* Allocating memory for lexTree...entryLabel, according to const char* .len,
+ * and copy it */
 void initNSetEntryDeclaration(lexTree*, const char* );
 
+/* Allocating memory for lexTree...externLabel, according to const char* .len,
+ * and copy it */
 void initNSetExternDeclaration(lexTree*, const char* );
 
+/* Allocating memory for lexTree...stringContent, according to const char* .len,
+ * and copy it */
 void initNSetStringDeclaration(lexTree*, const char* );
 
+/* Allocating the double pointer memory for lexTree...dataContent, according to
+ * the size_t argument entered. *dataContent[x] = NULL;*/
+void initDataDeclarationDoublePointer(lexTree* , size_t);
+
+/* Adding the char* to the next open lexTree....*dataDirection[i]*/
+void addTokenToDataDirection(lexTree*, char*);
+
+/* Helper function to free dataDirection*/
+void freeDataDirectionContent(lexTree* );
 /*------------------------------orders functions------------------------------*/
 
 

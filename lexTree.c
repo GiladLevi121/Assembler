@@ -3,6 +3,32 @@
 
 #include "lexTree.h"
 
+void initDataDeclarationDoublePointer(lexTree* thisLexTree, size_t pointersAmount){
+    int counter = ZEROISE_COUNTER;
+    if(pointersAmount <= ZERO_TOKENS){
+        thisLexTree->content.directionSentence.content.dataDirection = NULL;
+        return;
+    }
+    else
+        thisLexTree->content.directionSentence.content.dataDirection = (char **) malloc(
+                pointersAmount * sizeof(char *));
+
+    while(counter < pointersAmount){
+        thisLexTree->content.directionSentence.content.dataDirection[counter] = NULL;
+        counter++;
+    }
+}
+
+void addTokenToDataDirection(lexTree* thisLexTree, char* token){
+    int i = ZEROISE_COUNTER;
+    while(thisLexTree->content.directionSentence.content.dataDirection[i] != NULL){
+        i++;
+    }
+    thisLexTree->content.directionSentence.content.dataDirection[i] =
+            (char *) malloc(strlen(token) * sizeof (char));
+    thisLexTree->content.directionSentence.content.dataDirection[i] = token;
+}
+
 
 void initNSetEntryDeclaration(lexTree* thisLexTree, const char* entryLabel){
     if(entryLabel == NULL){
@@ -100,8 +126,22 @@ void freeLexTree(lexTree* thisLexTree) {
         if (thisLexTree->content.directionSentence.type == externDirection &&
                 thisLexTree->content.directionSentence.content.externLabel != NULL)
             free(thisLexTree->content.directionSentence.content.externLabel);
+        if(thisLexTree->content.directionSentence.type == dataDirection) {
+            freeDataDirectionContent(thisLexTree);
+        }
+
     }
     free(thisLexTree);
+}
+
+void freeDataDirectionContent(lexTree* thisLexTree){
+    int i = ZEROISE_COUNTER;
+    /*how many pointers*/
+    size_t pointersToFree = sizeof (thisLexTree->content.directionSentence.content.dataDirection)/
+        sizeof (thisLexTree->content.directionSentence.content.dataDirection[i]);
+    for (; i < pointersToFree; i++) {
+        free(thisLexTree->content.directionSentence.content.dataDirection[i]);
+    }
 }
 
 void resetInnerIndex(lexTree* thisLexTree, size_t plusIndex){

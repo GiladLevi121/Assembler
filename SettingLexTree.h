@@ -68,10 +68,11 @@ void directionDeclarationCheck(lexTree *);
 /*set content of data direction*/
 void setDataDirectionContent(lexTree*);
 
+/*get how many arguments data direction has*/
+size_t getDataArgumentAmount(lexTree* );
+
 /*set content of string direction*/
 void setStringDirectionContent(lexTree *);
-
-void assemblyStringValidation(lexTree *newLexTree, size_t, size_t);
 
 /*for ".entry thisLabel" set thisLabel*/
 void setEntryNExternContent(lexTree*);
