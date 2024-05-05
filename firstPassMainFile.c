@@ -10,7 +10,7 @@
 #include "SettingLexTree.h"
 #include "lexTreeValidation.h"
 #include "label.h"
-#include "memoryImage.h"
+#include "firstPassCoding.h"
 
 void runFirstPass(char *fileName,
                   labelOrDefinitionList* openingLabelNDefinitionList,
@@ -41,7 +41,7 @@ void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *newAssemblyLine, i
     validateLexTree(thisLexTree, openingLabelNDefinitionList);
     listsUpdating(openingLabelNDefinitionList, entryNExternalList, thisLexTree);
 
-    codingThisLexTree(thisLexTree);
+    codingThisLexTree(thisLexTree, openingLabelNDefinitionList);
     printf("Line of assembly: %d.    error type: %d\n", instructionCounter, thisLexTree->error);
 
     free(newAssemblyLine);
@@ -72,11 +72,11 @@ void listsUpdating(labelOrDefinitionList* labelNDefinitionList,
 
 
 
-void codingThisLexTree(lexTree* thisLexTree){
+void codingThisLexTree(lexTree* thisLexTree, labelOrDefinitionList *openingLabelNDefinitionList){
     if(thisLexTree->error != valid)
         return;
     if(thisLexTree->type == order)
-        codeToCodeImage(thisLexTree);
+        codeOrderToCodeImage(thisLexTree, openingLabelNDefinitionList);
 }
 
 

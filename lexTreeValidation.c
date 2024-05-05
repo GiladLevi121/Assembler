@@ -229,14 +229,13 @@ void validateDirectionLexTree(lexTree *thisLexTree, labelOrDefinitionList* openi
 void validateDataDirectionSentence(lexTree *thisLexTree, labelOrDefinitionList* openingNDefinitionList){
     char ** dataArguments = thisLexTree->content.directionSentence.content.dataDirection;
     int i = ZEROISE_COUNTER;
-    /*how many pointers*/
-    size_t pointersInDoublePointer = sizeof (dataArguments)/ sizeof (dataArguments[i]);
-    while(i < pointersInDoublePointer){
-        if (!is14BitsLegalNumberIgnoreWhiteSpaces(dataArguments[i]) ||
+
+    while(dataArguments[i] != NULL){
+        if (!is14BitsLegalNumberIgnoreWhiteSpaces(dataArguments[i]) &&
                 getDefinitionValueFromListIgnoreWhiteSpaces(
                         openingNDefinitionList, dataArguments[i]) == NULL){
         /* not legal number and not defined already*/
-        thisLexTree->error = incompatibleArgumentForDataDeclaration;
+            thisLexTree->error = incompatibleArgumentForDataDeclaration;
         }
         i++;
     }

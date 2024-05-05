@@ -1,24 +1,25 @@
 
+
 #ifndef ASSEMBLER_MEMORYIMAGE_H
 #define ASSEMBLER_MEMORYIMAGE_H
 
-#include "SettingLexTree.h"
+#define FIRST_FREE_WORD 100
+#define FIRS_WORD_OCCUPIED 1
 
+typedef struct {
+    size_t PC;
+    size_t currentlyWordsInCodeImage;
+    size_t currentlyWordsInDataImage;
+    char **codeImage;
+    char **dataImage;
+}memoryImage;
 
-#define BINARY_OPCODE_LENGTH 4
+/* Construct memoryImage*/
+memoryImage *memoryImageConstructor();
 
+/* Allocating memory*/
+void setFirstWordInCodeImage(memoryImage *, const char*);
 
-
-
-/*main function to code for Code Image, assuming lexTree.type = order */
-void codeToCodeImage(lexTree*);
-
-/*coding first word*/
-void codeFirstWordInCodeImage(lexTree *);
-
-/*return string that represent the binary opCode*/
-char *getBinaryOpCode(commandOpcode);
-
-
-
+/* Reallocating memory and add the const char** to codeImage*/
+void addToCodeImage(memoryImage*, const char**);
 #endif

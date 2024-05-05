@@ -97,6 +97,8 @@ void deallocateLabelListElements(labelOrDefinitionList *thisList) {
 
 char* getDefinitionValueFromList(labelOrDefinitionList *thisList, const char* defineName){
     labelNode *current = thisList->head;
+    if (thisList->head == NULL)
+        return NULL;
     while(current->next != NULL){
         if (current->labelType == mDefine && !strcmp(current->title, defineName))
             return current->value.definitionValue;
@@ -107,7 +109,8 @@ char* getDefinitionValueFromList(labelOrDefinitionList *thisList, const char* de
     return NULL;
 }
 
-char* getDefinitionValueFromListIgnoreWhiteSpaces(labelOrDefinitionList *thisList, const char* defineNameWithWhiteSpaces){
+char* getDefinitionValueFromListIgnoreWhiteSpaces(labelOrDefinitionList *thisList,
+                                                  const char* defineNameWithWhiteSpaces){
     char * defineName = trimLeadingNEndingWhitespace(defineNameWithWhiteSpaces);
     char* value = getDefinitionValueFromList(thisList, defineName);
     free(defineName);

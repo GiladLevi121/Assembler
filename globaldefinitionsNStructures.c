@@ -37,3 +37,13 @@ boolean isARegisterName(const char * str){
 }
 
 
+void appendToken(char* dest, const char* token){
+    size_t orgLength = strlen(dest);
+    int counter = ZEROISE_COUNTER;
+    for(;counter < strlen(token); counter++){
+        dest[orgLength + counter] = token[counter];
+    }
+    dest[orgLength + counter] = END_OF_STRING;
+}
+
+

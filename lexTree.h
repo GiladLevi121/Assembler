@@ -105,7 +105,8 @@ void initNSetExternDeclaration(lexTree*, const char* );
 void initNSetStringDeclaration(lexTree*, const char* );
 
 /* Allocating the double pointer memory for lexTree...dataContent, according to
- * the size_t argument entered. *dataContent[x] = NULL;*/
+ * the size_t argument entered. *dataContent[x] = NULL, also puts NULL in another
+ * cell to indicate end of data argument;*/
 void initDataDeclarationDoublePointer(lexTree* , size_t);
 
 /* Adding the char* to the next open lexTree....*dataDirection[i]*/

@@ -1,25 +1,43 @@
 
+#include <stdlib.h>
+#include <stdio.h>
+#include "string.h"
+
+#include "globaldefinitionsNStructures.h"
 #include "memoryImage.h"
-#include "SettingLexTree.h"
-#include "baseTransitionUtiles.h"
 
-void codeToCodeImage(lexTree* thisLexTree) {
-    /*add validation check up to this point*/
-    codeFirstWordInCodeImage(thisLexTree);
+memoryImage *memoryImageConstructor(){
+    memoryImage * newMemoryImage = (memoryImage*)malloc(sizeof (memoryImage));
+    newMemoryImage->PC = FIRST_FREE_WORD;
+
+    newMemoryImage->dataImage = (char**) malloc(sizeof (char*));
+    return newMemoryImage;
 }
 
-void codeFirstWordInCodeImage(lexTree* thisLexTree){
-    OrderSentence thisOrderSentence = thisLexTree->content.orderContent;
-    char * binaryOpCode = getBinaryOpCode(thisOrderSentence.opcode);
-
+void setFirstWordInCodeImage(memoryImage * thisMemoryImage, const char* word){
+    if(strlen(word) != IMAGE_WORD_IN_MEMORY_LENGTH)
+        printf("ERROR IN CODDING (setFirstWordInCodeImage) MUST CHECK");
+    thisMemoryImage->codeImage = (char**) malloc(sizeof (char*));
+    thisMemoryImage->codeImage[FIRST_INDEX] = (char*) malloc(
+            IMAGE_WORD_IN_MEMORY_LENGTH * sizeof (char));
+    strcpy(thisMemoryImage->codeImage[FIRST_INDEX], word);
+    thisMemoryImage->currentlyWordsInCodeImage = FIRS_WORD_OCCUPIED;
 }
 
-char* getBinaryOpCode(commandOpcode thisCommandOpCode){
-    return intToBinaryString(thisCommandOpCode, BINARY_OPCODE_LENGTH);
+void addToCodeImage(memoryImage* thisMemoryImage, const char** words){
+    size_t wordsAmount = sizeof (words) / sizeof (words[FIRST_INDEX]);
+    int counter = ZEROISE_COUNTER;
+    size_t newMemoryWordsAmount =
+            thisMemoryImage->currentlyWordsInCodeImage + wordsAmount;
+    if(thisMemoryImage->codeImage != NULL){
+        thisMemoryImage->codeImage = (char**) realloc(thisMemoryImage->codeImage,
+                                                      newMemoryWordsAmount * sizeof (char*));
+    }
+    for(; counter < wordsAmount; counter++){
+        strcpy(thisMemoryImage->codeImage[thisMemoryImage->currentlyWordsInCodeImage + counter + ANOTHER_CELL],
+               words[counter]);
+    }
+    thisMemoryImage->currentlyWordsInCodeImage = newMemoryWordsAmount;
 }
 
-
-
-
-
-
+/*void increaseCodeImage*/

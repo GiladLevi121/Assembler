@@ -18,12 +18,11 @@
 #define LAST_CELL 1
 
 
-#define CHARS_TO_REPRESENT_LINE_IN_MEMORY 4
-#define ORDER_MAX_WORD_IN_MEMORY 4 /*5,: 0 to 4 = 5*/
-#define MAX_OPCODE_LENGTH 3
+
 #define REGISTERS_AMOUNT 8
 
 #define DECIMAL 10
+#define IMAGE_WORD_IN_MEMORY_LENGTH 14
 
 /*in .c file*/
 #define REGISTERS_FIRST_INDEX_IN_KEY_WORDS 21
@@ -101,4 +100,6 @@ boolean isAReservedWord(const char*);
 /*Return true if str is one of the registers name*/
 boolean isARegisterName(const char *);
 
+
+void appendToken(char* , const char* );
 #endif

@@ -17,6 +17,6 @@ void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *, int ,labelOrDefi
                          labelOrDefinitionList*);
 
 /*send to coding according to the type*/
-void codingThisLexTree(lexTree* );
+void codingThisLexTree(lexTree*, labelOrDefinitionList*);
 
 #endif
