@@ -7,25 +7,16 @@
 
 char *intToBinaryString(int num, int stringLength) {
     unsigned int absNum = abs(num);
-    int counter = ZEROISE_COUNTER;
-    char *binaryStr = (char*)malloc((stringLength) * sizeof(char));
-    binaryStr[stringLength] = END_OF_STRING;
+    char *binaryStr = (char*)malloc((stringLength + LAST_CELL) * sizeof(char));
+    int iteration;
 
     if (binaryStr == NULL)
         return NULL;
 
-    while (absNum > POSITIVE){
-        if(counter == stringLength){
-            free(binaryStr);
-            return NULL;
-        }
-        binaryStr[counter] = (char)(absNum % BINARY_MODULO);
-        absNum = absNum / BINARY_MODULO;
-        counter++;
-    }
-    while(counter < stringLength){
-        binaryStr[counter] = '0';
-        counter++;
+    binaryStr[stringLength] = END_OF_STRING;
+    for (iteration = stringLength - LAST_CELL; iteration >= FIRST_INDEX; iteration--) {
+        binaryStr[iteration] = (absNum & CURRENT_BIT) ? '1' : '0';
+        absNum >>= SHIFT;
     }
     if (isNegative(num)) /* If the original number is negative => two's complement*/
         complementToTwo(binaryStr, stringLength);
@@ -40,13 +31,15 @@ boolean isNegative(int number){
 void complementToTwo(char *binaryStr, int stringLength){
     int carry = CARRY_EXIST;
     int iteration;
-    for (iteration = stringLength; iteration >= FIRST_INDEX; iteration--) {
+
+    for (iteration = stringLength - LAST_CELL; iteration >= FIRST_INDEX; iteration--) {
         if (binaryStr[iteration] == '0')
             binaryStr[iteration] = '1';
         else
             binaryStr[iteration] = '0';
     }
-    for (iteration = ZEROISE_COUNTER; iteration <= stringLength; iteration++) {
+
+    for (iteration = stringLength - LAST_CELL; iteration >= FIRST_INDEX; iteration--) {
         if (binaryStr[iteration] == '0' && carry == CARRY_EXIST) {
             binaryStr[iteration] = '1';
             carry = ZEROISE_CARRY;
@@ -55,20 +48,3 @@ void complementToTwo(char *binaryStr, int stringLength){
     }
 }
 
-/*
- *  int carry = CARRY_EXIST;
-    int iteration;
-    for (iteration = stringLength; iteration >= FIRST_INDEX; iteration--) {
-        if (binaryStr[iteration] == '0')
-            binaryStr[iteration] = '1';
-        else
-            binaryStr[iteration] = '0';
-    }
-    for (iteration = ZEROISE_COUNTER; iteration <= stringLength; iteration++) {
-        if (binaryStr[iteration] == '0')
-            binaryStr[iteration] = '1';
-        else{
-            binaryStr[iteration] = '0';
-
-        }
-    }*/

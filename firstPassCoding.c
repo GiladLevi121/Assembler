@@ -14,26 +14,35 @@ void codeOrderToCodeImage(lexTree* thisLexTree, labelOrDefinitionList* openingLa
     if(thisLexTree->error != valid)
         return;
     firstMemoryWord = getFirstWordInOrderImage(thisLexTree, openingLabelNDefinitionList);
+    printf("Line: (%d)%s first Memory Word: %s\n", thisLexTree->InstructionCounter, thisLexTree->rawLine->content ,firstMemoryWord);
     free(firstMemoryWord);
     if(determineAddressMethod(thisLexTree->content.orderContent.destinationOperand, openingLabelNDefinitionList) == immediateAddressing) {
         a = getImmediateAddressBinaryWord(&thisLexTree->content.orderContent.destinationOperand[SECOND_CELL_INDEX],
                                                 openingLabelNDefinitionList);
-        printf("%s\n", a);
+        printf("\t\tLine: %d Immediate Address: %s\n", thisLexTree->InstructionCounter ,a);
         free(a);
     }
 }
+
+
 
 char* getImmediateAddressBinaryWord(const char* operand, labelOrDefinitionList* openingLabelNDefinitionList){
     char* word = (char*) malloc(IMAGE_WORD_IN_MEMORY_LENGTH * sizeof (char));
     char* ARE = "00";
     char* binaryOperand;
     char *endPointer;
+    int finalOperand;
     const char * rawOperand;
     if(is12BitsLegalNumberAsIs(operand))
         rawOperand = operand;
     else
         rawOperand = getDefinitionValueFromList(openingLabelNDefinitionList, operand);
-    binaryOperand = intToBinaryString((int)strtol(rawOperand, &endPointer, DECIMAL), MEMORY_WORD_LENGTH_IN_CODE_IMAGE);
+    finalOperand = (int)strtol(rawOperand, &endPointer, DECIMAL);
+    if (*endPointer != '\0' && *endPointer != '\n'){
+        free(word);
+        return NULL;
+    }
+    binaryOperand = intToBinaryString(finalOperand, MEMORY_WORD_LENGTH_IN_CODE_IMAGE);
     strcpy(word, binaryOperand);
     free(binaryOperand);
     strcat(word, ARE);
@@ -71,7 +80,6 @@ char* getFirstWordInOrderImage(lexTree* thisLexTree, labelOrDefinitionList* open
     strcat(memoryWord, binaryDestinationAddressingMethod);
     free(binaryDestinationAddressingMethod);
     strcat(memoryWord,ARE);
-    printf("%s \n",memoryWord);
     return memoryWord;
 }
 

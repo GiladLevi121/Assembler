@@ -42,7 +42,7 @@ void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *newAssemblyLine, i
     listsUpdating(openingLabelNDefinitionList, entryNExternalList, thisLexTree);
 
     codingThisLexTree(thisLexTree, openingLabelNDefinitionList);
-    printf("Line of assembly: %d.    error type: %d\n", instructionCounter, thisLexTree->error);
+    //printf("Line of assembly: %d.    error type: %d\n", instructionCounter, thisLexTree->error);
 
     free(newAssemblyLine);
     freeLexTree(thisLexTree);
