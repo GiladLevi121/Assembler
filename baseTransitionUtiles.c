@@ -7,16 +7,25 @@
 
 char *intToBinaryString(int num, int stringLength) {
     unsigned int absNum = abs(num);
-    char *binaryStr = (char*)malloc((stringLength + LAST_CELL) * sizeof(char));
+    int counter = ZEROISE_COUNTER;
+    char *binaryStr = (char*)malloc((stringLength) * sizeof(char));
     binaryStr[stringLength] = END_OF_STRING;
-    int iteration;
 
-    if (binaryStr[FIRST_INDEX] == END_OF_STRING)
+    if (binaryStr == NULL)
         return NULL;
 
-    for (iteration = stringLength - LAST_CELL; iteration >= FIRST_INDEX; iteration--) {
-        binaryStr[iteration] = (absNum & CURRENT_BIT) ? '1' : '0';
-        absNum >>= SHIFT;
+    while (absNum > POSITIVE){
+        if(counter == stringLength){
+            free(binaryStr);
+            return NULL;
+        }
+        binaryStr[counter] = (char)(absNum % BINARY_MODULO);
+        absNum = absNum / BINARY_MODULO;
+        counter++;
+    }
+    while(counter < stringLength){
+        binaryStr[counter] = '0';
+        counter++;
     }
     if (isNegative(num)) /* If the original number is negative => two's complement*/
         complementToTwo(binaryStr, stringLength);

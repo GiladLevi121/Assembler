@@ -5,9 +5,10 @@
 
 #include "globaldefinitionsNStructures.h"
 
-
+#define POSITIVE 0
 #define ZEROISE_CARRY 0
 #define CARRY_EXIST 1
+#define BINARY_MODULO 2
 #define SHIFT 1
 #define CURRENT_BIT 1
 
