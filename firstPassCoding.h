@@ -16,7 +16,10 @@
 /*main function to code for Code Image, assuming lexTree.type = order */
 void codeOrderToCodeImage(lexTree*, labelOrDefinitionList*);
 
-/*coding first word*/
+/* Returns immediate address method binary representation*/
+char* getImmediateAddressBinaryWord(const char*, labelOrDefinitionList*);
+
+/*Returns first memory word of order sentence, in binary representation*/
 char* getFirstWordInOrderImage(lexTree *thisLexTree, labelOrDefinitionList *openingLabelNDefinitionList);
 
 /*return string that represent the binary opCode*/

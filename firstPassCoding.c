@@ -6,11 +6,38 @@
 #include "baseTransitionUtiles.h"
 #include "lexTreeValidation.h"
 #include "memoryImage.h"
+#include "parser.h"
 
 void codeOrderToCodeImage(lexTree* thisLexTree, labelOrDefinitionList* openingLabelNDefinitionList) {
+    char * firstMemoryWord;
+    char *a;
     if(thisLexTree->error != valid)
         return;
-    free(getFirstWordInOrderImage(thisLexTree, openingLabelNDefinitionList));
+    firstMemoryWord = getFirstWordInOrderImage(thisLexTree, openingLabelNDefinitionList);
+    free(firstMemoryWord);
+    if(determineAddressMethod(thisLexTree->content.orderContent.destinationOperand, openingLabelNDefinitionList) == immediateAddressing) {
+        a = getImmediateAddressBinaryWord(&thisLexTree->content.orderContent.destinationOperand[SECOND_CELL_INDEX],
+                                                openingLabelNDefinitionList);
+        printf("%s\n", a);
+        free(a);
+    }
+}
+
+char* getImmediateAddressBinaryWord(const char* operand, labelOrDefinitionList* openingLabelNDefinitionList){
+    char* word = (char*) malloc(IMAGE_WORD_IN_MEMORY_LENGTH * sizeof (char));
+    char* ARE = "00";
+    char* binaryOperand;
+    char *endPointer;
+    const char * rawOperand;
+    if(is12BitsLegalNumberAsIs(operand))
+        rawOperand = operand;
+    else
+        rawOperand = getDefinitionValueFromList(openingLabelNDefinitionList, operand);
+    binaryOperand = intToBinaryString((int)strtol(rawOperand, &endPointer, DECIMAL), MEMORY_WORD_LENGTH_IN_CODE_IMAGE);
+    strcpy(word, binaryOperand);
+    free(binaryOperand);
+    strcat(word, ARE);
+    return word;
 }
 
 char* getFirstWordInOrderImage(lexTree* thisLexTree, labelOrDefinitionList* openingLabelNDefinitionList){

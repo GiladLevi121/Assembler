@@ -11,8 +11,9 @@
 #define SHIFT 1
 #define CURRENT_BIT 1
 
-/*convert an integer to its binary representation as a string
- * max length allowed is sizeof(int)*/
+/* Convert an integer to its binary representation as a string
+ * max length allowed is sizeof(int). Second int is for the string length
+ * output*/
 char *intToBinaryString(int , int);
 
 /*return true <=> number is negative*/

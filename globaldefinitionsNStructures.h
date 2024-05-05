@@ -22,6 +22,7 @@
 #define REGISTERS_AMOUNT 8
 
 #define DECIMAL 10
+#define MEMORY_WORD_LENGTH_IN_CODE_IMAGE 12
 #define IMAGE_WORD_IN_MEMORY_LENGTH 14
 
 /*in .c file*/
