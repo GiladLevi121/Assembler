@@ -3,6 +3,8 @@
 #ifndef ASSEMBLER_GLOBALDEFINITIONSNSTRUCTURES_H
 #define ASSEMBLER_GLOBALDEFINITIONSNSTRUCTURES_H
 
+
+
 #define MEMORY_WORD_LENGTH 14
 #define WORDS_IN_MEMORY 4096
 #define FIRST_FILE 1
@@ -16,6 +18,8 @@
 #define ANOTHER_CELL 1
 #define SECOND_CELL_INDEX 1
 #define LAST_CELL 1
+#define TWO_WORDS 2
+#define REG_NAME_LENGTH 3
 
 
 
@@ -45,8 +49,9 @@
 #define FOURTEEN_BITS_MIN_NUMBER (-8192)
 
 #define DIRECTION_OR_DEFINITION_SENTENCE_KNOT '.'
+#define END_OF_ROW '\n'
 
-
+extern const char* reservedAssemblyWords[];
 /*------------------------------structs------------------------------*/
 
 typedef enum {

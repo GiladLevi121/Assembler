@@ -40,10 +40,8 @@ void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *newAssemblyLine, i
     lexTree *thisLexTree = lexTreeConstructor(newAssemblyLine, instructionCounter);
     validateLexTree(thisLexTree, openingLabelNDefinitionList);
     listsUpdating(openingLabelNDefinitionList, entryNExternalList, thisLexTree);
-
     codingThisLexTree(thisLexTree, openingLabelNDefinitionList);
-    //printf("Line of assembly: %d.    error type: %d\n", instructionCounter, thisLexTree->error);
-
+    printf("Line of assembly: %d.    error type: %d\n", instructionCounter, thisLexTree->error);
     free(newAssemblyLine);
     freeLexTree(thisLexTree);
 }
@@ -73,10 +71,25 @@ void listsUpdating(labelOrDefinitionList* labelNDefinitionList,
 
 
 void codingThisLexTree(lexTree* thisLexTree, labelOrDefinitionList *openingLabelNDefinitionList){
+    int amountOfWordsToCode = ZEROISE_COUNTER, i = 0;
+    char** wordsToCode;
     if(thisLexTree->error != valid)
         return;
-    if(thisLexTree->type == order)
-        codeOrderToCodeImage(thisLexTree, openingLabelNDefinitionList);
+    if(thisLexTree->type == order){
+        wordsToCode = getBinaryRepresentationOfThisOrder(thisLexTree,
+                                                         &amountOfWordsToCode ,openingLabelNDefinitionList);
+        for(; i < amountOfWordsToCode; i++){
+            if(wordsToCode[i] != NULL){
+                //printf("%s\n", wordsToCode[i]);
+                free(wordsToCode[i]);
+            }else{}
+                //printf("NULL\n");
+        }
+        free(wordsToCode);
+        //printf("\n");
+    }else if(thisLexTree->type == direction){
+        wordsToCode = getBinaryRepresentationOfDirection(thisLexTree, &amountOfWordsToCode ,openingLabelNDefinitionList);
+    }
 }
 
 

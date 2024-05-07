@@ -1,3 +1,7 @@
+.define len = 4
+LIST: .data 6, -9, len 
+K: .data 22 
+
 ; file ps.as
 .entry LIST 
 .extern W 
@@ -7,7 +11,7 @@ LOOP: 	jmp W
 	prn #-5
 	mov STR[5], STR[2] 
 	sub r1, r4
-	cmp K, #sz
+	cmp r3, #sz
 	bne W
 L1: 	inc L3 
 .entry LOOP
