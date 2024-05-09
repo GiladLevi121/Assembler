@@ -11,10 +11,12 @@
 #include "lexTreeValidation.h"
 #include "label.h"
 #include "firstPassCoding.h"
+#include "memoryImage.h"
 
 void runFirstPass(char *fileName,
                   labelOrDefinitionList* openingLabelNDefinitionList,
-                  labelOrDefinitionList* entryNExternalList){
+                  labelOrDefinitionList* entryNExternalList,
+                  memoryImage* fileMemoryImage){
     FILE *filePointer = openFileByName(fileName, AS_ENDING, "r");
     assemblyLineCode *newAssemblyLine;
     int instructionCounter = ZEROISE_COUNTER;
@@ -27,7 +29,8 @@ void runFirstPass(char *fileName,
         firstPassEveryLineOfAssemblyOperations(newAssemblyLine,
                                                ++instructionCounter,
                                                openingLabelNDefinitionList,
-                                               entryNExternalList);
+                                               entryNExternalList,
+                                               fileMemoryImage);
     }
     fclose(filePointer);
     deallocateLabelListElements(openingLabelNDefinitionList);
@@ -36,11 +39,12 @@ void runFirstPass(char *fileName,
 
 void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *newAssemblyLine, int instructionCounter,
                          labelOrDefinitionList* openingLabelNDefinitionList,
-                         labelOrDefinitionList* entryNExternalList){
+                         labelOrDefinitionList* entryNExternalList,
+                         memoryImage* fileMemoryImage){
     lexTree *thisLexTree = lexTreeConstructor(newAssemblyLine, instructionCounter);
     validateLexTree(thisLexTree, openingLabelNDefinitionList);
     listsUpdating(openingLabelNDefinitionList, entryNExternalList, thisLexTree);
-    codingThisLexTree(thisLexTree, openingLabelNDefinitionList);
+    codingThisLexTree(thisLexTree, openingLabelNDefinitionList, fileMemoryImage);
     //printf("Line of assembly: %d.    error type: %d\n", instructionCounter, thisLexTree->error);
     free(newAssemblyLine);
     freeLexTree(thisLexTree);
@@ -70,46 +74,25 @@ void listsUpdating(labelOrDefinitionList* labelNDefinitionList,
 
 
 
-void codingThisLexTree(lexTree* thisLexTree, labelOrDefinitionList *openingLabelNDefinitionList){
+void codingThisLexTree(lexTree* thisLexTree,
+                       labelOrDefinitionList *openingLabelNDefinitionList, memoryImage* fileMemoryImage){
     int amountOfWordsToCode = ZEROISE_COUNTER, i = 0;
     char** wordsToCode;
-    printf("Line number: %d:  %s\n", thisLexTree->InstructionCounter, thisLexTree->rawLine->content);
     if(thisLexTree->error != valid)
         return;
     if(thisLexTree->type == order){
         wordsToCode = getBinaryRepresentationOfThisOrder(thisLexTree,
                                                          &amountOfWordsToCode ,openingLabelNDefinitionList);
-        setbuf(stdout,0);
-        for(; i < amountOfWordsToCode; i++){
-            if(wordsToCode[i] != NULL){
-                printf("%s\n", wordsToCode[i]);
-                free(wordsToCode[i]);
-            }else{
-                printf("NULL\n");
-            }
-        }
-        free(wordsToCode);
-        printf("\n");
+            addToCodeImage(fileMemoryImage, wordsToCode, amountOfWordsToCode);
     }else if(thisLexTree->content.directionSentence.type == dataDirection) {
         wordsToCode = getBinaryRepresentationOfDirection(thisLexTree, &amountOfWordsToCode,
                                                          openingLabelNDefinitionList);
-        for (; i < getArgumentAmountInDataContent(thisLexTree); i++) {
-            printf("%s\n", wordsToCode[i]);
-            free(wordsToCode[i]);
-        }
-        free(wordsToCode);
-        printf("\n");
+        addToDataImage(fileMemoryImage, wordsToCode, getArgumentAmountInDataContent(thisLexTree));
     }else if (thisLexTree->content.directionSentence.type == stringDirection){
         wordsToCode = getBinaryRepresentationOfDirection(thisLexTree, &amountOfWordsToCode,
                                                          openingLabelNDefinitionList);
-        for (; i < amountOfWordsToCode; i++) {
-            printf("%s\n", wordsToCode[i]);
-            free(wordsToCode[i]);
-        }
-        free(wordsToCode);
-        printf("\n");
+        addToDataImage(fileMemoryImage, wordsToCode, amountOfWordsToCode);
     }
-    printf("\n");
 }
 
 

@@ -9,35 +9,67 @@
 memoryImage *memoryImageConstructor(){
     memoryImage * newMemoryImage = (memoryImage*)malloc(sizeof (memoryImage));
     newMemoryImage->PC = FIRST_FREE_WORD;
-
-    newMemoryImage->dataImage = (char**) malloc(sizeof (char*));
+    newMemoryImage->dataImage = (char**) malloc(BLOCK_OF_MEMORY * sizeof (char*));
+    newMemoryImage->codeImage = (char**) malloc(BLOCK_OF_MEMORY * sizeof (char*));
+    newMemoryImage->currentlyAllocatedWordsCodeImage = BLOCK_OF_MEMORY;
+    newMemoryImage->currentlyAllocatedWordsDataImage = BLOCK_OF_MEMORY;
+    newMemoryImage->currentlyWordsInCodeImage = ZEROISE_COUNTER;
+    newMemoryImage->currentlyWordsInDataImage = ZEROISE_COUNTER;
     return newMemoryImage;
 }
 
-void setFirstInstructionInCodeImage(memoryImage * thisMemoryImage, const char* word){
-    if(strlen(word) != IMAGE_WORD_IN_MEMORY_LENGTH)
-        printf("ERROR IN CODDING (setFirstInstructionInCodeImage) MUST CHECK");
-    thisMemoryImage->codeImage = (char**) malloc(sizeof (char*));
-    thisMemoryImage->codeImage[FIRST_INDEX] = (char*) malloc(
-            IMAGE_WORD_IN_MEMORY_LENGTH * sizeof (char));
-    strcpy(thisMemoryImage->codeImage[FIRST_INDEX], word);
-    thisMemoryImage->currentlyWordsInCodeImage = FIRS_WORD_OCCUPIED;
-}
 
-void addToCodeImage(memoryImage* thisMemoryImage, const char** words){
-    size_t wordsAmount = sizeof (words) / sizeof (words[FIRST_INDEX]);
+void addToCodeImage(memoryImage* thisMemoryImage, char** words, size_t wordsAmount){
     int counter = ZEROISE_COUNTER;
-    size_t newMemoryWordsAmount =
-            thisMemoryImage->currentlyWordsInCodeImage + wordsAmount;
-    if(thisMemoryImage->codeImage != NULL){
-        thisMemoryImage->codeImage = (char**) realloc(thisMemoryImage->codeImage,
-                                                      newMemoryWordsAmount * sizeof (char*));
+    size_t overAllWords = thisMemoryImage->currentlyAllocatedWordsCodeImage + BLOCK_OF_MEMORY;
+    if(thisMemoryImage->currentlyWordsInCodeImage + FIVE_WORD_TO_CODE >=
+    thisMemoryImage->currentlyAllocatedWordsCodeImage){
+        thisMemoryImage->codeImage = realloc(thisMemoryImage->codeImage,
+                                             overAllWords * sizeof (char*));
     }
     for(; counter < wordsAmount; counter++){
-        strcpy(thisMemoryImage->codeImage[thisMemoryImage->currentlyWordsInCodeImage + counter + ANOTHER_CELL],
-               words[counter]);
+        thisMemoryImage->codeImage[thisMemoryImage->currentlyWordsInCodeImage + counter] =
+                words[counter];
     }
-    thisMemoryImage->currentlyWordsInCodeImage = newMemoryWordsAmount;
+    thisMemoryImage->currentlyWordsInCodeImage += wordsAmount;
 }
 
-/*void increaseCodeImage*/
+void addToDataImage(memoryImage* thisMemoryImage, char** words, size_t wordsAmount){
+    int counter = ZEROISE_COUNTER;
+    size_t overAllWords = thisMemoryImage->currentlyAllocatedWordsDataImage + BLOCK_OF_MEMORY;
+    if(thisMemoryImage->currentlyWordsInDataImage + FIVE_WORD_TO_CODE >=
+       thisMemoryImage->currentlyAllocatedWordsDataImage){
+        thisMemoryImage->dataImage = realloc(thisMemoryImage->dataImage,
+                                             overAllWords * sizeof (char*));
+    }
+    for(; counter < wordsAmount; counter++){
+        thisMemoryImage->dataImage[thisMemoryImage->currentlyWordsInDataImage + counter] =
+                words[counter];
+    }
+    thisMemoryImage->currentlyWordsInDataImage += wordsAmount;
+}
+
+
+void freeMemoryImage(memoryImage* thisMemoryImage){
+    int i = ZEROISE_COUNTER;
+    for (; i < thisMemoryImage->currentlyWordsInCodeImage; i++) {
+        if(thisMemoryImage->codeImage[i] != NULL)
+            free(thisMemoryImage->codeImage[i]);
+    }
+    for (; i < thisMemoryImage->currentlyWordsInDataImage; i++) {
+        if(thisMemoryImage->dataImage[i] != NULL)
+            free(thisMemoryImage->dataImage[i]);
+    }
+    free(thisMemoryImage->codeImage);
+    free(thisMemoryImage->dataImage);
+}
+
+
+
+
+
+
+
+
+
+

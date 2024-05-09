@@ -18,6 +18,7 @@
 #define ANOTHER_CELL 1
 #define SECOND_CELL_INDEX 1
 #define LAST_CELL 1
+#define FIRS_INSTRUCTION 1
 #define TWO_WORDS 2
 #define REG_NAME_LENGTH 3
 
