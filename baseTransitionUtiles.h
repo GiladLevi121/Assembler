@@ -12,6 +12,9 @@
 #define SHIFT 1
 #define CURRENT_BIT 1
 
+/* Return 14 bit ascii value of char*/
+char *charToBinaryString(char);
+
 /* Convert an integer to its binary representation as a string
  * max length allowed is sizeof(int). Second int is for the string length
  * output*/

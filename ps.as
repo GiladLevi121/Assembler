@@ -1,7 +1,3 @@
-.define len = 4
-LIST: .data 6, -9, len 
-K: .data 22 
-
 ; file ps.as
 .entry LIST 
 .extern W 

@@ -30,7 +30,7 @@ typedef struct {
 memoryImage *memoryImageConstructor();
 
 /* Allocating memory*/
-void setFirstWordInCodeImage(memoryImage *, const char*);
+void setFirstInstructionInCodeImage(memoryImage *thisMemoryImage, const char *word);
 
 /* Reallocating memory and add the const char** to codeImage*/
 void addToCodeImage(memoryImage*, const char**);

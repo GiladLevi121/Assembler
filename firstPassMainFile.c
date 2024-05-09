@@ -41,7 +41,7 @@ void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *newAssemblyLine, i
     validateLexTree(thisLexTree, openingLabelNDefinitionList);
     listsUpdating(openingLabelNDefinitionList, entryNExternalList, thisLexTree);
     codingThisLexTree(thisLexTree, openingLabelNDefinitionList);
-    printf("Line of assembly: %d.    error type: %d\n", instructionCounter, thisLexTree->error);
+    //printf("Line of assembly: %d.    error type: %d\n", instructionCounter, thisLexTree->error);
     free(newAssemblyLine);
     freeLexTree(thisLexTree);
 }
@@ -73,23 +73,43 @@ void listsUpdating(labelOrDefinitionList* labelNDefinitionList,
 void codingThisLexTree(lexTree* thisLexTree, labelOrDefinitionList *openingLabelNDefinitionList){
     int amountOfWordsToCode = ZEROISE_COUNTER, i = 0;
     char** wordsToCode;
+    printf("Line number: %d:  %s\n", thisLexTree->InstructionCounter, thisLexTree->rawLine->content);
     if(thisLexTree->error != valid)
         return;
     if(thisLexTree->type == order){
         wordsToCode = getBinaryRepresentationOfThisOrder(thisLexTree,
                                                          &amountOfWordsToCode ,openingLabelNDefinitionList);
+        setbuf(stdout,0);
         for(; i < amountOfWordsToCode; i++){
             if(wordsToCode[i] != NULL){
-                //printf("%s\n", wordsToCode[i]);
+                printf("%s\n", wordsToCode[i]);
                 free(wordsToCode[i]);
-            }else{}
-                //printf("NULL\n");
+            }else{
+                printf("NULL\n");
+            }
         }
         free(wordsToCode);
-        //printf("\n");
-    }else if(thisLexTree->type == direction){
-        wordsToCode = getBinaryRepresentationOfDirection(thisLexTree, &amountOfWordsToCode ,openingLabelNDefinitionList);
+        printf("\n");
+    }else if(thisLexTree->content.directionSentence.type == dataDirection) {
+        wordsToCode = getBinaryRepresentationOfDirection(thisLexTree, &amountOfWordsToCode,
+                                                         openingLabelNDefinitionList);
+        for (; i < getArgumentAmountInDataContent(thisLexTree); i++) {
+            printf("%s\n", wordsToCode[i]);
+            free(wordsToCode[i]);
+        }
+        free(wordsToCode);
+        printf("\n");
+    }else if (thisLexTree->content.directionSentence.type == stringDirection){
+        wordsToCode = getBinaryRepresentationOfDirection(thisLexTree, &amountOfWordsToCode,
+                                                         openingLabelNDefinitionList);
+        for (; i < amountOfWordsToCode; i++) {
+            printf("%s\n", wordsToCode[i]);
+            free(wordsToCode[i]);
+        }
+        free(wordsToCode);
+        printf("\n");
     }
+    printf("\n");
 }
 
 

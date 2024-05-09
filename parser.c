@@ -46,12 +46,12 @@ boolean twoConsecutiveCommas(const char *line) {
 }
 
 boolean endsWithComma(const char * line){
-    size_t counter = ZEROISE_COUNTER;
+    int counter = ZEROISE_COUNTER;
 
     if(line == NULL || line[counter] == END_OF_STRING)
         return false;
 
-    counter = strlen(line);
+    counter = (int)strlen(line);
     while((counter >= FIRST_INDEX) && (isspace(line[counter])))
         counter--;
 
@@ -181,10 +181,6 @@ char* trimLeadingNEndingWhitespace(const char* str) {
     trimmedStr[trimmedLen] = END_OF_STRING;
 
     return trimmedStr;
-}
-
-boolean isValidAssemblyArray(const char * str, int beginning, int ending){
-
 }
 
 boolean isEmptyString(const char *str) {

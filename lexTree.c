@@ -143,7 +143,14 @@ void resetInnerIndex(lexTree* thisLexTree, size_t plusIndex){
     thisLexTree->rawLineInnerIndex = thisLexTree->rawLineInnerIndex + plusIndex;
 }
 
-
+size_t getArgumentAmountInDataContent(lexTree* thisLexTree){
+    DirectionSentence thisDirection= thisLexTree->content.directionSentence;
+    size_t i = ZEROISE_COUNTER;
+    while(thisDirection.content.dataDirection[i] != NULL){
+        i++;
+    }
+    return i;
+}
 
 
 

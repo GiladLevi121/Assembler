@@ -16,7 +16,7 @@ char** getBinaryRepresentationOfDirection(lexTree *thisLexTree, int *wordsOfMemo
         return getBinaryRepresentationOfData(thisLexTree, wordsOfMemoryInThisDirection,
                                              openingLabelNDefinitionList);
     }else if(thisLexTree->content.directionSentence.type == stringDirection){
-
+        return getBinaryRepresentationOfString(thisLexTree, wordsOfMemoryInThisDirection);
     }
     return NULL;
 }
@@ -24,12 +24,46 @@ char** getBinaryRepresentationOfDirection(lexTree *thisLexTree, int *wordsOfMemo
 
 char **getBinaryRepresentationOfData(lexTree *thisLexTree, int *wordsOfMemoryInThisDirection,
                                      labelOrDefinitionList* openingLabelNDefinitionList){
-    return NULL;
+    DirectionSentence thisDirection = thisLexTree->content.directionSentence;
+    size_t argumentAmount = getArgumentAmountInDataContent(thisLexTree);
+    char** wordsToCode;
+    int i = ZEROISE_COUNTER, finalOperand;
+    char* definitionValue, *endPointer;
+    *wordsOfMemoryInThisDirection = (int)argumentAmount;
+    wordsToCode = (char**) malloc(argumentAmount * sizeof (char*));
+
+    for(; i < argumentAmount; i++){
+        if(is14BitsLegalNumberAsIs(thisDirection.content.dataDirection[i]))
+            finalOperand = (int)strtol(thisDirection.content.dataDirection[i], &endPointer, DECIMAL);
+        else{
+            definitionValue = getDefinitionValueFromListIgnoreWhiteSpaces(
+                    openingLabelNDefinitionList, thisDirection.content.dataDirection[i]);
+            finalOperand = (int)strtol(definitionValue, &endPointer, DECIMAL);
+        }
+        if (*endPointer != END_OF_STRING && *endPointer != END_OF_ROW)
+            return NULL;
+        wordsToCode[i] = intToBinaryString(finalOperand, IMAGE_WORD_IN_MEMORY_LENGTH);
+    }
+    return wordsToCode;
 }
 
-char **getBinaryRepresentationOfString(lexTree *thisLexTree, int *wordsOfMemoryInThisDirection){
-    return NULL;
+char **getBinaryRepresentationOfString(lexTree *thisLexTree,
+                                       int *wordsOfMemoryInThisDirection){
+    //printf("%s\n",thisLexTree->content.directionSentence.content.stringContent);
+    DirectionSentence thisString = thisLexTree->content.directionSentence;
+    int i = ZEROISE_COUNTER + ANOTHER_CELL;/* stringContent[0] = '"'*/
+    /* <=> strlen(string) - len('"') - len('"') + len(endOfString) = len - 1 - 1 + 1*/
+    size_t amountOfSinglePointers = strlen(thisString.content.stringContent) - ANOTHER_CELL;
+    char** stringInBinary = (char**)malloc(amountOfSinglePointers * sizeof (char*));
+    for(; thisString.content.stringContent[i] != '"'; i++){
+        stringInBinary[i - ANOTHER_CELL] = charToBinaryString(thisString.content.stringContent[i]);
+    }
+    stringInBinary[i - ANOTHER_CELL] = (char*) malloc(IMAGE_WORD_IN_MEMORY_LENGTH * sizeof(char));
+    strcpy(stringInBinary[i - ANOTHER_CELL], "00000000000000");
+    *wordsOfMemoryInThisDirection = amountOfSinglePointers;
+    return stringInBinary;
 }
+
 
 /*------------------------------orders functions------------------------------*/
 char** getBinaryRepresentationOfThisOrder(lexTree* thisLexTree, int* wordsOfMemoryInThisOrder,
@@ -239,7 +273,7 @@ char* getBinaryIndexOfFixedIndex(
     indexName = (char*)malloc(sizeof (char) * (lengthOfInnerIndex));
     strncpy(token, indexOfSquareBrackets + LAST_CELL , lengthOfInnerIndex);
     indexName = trimLeadingNEndingWhitespace(token);
-    //indexName[lengthOfInnerIndex] = END_OF_STRING;
+    /*indexName[lengthOfInnerIndex] = END_OF_STRING;*/
     if(is12BitsLegalNumberAsIs(indexName))
         finalOperand = (int)strtol(indexName, &endPointer, DECIMAL);
     else{

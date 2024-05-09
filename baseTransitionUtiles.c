@@ -4,6 +4,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+char *charToBinaryString(char ch) {
+    char *binaryStr = (char *)malloc(IMAGE_WORD_IN_MEMORY_LENGTH * sizeof(char));
+    binaryStr[IMAGE_WORD_IN_MEMORY_LENGTH] = END_OF_STRING;
+    int i = IMAGE_WORD_IN_MEMORY_LENGTH - LAST_CELL;
+    for (; i >= FIRST_INDEX; i--) {
+        binaryStr[i] = (ch & CURRENT_BIT) ? '1' : '0';
+        ch >>= SHIFT;
+    }
+
+    return binaryStr;
+}
+
 
 char *intToBinaryString(int num, int stringLength) {
     unsigned int absNum = abs(num);

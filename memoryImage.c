@@ -14,9 +14,9 @@ memoryImage *memoryImageConstructor(){
     return newMemoryImage;
 }
 
-void setFirstWordInCodeImage(memoryImage * thisMemoryImage, const char* word){
+void setFirstInstructionInCodeImage(memoryImage * thisMemoryImage, const char* word){
     if(strlen(word) != IMAGE_WORD_IN_MEMORY_LENGTH)
-        printf("ERROR IN CODDING (setFirstWordInCodeImage) MUST CHECK");
+        printf("ERROR IN CODDING (setFirstInstructionInCodeImage) MUST CHECK");
     thisMemoryImage->codeImage = (char**) malloc(sizeof (char*));
     thisMemoryImage->codeImage[FIRST_INDEX] = (char*) malloc(
             IMAGE_WORD_IN_MEMORY_LENGTH * sizeof (char));
