@@ -12,19 +12,7 @@ int main(int argc, char *argv[]) {
     labelOrDefinitionList *openingLabelList = labelOrDefinitionListConstructor();
     labelOrDefinitionList *entryNExternalList = labelOrDefinitionListConstructor();
     runFirstPass(argv[1], openingLabelList, entryNExternalList, fileMemoryImage);
-    for (; i < fileMemoryImage->currentlyWordsInCodeImage; i++) {
-        if(fileMemoryImage->codeImage[i] != NULL)
-            printf("%s \n", fileMemoryImage->codeImage[i]);
-        else
-            printf("NULL\n");
-    }
-    i = 0;
-    for (; i < fileMemoryImage->currentlyWordsInDataImage; i++) {
-        if(fileMemoryImage->dataImage[i] != NULL)
-            printf("%s \n", fileMemoryImage->dataImage[i]);
-        else
-            printf("NULL\n");
-    }
+    deallocateLabelListElements(openingLabelList);
     freeMemoryImage(fileMemoryImage);
     return 0;
 }

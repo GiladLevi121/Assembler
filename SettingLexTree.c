@@ -19,9 +19,10 @@ const char* opcodeString[] =          {"mov", "cmp","add","sub",
                                        "dec","jmp","bne","red",
                                        "prn","jsr","rts","hlt"};
 //TODO: Set labelType.pc
-lexTree *lexTreeConstructor(const assemblyLineCode *inputAssemblyLine, int pc){
+lexTree *lexTreeConstructor(const assemblyLineCode *inputAssemblyLine, int instructionCounter,
+                            size_t currentlyDataImagePC, size_t currentlyCodeImagePC){
     lexTree *newLexTree = (lexTree*)malloc(sizeof (lexTree));
-    newLexTree->InstructionCounter = pc;
+    newLexTree->InstructionCounter = instructionCounter;
     newLexTree->error = valid;
     if(inputAssemblyLine->status == lineOutOfBounds){
         newLexTree->error = lineLengthIsTooLong;
@@ -32,9 +33,16 @@ lexTree *lexTreeConstructor(const assemblyLineCode *inputAssemblyLine, int pc){
     newLexTree->rawLineInnerIndex = ZEROISE_COUNTER;
     setLexTreeType(newLexTree);
     setLexTreeContent(newLexTree);
+    setLexTreeLabel(newLexTree, currentlyDataImagePC, currentlyCodeImagePC);
     return newLexTree;
 }
 
+void setLexTreeLabel(lexTree* newLexTree, size_t currentlyDataImagePC, size_t currentlyCodeImagePC){
+    if(newLexTree->type == order)
+        setLabelType(newLexTree->potentialLabel, false, currentlyDataImagePC, currentlyCodeImagePC);
+    else if(newLexTree->type == direction)
+        setLabelType(newLexTree->potentialLabel, true, currentlyDataImagePC, currentlyCodeImagePC);
+}
 
 void setLexTreeType(lexTree* thisLexTree){
     const char *rawLineContent = thisLexTree->rawLine->content;

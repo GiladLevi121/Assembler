@@ -44,7 +44,6 @@ size_t getLabelLengthWithLabelIdentifier(const labelNode* thisLabelNode) {
     return labelFinalLength;
 }
 
-
 labelNode* labelDefinitionNodeConstructor(const char *enteredTitle, const char* enteredValue){
     labelNode *newDefinition = (labelNode *) malloc(sizeof(labelNode));
     newDefinition->title = (char*) malloc(strlen(enteredTitle) * sizeof (char));
@@ -55,6 +54,43 @@ labelNode* labelDefinitionNodeConstructor(const char *enteredTitle, const char* 
     return newDefinition;
 }
 
+void setLabelType(labelNode* thisLabel, boolean isDataImage,
+                  size_t currentlyDataImagePC, size_t currentlyCodeImagePC ){
+    if(thisLabel != NULL)
+        thisLabel->value.PC = (char*)malloc(CHARS_NEEDED_TO_REPRESENT_LAST_MEMORY_LINE * sizeof(char));
+    else
+        return;
+
+    if(isDataImage){
+        thisLabel->labelType = data;
+        itoa((int)currentlyDataImagePC,thisLabel->value.PC, DECIMAL);
+    }else {
+        thisLabel->labelType = code;
+        itoa((int) currentlyCodeImagePC, thisLabel->value.PC, DECIMAL);
+    }
+}
+
+void resetPC(labelNode* thisLabel, int increment){
+    char* endPointer;
+    int previousPC;
+    previousPC = (int) strtol(thisLabel->value.PC,&endPointer, DECIMAL);
+    if (*endPointer != END_OF_STRING && *endPointer != END_OF_ROW) {
+        printf("Critical error in resetPC (label.c)!!!");
+    }
+    itoa(previousPC + increment, thisLabel->value.PC, DECIMAL);
+}
+
+void freeLabel(labelNode* labelToFree){
+    if(labelToFree == NULL)
+        return;
+    if(labelToFree->title != NULL)
+        free(labelToFree->title);
+    if(labelToFree->labelType == mDefine && labelToFree->value.definitionValue != NULL)
+        free(labelToFree->value.definitionValue);
+    else if (labelToFree->value.PC != NULL)
+        free(labelToFree->value.PC);
+    free(labelToFree);
+}
 
 /*------------------------------list functions------------------------------*/
 
@@ -90,7 +126,7 @@ void deallocateLabelListElements(labelOrDefinitionList *thisList) {
     labelNode *currentHead = thisList->head;
     while (currentHead != NULL) {
         labelNode *temp = (labelNode *) currentHead->next;
-        free(currentHead);
+        freeLabel(currentHead);
         currentHead = temp;
     }
 }

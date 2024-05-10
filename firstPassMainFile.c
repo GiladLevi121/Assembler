@@ -22,7 +22,7 @@ void runFirstPass(char *fileName,
     int instructionCounter = ZEROISE_COUNTER;
     if(filePointer == NULL){
         printf("Failed to open file %s, please make sure that file with exact"
-               " name is in the project file", fileName);
+               " name is in the project file\n", fileName);
         return;
     }
     while ((newAssemblyLine = getNextAssemblyLine(filePointer)) != NULL){
@@ -32,8 +32,23 @@ void runFirstPass(char *fileName,
                                                entryNExternalList,
                                                fileMemoryImage);
     }
+    dataImageEndOfFirstPassUpdating(fileMemoryImage, openingLabelNDefinitionList);
+    labelNode *current = openingLabelNDefinitionList->head;
+    while(current->next != NULL){
+        if (current->labelType == code ||
+        current->labelType == data)
+            printf("%s  %s\n", current->title, current->value.PC);
+        else
+            printf("%s  %s\n", current->title, current->value.definitionValue);
+        current = (labelNode *) current->next;
+    }
+    if (current->labelType == code ||
+        current->labelType == data)
+        printf("%s  %s\n", current->title, current->value.PC);
+    else
+        printf("%s  %s\n", current->title, current->value.definitionValue);
     fclose(filePointer);
-    deallocateLabelListElements(openingLabelNDefinitionList);
+
 }
 
 
@@ -41,11 +56,12 @@ void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *newAssemblyLine, i
                          labelOrDefinitionList* openingLabelNDefinitionList,
                          labelOrDefinitionList* entryNExternalList,
                          memoryImage* fileMemoryImage){
-    lexTree *thisLexTree = lexTreeConstructor(newAssemblyLine, instructionCounter);
+    lexTree *thisLexTree = lexTreeConstructor(newAssemblyLine, instructionCounter,
+                                              fileMemoryImage->currentlyWordsInDataImage,
+        /* PC + amount of words in CI <=>*/   (fileMemoryImage->currentlyWordsInCodeImage + fileMemoryImage->PC));
     validateLexTree(thisLexTree, openingLabelNDefinitionList);
     listsUpdating(openingLabelNDefinitionList, entryNExternalList, thisLexTree);
     codingThisLexTree(thisLexTree, openingLabelNDefinitionList, fileMemoryImage);
-    //printf("Line of assembly: %d.    error type: %d\n", instructionCounter, thisLexTree->error);
     free(newAssemblyLine);
     freeLexTree(thisLexTree);
 }
@@ -73,16 +89,15 @@ void listsUpdating(labelOrDefinitionList* labelNDefinitionList,
 }
 
 
-
 void codingThisLexTree(lexTree* thisLexTree,
                        labelOrDefinitionList *openingLabelNDefinitionList, memoryImage* fileMemoryImage){
-    int amountOfWordsToCode = ZEROISE_COUNTER, i = 0;
+    int amountOfWordsToCode = ZEROISE_COUNTER;
     char** wordsToCode;
     if(thisLexTree->error != valid)
         return;
     if(thisLexTree->type == order){
-        wordsToCode = getBinaryRepresentationOfThisOrder(thisLexTree,
-                                                         &amountOfWordsToCode ,openingLabelNDefinitionList);
+        wordsToCode = getBinaryRepresentationOfThisOrder(thisLexTree,&amountOfWordsToCode,
+                                                         openingLabelNDefinitionList);
             addToCodeImage(fileMemoryImage, wordsToCode, amountOfWordsToCode);
     }else if(thisLexTree->content.directionSentence.type == dataDirection) {
         wordsToCode = getBinaryRepresentationOfDirection(thisLexTree, &amountOfWordsToCode,
@@ -97,7 +112,19 @@ void codingThisLexTree(lexTree* thisLexTree,
 
 
 
-
+void dataImageEndOfFirstPassUpdating(memoryImage *fileMemoryImage,
+                                     labelOrDefinitionList* openingLabelNDefinitionList){
+    labelNode *current = openingLabelNDefinitionList->head;
+    while(current->next != NULL){
+        if(current->labelType == data){
+            resetPC(current, 100 + fileMemoryImage->currentlyWordsInCodeImage);
+        }
+        current = (labelNode *) current->next;
+    }
+    if(current->labelType == data){
+        resetPC(current, 100 + fileMemoryImage->currentlyWordsInCodeImage);
+    }
+}
 
 
 

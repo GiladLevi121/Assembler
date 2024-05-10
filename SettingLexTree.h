@@ -39,7 +39,7 @@
 */
 /*------------------------------lexTree functions ------------------------------*/
 /*lex tree constructor*/
-lexTree *lexTreeConstructor(const assemblyLineCode *, int);
+lexTree *lexTreeConstructor(const assemblyLineCode *, int, size_t, size_t);
 
 /*sets lex tree sentence type*/
 void setLexTreeType(lexTree*);
@@ -52,6 +52,8 @@ void commasValidation(lexTree *);
 
 /*set lex tree if direction sentence*/
 void setDirectionLexTreeContent(lexTree *);
+
+void setLexTreeLabel(lexTree*, size_t, size_t);
 
 /*------------------------------directions functions------------------------------*/
 

@@ -30,7 +30,7 @@ typedef struct /*labelNode*/ {
     char *title;
     labelCharacteristics labelType;
     union {
-        char PC;
+        char *PC;
         char *definitionValue;
     }value;
     struct labelOrDefinitionNode *next;
@@ -52,12 +52,20 @@ char *extractOpeningLabelTitle(const assemblyLineCode *assemblyLine);
 /*construct and set label node*/
 labelNode *labelNodeConstructor(const assemblyLineCode*);
 
-
 /*return label length with ":"*/
 size_t getLabelLengthWithLabelIdentifier(const labelNode*);
 
 /*Construct labelNode based on definition sentence*/
 labelNode* labelDefinitionNodeConstructor(const char *, const char *);
+
+/*Set the pc (do this when assuming lexTree is data or string type)*/
+void setPC(labelNode*, int);
+
+/* Freeing label node, don't free .next*/
+void freeLabel(labelNode*);
+
+/* Add the int to the current pc. Assuming label.type = data/code =>pc initiated already*/
+void resetPC(labelNode*, int );
 /*------------------------------list functions------------------------------*/
 
 labelOrDefinitionList* labelOrDefinitionListConstructor();

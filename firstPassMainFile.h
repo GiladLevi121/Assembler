@@ -11,13 +11,17 @@
  *file's name (without ending),  */
 void runFirstPass(char *, labelOrDefinitionList*, labelOrDefinitionList*, memoryImage* );
 
+/* Updating linked lists*/
 void listsUpdating(labelOrDefinitionList*, labelOrDefinitionList*, lexTree*);
 
-/*main operations that every line of assembly code need to be done*/
+/* Main operations that every line of assembly code need to be done*/
 void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *, int ,labelOrDefinitionList* ,
                          labelOrDefinitionList*, memoryImage*);
 
-/*send to coding according to the type*/
+/* Send to coding according to the type*/
 void codingThisLexTree(lexTree*, labelOrDefinitionList*, memoryImage*);
+
+/* Add offset of ci to di*/
+void dataImageEndOfFirstPassUpdating(memoryImage*, labelOrDefinitionList*);
 
 #endif
