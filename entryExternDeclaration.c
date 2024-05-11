@@ -110,3 +110,27 @@ void deallocatingEntryExternList(entryExternList* listToFree){
         currentHead = temp;
     }
 }
+
+boolean isTileAppearInEntryExternAsExternDeclarationList(const char *titleToSearch, entryExternList *thisList){
+    entryExternNode *current = thisList->head;
+    if(titleToSearch == NULL)
+        return false;
+    while (current != NULL) {
+        if(!strcmp(current->title, titleToSearch) && current->type == externDeclaration)
+            return true;
+        current = (entryExternNode *) current->next;
+    }
+    return false;
+}
+
+entryExternNode * nodeWithThisTitle(const char *titleToSearch, entryExternList *thisList){
+    entryExternNode *current = thisList->head;
+    if(titleToSearch == NULL)
+        return NULL;
+    while (current != NULL) {
+        if(!strcmp(current->title, titleToSearch) && current->type == externDeclaration)
+            return current;
+        current = (entryExternNode *) current->next;
+    }
+    return NULL;
+}

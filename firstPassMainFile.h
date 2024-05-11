@@ -25,4 +25,13 @@ void codingThisLexTree(lexTree*, labelOrDefinitionList*, memoryImage*);
 /* Add offset of ci to di*/
 void dataImageEndOfFirstPassUpdating(memoryImage*, labelOrDefinitionList*);
 
+/* Use-case for updatingLists function*/
+void addDefinitionToList(lexTree*, labelOrDefinitionList*, entryExternList* );
+
+/* Use-case for updatingLists function*/
+void addEntryOrExternToList(lexTree*, entryExternList *,labelOrDefinitionList* );
+
+/* For each entry declaration, sets its entryExternNode.content.declaredLine
+ * according to labelList. If amountOfWord = 0, ...declaredLine = NULL */
+void externEntryListUpdating(entryExternList *,labelOrDefinitionList *);
 #endif

@@ -97,6 +97,11 @@ typedef enum {
     definitionNamingIsIllegal,
     MissingEqualKnotInDefineSentence,
 
+    declaredEntryLabelButDidntDeclaredLabelInFile,
+    unKnownLabelUsage,
+    conflictNaming,
+    cantUseExternalDeclarationNameToAlreadyExistLabel,
+    cantUseEntryLabelOrDefinitionNameToAlreadyExistExternalDeclaration,
     entryOrExternDeclarationCantAppearTwice,
     twoConsecutiveCommasFound,
     labelUsedIsNotDeclared,/*label used but not connected to any memory*/

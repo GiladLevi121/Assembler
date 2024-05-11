@@ -154,3 +154,27 @@ char* getDefinitionValueFromListIgnoreWhiteSpaces(labelOrDefinitionList *thisLis
     free(defineName);
     return value;
 }
+
+boolean isTileAppearInLabelList(const char* titleToSearch, labelOrDefinitionList* thisList){
+    labelNode *current = thisList->head;
+    if(titleToSearch == NULL)
+        return false;
+    while (current != NULL) {
+        if(!strcmp(current->title, titleToSearch))
+            return true;
+        current = (labelNode *) current->next;
+    }
+    return false;
+}
+
+labelNode *getNodeIfAppearInLabelList(const char* titleToSearch, labelOrDefinitionList* thisList){
+    labelNode *current = thisList->head;
+    if(titleToSearch == NULL)
+        return NULL;
+    while (current != NULL) {
+        if(!strcmp(current->title, titleToSearch))
+            return current;
+        current = (labelNode *) current->next;
+    }
+    return NULL;
+}

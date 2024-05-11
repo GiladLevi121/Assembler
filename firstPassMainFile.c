@@ -34,14 +34,14 @@ void runFirstPass(char *fileName,
                                                fileMemoryImage);
     }
     dataImageEndOfFirstPassUpdating(fileMemoryImage, openingLabelNDefinitionList);
-
+    externEntryListUpdating(entryNExternalList, openingLabelNDefinitionList);
     fclose(filePointer);
 }
 
 
 void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *newAssemblyLine, int instructionCounter,
                          labelOrDefinitionList* openingLabelNDefinitionList,
-                                            entryExternList* entryNExternalList,
+                         entryExternList* entryNExternalList,
                          memoryImage* fileMemoryImage){
     lexTree *thisLexTree = lexTreeConstructor(newAssemblyLine, instructionCounter,
                                               fileMemoryImage->currentlyWordsInDataImage,
@@ -58,32 +58,66 @@ void listsUpdating(labelOrDefinitionList* labelNDefinitionList,
     if(thisLexTree->error != valid)
         return;
     if(thisLexTree->potentialLabel != NULL){
+        if(isTileAppearInEntryExternAsExternDeclarationList(
+                thisLexTree->potentialLabel->title, entryNExternalList)){
+            thisLexTree->error = cantUseEntryLabelOrDefinitionNameToAlreadyExistExternalDeclaration;
+            thisLexTree->error = conflictNaming;
+            entryExternNode * detectedRepeatedNodeTitle =
+                    nodeWithThisTitle(thisLexTree->potentialLabel->title, entryNExternalList);
+            detectedRepeatedNodeTitle->error = conflictNaming;
+        }
         addLabelOrDefinitionNodeAtTheEnd(labelNDefinitionList, thisLexTree->potentialLabel);
     }
     if (thisLexTree->type == definition){
-        labelNode * newDefinitionNode = labelDefinitionNodeConstructor(
-                thisLexTree->content.definitionContent.name,
-                thisLexTree->content.definitionContent.value,
-                thisLexTree->InstructionCounter);
-        addLabelOrDefinitionNodeAtTheEnd(labelNDefinitionList, newDefinitionNode);
-        if(newDefinitionNode->labelError == labelTitleAlreadyUsed)
-            newDefinitionNode->labelError = definitionNamingAlreadyInUse;
+        addDefinitionToList(thisLexTree, labelNDefinitionList, entryNExternalList);
         return;
     }
-
     if(thisLexTree->type == direction){
-        if(thisLexTree->content.directionSentence.type == entryDirection){
-            entryExternNode * newEntryExternNode = entryExternNodeConstructor(
-                    thisLexTree->content.directionSentence.content.entryLabel, entryDeclaration);
-            addNodeToEntryExternList(entryNExternalList, newEntryExternNode);
-        }else if(thisLexTree->content.directionSentence.type == externDirection){
-            entryExternNode * newEntryExternNode = entryExternNodeConstructor(
-                    thisLexTree->content.directionSentence.content.externLabel, externDeclaration);
-            constructExternUsedLines(newEntryExternNode);
-            addNodeToEntryExternList(entryNExternalList, newEntryExternNode);
-        }
-
+        addEntryOrExternToList(thisLexTree, entryNExternalList, labelNDefinitionList);
     }
+}
+
+
+void addEntryOrExternToList(lexTree* thisLexTree, entryExternList * entryNExternalList,
+                            labelOrDefinitionList* labelNDefinitionList){
+    if(thisLexTree->content.directionSentence.type == entryDirection){
+        entryExternNode * newEntryExternNode = entryExternNodeConstructor(
+                thisLexTree->content.directionSentence.content.entryLabel, entryDeclaration);
+        addNodeToEntryExternList(entryNExternalList, newEntryExternNode);
+    }else if(thisLexTree->content.directionSentence.type == externDirection){
+        entryExternNode * newEntryExternNode = entryExternNodeConstructor(
+                thisLexTree->content.directionSentence.content.externLabel, externDeclaration);
+        constructExternUsedLines(newEntryExternNode);
+        if(isTileAppearInLabelList(newEntryExternNode->title, labelNDefinitionList)){
+            thisLexTree->error = cantUseExternalDeclarationNameToAlreadyExistLabel;
+            newEntryExternNode->error = cantUseExternalDeclarationNameToAlreadyExistLabel;
+            labelNode * detectedRepeatedNodeTitle =
+                    getNodeIfAppearInLabelList(newEntryExternNode->title, labelNDefinitionList);
+            detectedRepeatedNodeTitle->labelError = conflictNaming;
+        }
+        addNodeToEntryExternList(entryNExternalList, newEntryExternNode);
+    }
+}
+
+
+void addDefinitionToList(lexTree* thisLexTree, labelOrDefinitionList* labelNDefinitionList,
+                         entryExternList* entryNExternalList){
+    labelNode * newDefinitionNode = labelDefinitionNodeConstructor(
+            thisLexTree->content.definitionContent.name,
+            thisLexTree->content.definitionContent.value,
+            thisLexTree->InstructionCounter);
+    if(isTileAppearInEntryExternAsExternDeclarationList(
+            newDefinitionNode->title, entryNExternalList)){
+        newDefinitionNode->labelError = cantUseEntryLabelOrDefinitionNameToAlreadyExistExternalDeclaration;
+        entryExternNode * detectedRepeatedNodeTitle = nodeWithThisTitle(newDefinitionNode->title, entryNExternalList);
+        detectedRepeatedNodeTitle->error = conflictNaming;
+    }
+    addLabelOrDefinitionNodeAtTheEnd(labelNDefinitionList, newDefinitionNode);
+    if(newDefinitionNode->labelError == labelTitleAlreadyUsed)
+        newDefinitionNode->labelError = definitionNamingAlreadyInUse;
+
+    if (newDefinitionNode->labelError != valid)
+        thisLexTree->error = newDefinitionNode->labelError;
 }
 
 
@@ -123,7 +157,22 @@ void dataImageEndOfFirstPassUpdating(memoryImage *fileMemoryImage,
 }
 
 
+void externEntryListUpdating(entryExternList *entryNExternalList,
+                             labelOrDefinitionList *openingLabelNDefinitionList){
+    entryExternNode * current = entryNExternalList->head;
+    while (current != NULL){
+        if (isTileAppearInLabelList(current->title, openingLabelNDefinitionList)){
+            labelNode* pointer = getNodeIfAppearInLabelList(current->title, openingLabelNDefinitionList);
+            if(pointer->labelType != mDefine) /* <=> code image or data image*/
+                constructEntryDeclaredLine(current, pointer->value.PC);
+        } else if (!isTileAppearInLabelList(current->title, openingLabelNDefinitionList) &&
+        current->type == entryDeclaration){
+            current->error = declaredEntryLabelButDidntDeclaredLabelInFile;
+        }
+        current = (entryExternNode *)current->next;
+    }
 
+}
 /*
 labelNode *current = openingLabelNDefinitionList->head;
 while(current->next != NULL){

@@ -6,15 +6,18 @@
 #include "globaldefinitionsNStructures.h"
 #include "label.h"
 #include "filesUtil.h"
+#include "lexTree.h"
+#include "entryExternDeclaration.h"
 
 /* Main function of second pass*/
-void runSecondPass(memoryImage*, boolean ,labelOrDefinitionList*,
-                   labelOrDefinitionList* , char *);
+void runSecondPass(char *, /*boolean errorExist,*/
+                   labelOrDefinitionList* ,
+                   entryExternList * , memoryImage* );
 
 /* Main operations that every line of assembly code need to be done,
  * in the second pass*/
 void secondPassEveryLineOfAssemblyOperations(assemblyLineCode *, int, labelOrDefinitionList*,
-                                             labelOrDefinitionList*, memoryImage*);
+                                             entryExternList *, memoryImage*);
 
-
+void additionValidationSecondPass(lexTree *,labelOrDefinitionList *,entryExternList*);
 #endif

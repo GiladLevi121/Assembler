@@ -73,11 +73,16 @@ labelOrDefinitionList* labelOrDefinitionListConstructor();
 
 void addLabelOrDefinitionNodeAtTheEnd(labelOrDefinitionList *, labelNode *);
 
-boolean isLabelAppearInList(labelNode*, labelOrDefinitionList*);
+/* Returns true if title appears*/
+boolean isTileAppearInLabelList(const char *, labelOrDefinitionList *);
 
+
+labelNode *getNodeIfAppearInLabelList(const char*, labelOrDefinitionList* );
+
+/* Free list*/
 void deallocateLabelListElements(labelOrDefinitionList *);
 
-/*return true if names are equal, newNode.errorType = labelTitleAlreadyUsed*/
+/* Return true if names are equal, newNode.errorType = labelTitleAlreadyUsed*/
 boolean setErrorIfEqualNames(labelNode* newNode, labelNode *otherNode);
 
 /* Return definition value if found in list, null if didn't.

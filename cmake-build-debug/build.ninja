@@ -51,97 +51,103 @@ build cmake_object_order_depends_target_ASSEMBLER: phony || CMakeFiles/ASSEMBLER
 
 build CMakeFiles/ASSEMBLER.dir/assembler.c.obj: C_COMPILER__ASSEMBLER_Debug D$:/Gilad/labCourse/ASSEMBLER/assembler.c || cmake_object_order_depends_target_ASSEMBLER
   DEP_FILE = CMakeFiles\ASSEMBLER.dir\assembler.c.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu90
+  FLAGS = -g -fdiagnostics-color=always -Wall -std=gnu90
   OBJECT_DIR = CMakeFiles\ASSEMBLER.dir
   OBJECT_FILE_DIR = CMakeFiles\ASSEMBLER.dir
 
 build CMakeFiles/ASSEMBLER.dir/label.c.obj: C_COMPILER__ASSEMBLER_Debug D$:/Gilad/labCourse/ASSEMBLER/label.c || cmake_object_order_depends_target_ASSEMBLER
   DEP_FILE = CMakeFiles\ASSEMBLER.dir\label.c.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu90
+  FLAGS = -g -fdiagnostics-color=always -Wall -std=gnu90
   OBJECT_DIR = CMakeFiles\ASSEMBLER.dir
   OBJECT_FILE_DIR = CMakeFiles\ASSEMBLER.dir
 
 build CMakeFiles/ASSEMBLER.dir/filesUtil.c.obj: C_COMPILER__ASSEMBLER_Debug D$:/Gilad/labCourse/ASSEMBLER/filesUtil.c || cmake_object_order_depends_target_ASSEMBLER
   DEP_FILE = CMakeFiles\ASSEMBLER.dir\filesUtil.c.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu90
+  FLAGS = -g -fdiagnostics-color=always -Wall -std=gnu90
   OBJECT_DIR = CMakeFiles\ASSEMBLER.dir
   OBJECT_FILE_DIR = CMakeFiles\ASSEMBLER.dir
 
 build CMakeFiles/ASSEMBLER.dir/firstPassMainFile.c.obj: C_COMPILER__ASSEMBLER_Debug D$:/Gilad/labCourse/ASSEMBLER/firstPassMainFile.c || cmake_object_order_depends_target_ASSEMBLER
   DEP_FILE = CMakeFiles\ASSEMBLER.dir\firstPassMainFile.c.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu90
+  FLAGS = -g -fdiagnostics-color=always -Wall -std=gnu90
   OBJECT_DIR = CMakeFiles\ASSEMBLER.dir
   OBJECT_FILE_DIR = CMakeFiles\ASSEMBLER.dir
 
 build CMakeFiles/ASSEMBLER.dir/line.c.obj: C_COMPILER__ASSEMBLER_Debug D$:/Gilad/labCourse/ASSEMBLER/line.c || cmake_object_order_depends_target_ASSEMBLER
   DEP_FILE = CMakeFiles\ASSEMBLER.dir\line.c.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu90
+  FLAGS = -g -fdiagnostics-color=always -Wall -std=gnu90
   OBJECT_DIR = CMakeFiles\ASSEMBLER.dir
   OBJECT_FILE_DIR = CMakeFiles\ASSEMBLER.dir
 
 build CMakeFiles/ASSEMBLER.dir/SettingLexTree.c.obj: C_COMPILER__ASSEMBLER_Debug D$:/Gilad/labCourse/ASSEMBLER/SettingLexTree.c || cmake_object_order_depends_target_ASSEMBLER
   DEP_FILE = CMakeFiles\ASSEMBLER.dir\SettingLexTree.c.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu90
+  FLAGS = -g -fdiagnostics-color=always -Wall -std=gnu90
   OBJECT_DIR = CMakeFiles\ASSEMBLER.dir
   OBJECT_FILE_DIR = CMakeFiles\ASSEMBLER.dir
 
 build CMakeFiles/ASSEMBLER.dir/globaldefinitionsNStructures.c.obj: C_COMPILER__ASSEMBLER_Debug D$:/Gilad/labCourse/ASSEMBLER/globaldefinitionsNStructures.c || cmake_object_order_depends_target_ASSEMBLER
   DEP_FILE = CMakeFiles\ASSEMBLER.dir\globaldefinitionsNStructures.c.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu90
+  FLAGS = -g -fdiagnostics-color=always -Wall -std=gnu90
   OBJECT_DIR = CMakeFiles\ASSEMBLER.dir
   OBJECT_FILE_DIR = CMakeFiles\ASSEMBLER.dir
 
 build CMakeFiles/ASSEMBLER.dir/labelNDefineValidation.c.obj: C_COMPILER__ASSEMBLER_Debug D$:/Gilad/labCourse/ASSEMBLER/labelNDefineValidation.c || cmake_object_order_depends_target_ASSEMBLER
   DEP_FILE = CMakeFiles\ASSEMBLER.dir\labelNDefineValidation.c.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu90
+  FLAGS = -g -fdiagnostics-color=always -Wall -std=gnu90
   OBJECT_DIR = CMakeFiles\ASSEMBLER.dir
   OBJECT_FILE_DIR = CMakeFiles\ASSEMBLER.dir
 
 build CMakeFiles/ASSEMBLER.dir/parser.c.obj: C_COMPILER__ASSEMBLER_Debug D$:/Gilad/labCourse/ASSEMBLER/parser.c || cmake_object_order_depends_target_ASSEMBLER
   DEP_FILE = CMakeFiles\ASSEMBLER.dir\parser.c.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu90
+  FLAGS = -g -fdiagnostics-color=always -Wall -std=gnu90
   OBJECT_DIR = CMakeFiles\ASSEMBLER.dir
   OBJECT_FILE_DIR = CMakeFiles\ASSEMBLER.dir
 
 build CMakeFiles/ASSEMBLER.dir/lexTreeValidation.c.obj: C_COMPILER__ASSEMBLER_Debug D$:/Gilad/labCourse/ASSEMBLER/lexTreeValidation.c || cmake_object_order_depends_target_ASSEMBLER
   DEP_FILE = CMakeFiles\ASSEMBLER.dir\lexTreeValidation.c.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu90
+  FLAGS = -g -fdiagnostics-color=always -Wall -std=gnu90
   OBJECT_DIR = CMakeFiles\ASSEMBLER.dir
   OBJECT_FILE_DIR = CMakeFiles\ASSEMBLER.dir
 
 build CMakeFiles/ASSEMBLER.dir/firstPassCoding.c.obj: C_COMPILER__ASSEMBLER_Debug D$:/Gilad/labCourse/ASSEMBLER/firstPassCoding.c || cmake_object_order_depends_target_ASSEMBLER
   DEP_FILE = CMakeFiles\ASSEMBLER.dir\firstPassCoding.c.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu90
+  FLAGS = -g -fdiagnostics-color=always -Wall -std=gnu90
   OBJECT_DIR = CMakeFiles\ASSEMBLER.dir
   OBJECT_FILE_DIR = CMakeFiles\ASSEMBLER.dir
 
 build CMakeFiles/ASSEMBLER.dir/baseTransitionUtiles.c.obj: C_COMPILER__ASSEMBLER_Debug D$:/Gilad/labCourse/ASSEMBLER/baseTransitionUtiles.c || cmake_object_order_depends_target_ASSEMBLER
   DEP_FILE = CMakeFiles\ASSEMBLER.dir\baseTransitionUtiles.c.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu90
+  FLAGS = -g -fdiagnostics-color=always -Wall -std=gnu90
   OBJECT_DIR = CMakeFiles\ASSEMBLER.dir
   OBJECT_FILE_DIR = CMakeFiles\ASSEMBLER.dir
 
 build CMakeFiles/ASSEMBLER.dir/lexTree.c.obj: C_COMPILER__ASSEMBLER_Debug D$:/Gilad/labCourse/ASSEMBLER/lexTree.c || cmake_object_order_depends_target_ASSEMBLER
   DEP_FILE = CMakeFiles\ASSEMBLER.dir\lexTree.c.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu90
+  FLAGS = -g -fdiagnostics-color=always -Wall -std=gnu90
   OBJECT_DIR = CMakeFiles\ASSEMBLER.dir
   OBJECT_FILE_DIR = CMakeFiles\ASSEMBLER.dir
 
 build CMakeFiles/ASSEMBLER.dir/memoryImage.c.obj: C_COMPILER__ASSEMBLER_Debug D$:/Gilad/labCourse/ASSEMBLER/memoryImage.c || cmake_object_order_depends_target_ASSEMBLER
   DEP_FILE = CMakeFiles\ASSEMBLER.dir\memoryImage.c.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu90
+  FLAGS = -g -fdiagnostics-color=always -Wall -std=gnu90
   OBJECT_DIR = CMakeFiles\ASSEMBLER.dir
   OBJECT_FILE_DIR = CMakeFiles\ASSEMBLER.dir
 
 build CMakeFiles/ASSEMBLER.dir/secondPassMainFile.c.obj: C_COMPILER__ASSEMBLER_Debug D$:/Gilad/labCourse/ASSEMBLER/secondPassMainFile.c || cmake_object_order_depends_target_ASSEMBLER
   DEP_FILE = CMakeFiles\ASSEMBLER.dir\secondPassMainFile.c.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu90
+  FLAGS = -g -fdiagnostics-color=always -Wall -std=gnu90
   OBJECT_DIR = CMakeFiles\ASSEMBLER.dir
   OBJECT_FILE_DIR = CMakeFiles\ASSEMBLER.dir
 
 build CMakeFiles/ASSEMBLER.dir/entryExternDeclaration.c.obj: C_COMPILER__ASSEMBLER_Debug D$:/Gilad/labCourse/ASSEMBLER/entryExternDeclaration.c || cmake_object_order_depends_target_ASSEMBLER
   DEP_FILE = CMakeFiles\ASSEMBLER.dir\entryExternDeclaration.c.obj.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu90
+  FLAGS = -g -fdiagnostics-color=always -Wall -std=gnu90
+  OBJECT_DIR = CMakeFiles\ASSEMBLER.dir
+  OBJECT_FILE_DIR = CMakeFiles\ASSEMBLER.dir
+
+build CMakeFiles/ASSEMBLER.dir/secondPassLexTreeValidation.c.obj: C_COMPILER__ASSEMBLER_Debug D$:/Gilad/labCourse/ASSEMBLER/secondPassLexTreeValidation.c || cmake_object_order_depends_target_ASSEMBLER
+  DEP_FILE = CMakeFiles\ASSEMBLER.dir\secondPassLexTreeValidation.c.obj.d
+  FLAGS = -g -fdiagnostics-color=always -Wall -std=gnu90
   OBJECT_DIR = CMakeFiles\ASSEMBLER.dir
   OBJECT_FILE_DIR = CMakeFiles\ASSEMBLER.dir
 
@@ -153,7 +159,7 @@ build CMakeFiles/ASSEMBLER.dir/entryExternDeclaration.c.obj: C_COMPILER__ASSEMBL
 #############################################
 # Link the executable ASSEMBLER.exe
 
-build ASSEMBLER.exe: C_EXECUTABLE_LINKER__ASSEMBLER_Debug CMakeFiles/ASSEMBLER.dir/assembler.c.obj CMakeFiles/ASSEMBLER.dir/label.c.obj CMakeFiles/ASSEMBLER.dir/filesUtil.c.obj CMakeFiles/ASSEMBLER.dir/firstPassMainFile.c.obj CMakeFiles/ASSEMBLER.dir/line.c.obj CMakeFiles/ASSEMBLER.dir/SettingLexTree.c.obj CMakeFiles/ASSEMBLER.dir/globaldefinitionsNStructures.c.obj CMakeFiles/ASSEMBLER.dir/labelNDefineValidation.c.obj CMakeFiles/ASSEMBLER.dir/parser.c.obj CMakeFiles/ASSEMBLER.dir/lexTreeValidation.c.obj CMakeFiles/ASSEMBLER.dir/firstPassCoding.c.obj CMakeFiles/ASSEMBLER.dir/baseTransitionUtiles.c.obj CMakeFiles/ASSEMBLER.dir/lexTree.c.obj CMakeFiles/ASSEMBLER.dir/memoryImage.c.obj CMakeFiles/ASSEMBLER.dir/secondPassMainFile.c.obj CMakeFiles/ASSEMBLER.dir/entryExternDeclaration.c.obj
+build ASSEMBLER.exe: C_EXECUTABLE_LINKER__ASSEMBLER_Debug CMakeFiles/ASSEMBLER.dir/assembler.c.obj CMakeFiles/ASSEMBLER.dir/label.c.obj CMakeFiles/ASSEMBLER.dir/filesUtil.c.obj CMakeFiles/ASSEMBLER.dir/firstPassMainFile.c.obj CMakeFiles/ASSEMBLER.dir/line.c.obj CMakeFiles/ASSEMBLER.dir/SettingLexTree.c.obj CMakeFiles/ASSEMBLER.dir/globaldefinitionsNStructures.c.obj CMakeFiles/ASSEMBLER.dir/labelNDefineValidation.c.obj CMakeFiles/ASSEMBLER.dir/parser.c.obj CMakeFiles/ASSEMBLER.dir/lexTreeValidation.c.obj CMakeFiles/ASSEMBLER.dir/firstPassCoding.c.obj CMakeFiles/ASSEMBLER.dir/baseTransitionUtiles.c.obj CMakeFiles/ASSEMBLER.dir/lexTree.c.obj CMakeFiles/ASSEMBLER.dir/memoryImage.c.obj CMakeFiles/ASSEMBLER.dir/secondPassMainFile.c.obj CMakeFiles/ASSEMBLER.dir/entryExternDeclaration.c.obj CMakeFiles/ASSEMBLER.dir/secondPassLexTreeValidation.c.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\ASSEMBLER.dir

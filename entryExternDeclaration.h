@@ -68,4 +68,10 @@ void addNodeToEntryExternList(entryExternList* , entryExternNode*);
 
 /* Freeing list*/
 void deallocatingEntryExternList(entryExternList*);
+
+/* Returns true if title appears*/
+boolean isTileAppearInEntryExternAsExternDeclarationList(const char *, entryExternList *);
+
+/* Return node with this title if appears, null if not*/
+entryExternNode * nodeWithThisTitle(const char *, entryExternList *);
 #endif

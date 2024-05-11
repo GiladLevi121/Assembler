@@ -2,6 +2,7 @@
 .entry LIST 
 .extern W 
 .define sz = 2 
+.entry kfkfkf
 MAIN:	mov r3, LIST[sz]
 LOOP: 	jmp W 
 	prn #-5
