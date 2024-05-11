@@ -6,10 +6,7 @@
 #include "globaldefinitionsNStructures.h"
 #include "line.h"
 
-#define LEN_OF_FILE_TYPE 3
-#define FIRST_FILE 1
-#define NOT_VALID_LINE 1
-#define VALID_LINE 0
+
 #define START_OF_NOTE ";"
 #define AM_ENDING ".am"
 #define AS_ENDING ".as"

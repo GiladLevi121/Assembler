@@ -61,7 +61,6 @@ typedef struct {
     } type;
     union {
         char *stringContent;
-        /*[MAX_NUMBERS_IN_DATA_DECLARATION][MAX_NUMBER_LENGTH];*/
         char **dataDirection;
         char *entryLabel;
         char *externLabel;

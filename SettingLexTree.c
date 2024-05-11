@@ -39,9 +39,11 @@ lexTree *lexTreeConstructor(const assemblyLineCode *inputAssemblyLine, int instr
 
 void setLexTreeLabel(lexTree* newLexTree, size_t currentlyDataImagePC, size_t currentlyCodeImagePC){
     if(newLexTree->type == order)
-        setLabelType(newLexTree->potentialLabel, false, currentlyDataImagePC, currentlyCodeImagePC);
+        setLabelType(newLexTree->potentialLabel, false, currentlyDataImagePC,
+                     currentlyCodeImagePC, newLexTree->InstructionCounter);
     else if(newLexTree->type == direction)
-        setLabelType(newLexTree->potentialLabel, true, currentlyDataImagePC, currentlyCodeImagePC);
+        setLabelType(newLexTree->potentialLabel, true, currentlyDataImagePC,
+                     currentlyCodeImagePC, newLexTree->InstructionCounter);
 }
 
 void setLexTreeType(lexTree* thisLexTree){

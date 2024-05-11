@@ -44,23 +44,25 @@ size_t getLabelLengthWithLabelIdentifier(const labelNode* thisLabelNode) {
     return labelFinalLength;
 }
 
-labelNode* labelDefinitionNodeConstructor(const char *enteredTitle, const char* enteredValue){
+labelNode* labelDefinitionNodeConstructor(const char *enteredTitle, const char* enteredValue,
+                                          int instructionCounter){
     labelNode *newDefinition = (labelNode *) malloc(sizeof(labelNode));
     newDefinition->title = (char*) malloc(strlen(enteredTitle) * sizeof (char));
     newDefinition->value.definitionValue = (char*) malloc(strlen(enteredValue) * sizeof (char ));
     strcpy(newDefinition->title, enteredTitle);
     strcpy(newDefinition->value.definitionValue, enteredValue);
+    newDefinition->instructionCounter = instructionCounter;
     newDefinition->labelType = mDefine;
     return newDefinition;
 }
 
 void setLabelType(labelNode* thisLabel, boolean isDataImage,
-                  size_t currentlyDataImagePC, size_t currentlyCodeImagePC ){
+                  size_t currentlyDataImagePC, size_t currentlyCodeImagePC, int instructionCounter ){
     if(thisLabel != NULL)
         thisLabel->value.PC = (char*)malloc(CHARS_NEEDED_TO_REPRESENT_LAST_MEMORY_LINE * sizeof(char));
     else
         return;
-
+    thisLabel->instructionCounter = instructionCounter;
     if(isDataImage){
         thisLabel->labelType = data;
         itoa((int)currentlyDataImagePC,thisLabel->value.PC, DECIMAL);
@@ -108,13 +110,13 @@ void addLabelOrDefinitionNodeAtTheEnd(labelOrDefinitionList * thisList, labelNod
         return;
     }
     while(current->next != NULL){
-        areEqualNames(nodeToAdd, current);
+        setErrorIfEqualNames(nodeToAdd, current);
         current = (labelNode *) current->next;
     }
     current->next = (struct labelOrDefinitionNode *) nodeToAdd;
 }
 
-boolean areEqualNames(labelNode* newNode, labelNode* otherNode){
+boolean setErrorIfEqualNames(labelNode* newNode, labelNode* otherNode){
     if (!strcmp(newNode->title, otherNode->title)) {
         newNode->labelError = labelTitleAlreadyUsed;
         return true;

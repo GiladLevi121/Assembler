@@ -26,6 +26,7 @@ typedef enum{
 }labelCharacteristics;
 
 typedef struct /*labelNode*/ {
+    int instructionCounter;
     errorType labelError;
     char *title;
     labelCharacteristics labelType;
@@ -56,15 +57,15 @@ labelNode *labelNodeConstructor(const assemblyLineCode*);
 size_t getLabelLengthWithLabelIdentifier(const labelNode*);
 
 /*Construct labelNode based on definition sentence*/
-labelNode* labelDefinitionNodeConstructor(const char *, const char *);
-
-/*Set the pc (do this when assuming lexTree is data or string type)*/
-void setPC(labelNode*, int);
+labelNode* labelDefinitionNodeConstructor(const char *, const char *, int);
 
 /* Freeing label node, don't free .next*/
 void freeLabel(labelNode*);
 
-/* Add the int to the current pc. Assuming label.type = data/code =>pc initiated already*/
+/* Setting pc if label found*/
+void setLabelType(labelNode*, boolean, size_t, size_t, int);
+
+/* Add the int to the current pc. Assuming label.type = data/code*/
 void resetPC(labelNode*, int );
 /*------------------------------list functions------------------------------*/
 
@@ -77,7 +78,7 @@ boolean isLabelAppearInList(labelNode*, labelOrDefinitionList*);
 void deallocateLabelListElements(labelOrDefinitionList *);
 
 /*return true if names are equal, newNode.errorType = labelTitleAlreadyUsed*/
-boolean areEqualNames(labelNode* newNode, labelNode* );
+boolean setErrorIfEqualNames(labelNode* newNode, labelNode *otherNode);
 
 /* Return definition value if found in list, null if didn't.
  * Searching by name. Assuming nodes.labelType already mDefine*/

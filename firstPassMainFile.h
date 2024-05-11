@@ -6,17 +6,18 @@
 #include "label.h"
 #include "SettingLexTree.h"
 #include "memoryImage.h"
+#include "entryExternDeclaration.h"
 
 /*this function activates first pass on a file. it gets
  *file's name (without ending),  */
-void runFirstPass(char *, labelOrDefinitionList*, labelOrDefinitionList*, memoryImage* );
+void runFirstPass(char *, labelOrDefinitionList*, entryExternList*, memoryImage* );
 
 /* Updating linked lists*/
-void listsUpdating(labelOrDefinitionList*, labelOrDefinitionList*, lexTree*);
+void listsUpdating(labelOrDefinitionList*, entryExternList*, lexTree*);
 
 /* Main operations that every line of assembly code need to be done*/
-void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *, int ,labelOrDefinitionList* ,
-                         labelOrDefinitionList*, memoryImage*);
+void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *, int, labelOrDefinitionList*,
+                                            entryExternList*, memoryImage*);
 
 /* Send to coding according to the type*/
 void codingThisLexTree(lexTree*, labelOrDefinitionList*, memoryImage*);

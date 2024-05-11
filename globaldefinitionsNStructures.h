@@ -14,11 +14,13 @@
 #define ZEROISE_COUNTER 0
 #define ZERO_CHARACTERS 0
 #define BEGINNING_ASSEMBLY_ARRAY_INDEX 0
+#define EMPTY 0
 #define END_OF_STRING '\0'
 #define ANOTHER_CELL 1
 #define SECOND_CELL_INDEX 1
 #define LAST_CELL 1
 #define FIRS_INSTRUCTION 1
+#define MEMORY_INCREMENT_FACTOR 2
 #define TWO_WORDS 2
 #define REG_NAME_LENGTH 3
 #define CHARS_NEEDED_TO_REPRESENT_LAST_MEMORY_LINE 5
@@ -85,7 +87,7 @@ typedef enum {
 
     invalidNameForEntryOrExternDeclaration,
     labelTitleAlreadyUsed,
-    illegalDefinitionTitle,
+    definitionNamingAlreadyInUse,
     definitionCantHaveALabel,
     commaIsTheLastChar,
     commaCantBeTheFirsCharAfterDirectionDeclaration,
@@ -95,6 +97,7 @@ typedef enum {
     definitionNamingIsIllegal,
     MissingEqualKnotInDefineSentence,
 
+    entryOrExternDeclarationCantAppearTwice,
     twoConsecutiveCommasFound,
     labelUsedIsNotDeclared,/*label used but not connected to any memory*/
     lineLengthIsTooLong

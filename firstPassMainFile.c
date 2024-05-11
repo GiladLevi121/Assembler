@@ -12,10 +12,11 @@
 #include "label.h"
 #include "firstPassCoding.h"
 #include "memoryImage.h"
+#include "entryExternDeclaration.h"
 
 void runFirstPass(char *fileName,
                   labelOrDefinitionList* openingLabelNDefinitionList,
-                  labelOrDefinitionList* entryNExternalList,
+                  entryExternList * entryNExternalList,
                   memoryImage* fileMemoryImage){
     FILE *filePointer = openFileByName(fileName, AS_ENDING, "r");
     assemblyLineCode *newAssemblyLine;
@@ -33,28 +34,14 @@ void runFirstPass(char *fileName,
                                                fileMemoryImage);
     }
     dataImageEndOfFirstPassUpdating(fileMemoryImage, openingLabelNDefinitionList);
-    labelNode *current = openingLabelNDefinitionList->head;
-    while(current->next != NULL){
-        if (current->labelType == code ||
-        current->labelType == data)
-            printf("%s  %s\n", current->title, current->value.PC);
-        else
-            printf("%s  %s\n", current->title, current->value.definitionValue);
-        current = (labelNode *) current->next;
-    }
-    if (current->labelType == code ||
-        current->labelType == data)
-        printf("%s  %s\n", current->title, current->value.PC);
-    else
-        printf("%s  %s\n", current->title, current->value.definitionValue);
-    fclose(filePointer);
 
+    fclose(filePointer);
 }
 
 
 void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *newAssemblyLine, int instructionCounter,
                          labelOrDefinitionList* openingLabelNDefinitionList,
-                         labelOrDefinitionList* entryNExternalList,
+                                            entryExternList* entryNExternalList,
                          memoryImage* fileMemoryImage){
     lexTree *thisLexTree = lexTreeConstructor(newAssemblyLine, instructionCounter,
                                               fileMemoryImage->currentlyWordsInDataImage,
@@ -67,7 +54,7 @@ void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *newAssemblyLine, i
 }
 
 void listsUpdating(labelOrDefinitionList* labelNDefinitionList,
-                   labelOrDefinitionList* entryNExternalList, lexTree* thisLexTree){
+                   entryExternList* entryNExternalList, lexTree* thisLexTree){
     if(thisLexTree->error != valid)
         return;
     if(thisLexTree->potentialLabel != NULL){
@@ -76,16 +63,27 @@ void listsUpdating(labelOrDefinitionList* labelNDefinitionList,
     if (thisLexTree->type == definition){
         labelNode * newDefinitionNode = labelDefinitionNodeConstructor(
                 thisLexTree->content.definitionContent.name,
-                thisLexTree->content.definitionContent.value);
+                thisLexTree->content.definitionContent.value,
+                thisLexTree->InstructionCounter);
         addLabelOrDefinitionNodeAtTheEnd(labelNDefinitionList, newDefinitionNode);
+        if(newDefinitionNode->labelError == labelTitleAlreadyUsed)
+            newDefinitionNode->labelError = definitionNamingAlreadyInUse;
         return;
     }
-    /*
-    if(thisLexTree->type == direction)
-        if(thisLexTree->content.directionSentence.type == entryDirection ||
-           thisLexTree->content.directionSentence.type == externDirection)
-            printf("hi");*/
-            /*addLabelOrDefinitionNodeAtTheEnd(entryNExternalList, )*/
+
+    if(thisLexTree->type == direction){
+        if(thisLexTree->content.directionSentence.type == entryDirection){
+            entryExternNode * newEntryExternNode = entryExternNodeConstructor(
+                    thisLexTree->content.directionSentence.content.entryLabel, entryDeclaration);
+            addNodeToEntryExternList(entryNExternalList, newEntryExternNode);
+        }else if(thisLexTree->content.directionSentence.type == externDirection){
+            entryExternNode * newEntryExternNode = entryExternNodeConstructor(
+                    thisLexTree->content.directionSentence.content.externLabel, externDeclaration);
+            constructExternUsedLines(newEntryExternNode);
+            addNodeToEntryExternList(entryNExternalList, newEntryExternNode);
+        }
+
+    }
 }
 
 
@@ -110,19 +108,17 @@ void codingThisLexTree(lexTree* thisLexTree,
     }
 }
 
-
-
 void dataImageEndOfFirstPassUpdating(memoryImage *fileMemoryImage,
                                      labelOrDefinitionList* openingLabelNDefinitionList){
     labelNode *current = openingLabelNDefinitionList->head;
     while(current->next != NULL){
         if(current->labelType == data){
-            resetPC(current, 100 + fileMemoryImage->currentlyWordsInCodeImage);
+            resetPC(current, FIRST_FREE_WORD + fileMemoryImage->currentlyWordsInCodeImage);
         }
         current = (labelNode *) current->next;
     }
     if(current->labelType == data){
-        resetPC(current, 100 + fileMemoryImage->currentlyWordsInCodeImage);
+        resetPC(current, FIRST_FREE_WORD + fileMemoryImage->currentlyWordsInCodeImage);
     }
 }
 
@@ -140,7 +136,20 @@ printf("%s  \n",current->title);
 
 
 
-
+/*labelNode *current = openingLabelNDefinitionList->head;
+    while(current->next != NULL){
+        if(current->labelType == data ||
+        current->labelType == code){
+            printf("%s  %s\n", current->title, current->value.PC);
+        }else
+            printf("%s  %s\n", current->title, current->value.definitionValue);
+        current = (labelNode *) current->next;
+    }
+    if(current->labelType == data ||
+       current->labelType == code){
+        printf("%s  %s\n", current->title, current->value.PC);
+    }else
+        printf("%s  %s\n", current->title, current->value.definitionValue);*/
 
 
 
