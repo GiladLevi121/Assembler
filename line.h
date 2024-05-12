@@ -10,7 +10,10 @@
 typedef enum {
     validLine,
     lineOutOfBounds,
-    emptyLine /* \n, spaces or \t, shorter then 80 chars.*/
+    emptyLine, /* \n, spaces or \t, shorter then 80 chars.*/
+    commentLine,
+    startOfMacro,
+    endOfMacro,
 }lineStatus;
 
 typedef struct {
@@ -32,7 +35,7 @@ void setContent(assemblyLineCode*, const char* rawLine);
 
 /*this function gets assemblyLineCode that its content is set,
  *and sets its status correspondingly*/
-void setStatus(assemblyLineCode*);
+void setStatusForLineFromAmFile(assemblyLineCode *thisAssemblyLine);
 
 /*this function gets a raw line from file and returns its status.
  * this function assumed that there is '\0' at the end of the line's

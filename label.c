@@ -47,8 +47,8 @@ size_t getLabelLengthWithLabelIdentifier(const labelNode* thisLabelNode) {
 labelNode* labelDefinitionNodeConstructor(const char *enteredTitle, const char* enteredValue,
                                           int instructionCounter){
     labelNode *newDefinition = (labelNode *) malloc(sizeof(labelNode));
-    newDefinition->title = (char*) malloc(strlen(enteredTitle) * sizeof (char));
-    newDefinition->value.definitionValue = (char*) malloc(strlen(enteredValue) * sizeof (char ));
+    newDefinition->title = (char*) malloc((strlen(enteredTitle) + ANOTHER_CELL) * sizeof (char));
+    newDefinition->value.definitionValue = (char*) malloc((strlen(enteredValue) + ANOTHER_CELL) * sizeof (char ));
     strcpy(newDefinition->title, enteredTitle);
     strcpy(newDefinition->value.definitionValue, enteredValue);
     newDefinition->instructionCounter = instructionCounter;
@@ -65,10 +65,12 @@ void setLabelType(labelNode* thisLabel, boolean isDataImage,
     thisLabel->instructionCounter = instructionCounter;
     if(isDataImage){
         thisLabel->labelType = data;
-        itoa((int)currentlyDataImagePC,thisLabel->value.PC, DECIMAL);
+        sprintf(thisLabel->value.PC, "%d", (int)currentlyDataImagePC);
+        /*itoa((int)currentlyDataImagePC,thisLabel->value.PC, DECIMAL);*/
     }else {
         thisLabel->labelType = code;
-        itoa((int) currentlyCodeImagePC, thisLabel->value.PC, DECIMAL);
+        sprintf(thisLabel->value.PC, "%d", (int) currentlyCodeImagePC);
+        /*itoa((int) currentlyCodeImagePC, thisLabel->value.PC, DECIMAL);*/
     }
 }
 
@@ -79,19 +81,28 @@ void resetPC(labelNode* thisLabel, int increment){
     if (*endPointer != END_OF_STRING && *endPointer != END_OF_ROW) {
         printf("Critical error in resetPC (label.c)!!!");
     }
-    itoa(previousPC + increment, thisLabel->value.PC, DECIMAL);
+    sprintf(thisLabel->value.PC, "%d", previousPC + increment);
+    /*itoa(previousPC + increment, thisLabel->value.PC, DECIMAL);*/
 }
 
 void freeLabel(labelNode* labelToFree){
     if(labelToFree == NULL)
         return;
-    if(labelToFree->title != NULL)
+    if(labelToFree->title != NULL) {
         free(labelToFree->title);
-    if(labelToFree->labelType == mDefine && labelToFree->value.definitionValue != NULL)
+        labelToFree->title = NULL;
+    }
+    if(labelToFree->labelType == mDefine /*&& labelToFree->value.definitionValue != NULL*/){
         free(labelToFree->value.definitionValue);
-    else if (labelToFree->value.PC != NULL)
+        labelToFree->value.definitionValue = NULL;
+    }
+    else if ((labelToFree->labelType == code || labelToFree->labelType == data)/* &&
+    labelToFree->value.PC != NULL*/){
         free(labelToFree->value.PC);
+        labelToFree->value.PC = NULL;
+    }
     free(labelToFree);
+    labelToFree = NULL;
 }
 
 /*------------------------------list functions------------------------------*/
@@ -131,6 +142,7 @@ void deallocateLabelListElements(labelOrDefinitionList *thisList) {
         freeLabel(currentHead);
         currentHead = temp;
     }
+    free(thisList);
 }
 
 char* getDefinitionValueFromList(labelOrDefinitionList *thisList, const char* defineName){

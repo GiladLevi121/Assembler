@@ -41,6 +41,7 @@ void secondPassEveryLineOfAssemblyOperations(assemblyLineCode *newAssemblyLine, 
                                               fileMemoryImage->currentlyWordsInDataImage,
         /* PC + amount of words in CI <=>*/   (fileMemoryImage->currentlyWordsInCodeImage + fileMemoryImage->PC));
     validateLexTree(thisLexTree, openingLabelNDefinitionList);
+    /*printf("Line : %d\n", thisLexTree->InstructionCounter);*/
     additionValidationSecondPass(thisLexTree, openingLabelNDefinitionList, entryExternLabelList);
 
 }

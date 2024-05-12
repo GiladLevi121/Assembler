@@ -49,7 +49,6 @@ char **getBinaryRepresentationOfData(lexTree *thisLexTree, int *wordsOfMemoryInT
 
 char **getBinaryRepresentationOfString(lexTree *thisLexTree,
                                        int *wordsOfMemoryInThisDirection){
-    //printf("%s\n",thisLexTree->content.directionSentence.content.stringContent);
     DirectionSentence thisString = thisLexTree->content.directionSentence;
     int i = ZEROISE_COUNTER + ANOTHER_CELL;/* stringContent[0] = '"'*/
     /* <=> strlen(string) - len('"') - len('"') + len(endOfString) = len - 1 - 1 + 1*/

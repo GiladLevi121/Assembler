@@ -35,6 +35,22 @@ void runFirstPass(char *fileName,
     }
     dataImageEndOfFirstPassUpdating(fileMemoryImage, openingLabelNDefinitionList);
     externEntryListUpdating(entryNExternalList, openingLabelNDefinitionList);
+    deallocatingEntryExternList(entryNExternalList);
+    deallocateLabelListElements(openingLabelNDefinitionList);
+    freeMemoryImage(fileMemoryImage);
+    /*labelNode *current = openingLabelNDefinitionList->head;
+    while(current->next != NULL){
+        printf("%s  \n",current->title);
+        current = (labelNode *) current->next;
+    }
+    printf("%s  \n",current->title);
+
+    entryExternNode *temp = entryNExternalList->head;
+    while(current->next != NULL){
+        printf("%s  \n",temp->title);
+        temp = (entryExternNode *) temp->next;
+    }
+    printf("%s  \n",temp->title);*/
     fclose(filePointer);
 }
 
@@ -62,8 +78,8 @@ void listsUpdating(labelOrDefinitionList* labelNDefinitionList,
                 thisLexTree->potentialLabel->title, entryNExternalList)){
             thisLexTree->error = cantUseEntryLabelOrDefinitionNameToAlreadyExistExternalDeclaration;
             thisLexTree->error = conflictNaming;
-            entryExternNode * detectedRepeatedNodeTitle =
-                    nodeWithThisTitle(thisLexTree->potentialLabel->title, entryNExternalList);
+            entryExternNode* detectedRepeatedNodeTitle;
+            detectedRepeatedNodeTitle = nodeWithThisTitle(thisLexTree->potentialLabel->title, entryNExternalList);
             detectedRepeatedNodeTitle->error = conflictNaming;
         }
         addLabelOrDefinitionNodeAtTheEnd(labelNDefinitionList, thisLexTree->potentialLabel);
@@ -91,8 +107,8 @@ void addEntryOrExternToList(lexTree* thisLexTree, entryExternList * entryNExtern
         if(isTileAppearInLabelList(newEntryExternNode->title, labelNDefinitionList)){
             thisLexTree->error = cantUseExternalDeclarationNameToAlreadyExistLabel;
             newEntryExternNode->error = cantUseExternalDeclarationNameToAlreadyExistLabel;
-            labelNode * detectedRepeatedNodeTitle =
-                    getNodeIfAppearInLabelList(newEntryExternNode->title, labelNDefinitionList);
+            labelNode * detectedRepeatedNodeTitle;
+            detectedRepeatedNodeTitle = getNodeIfAppearInLabelList(newEntryExternNode->title, labelNDefinitionList);
             detectedRepeatedNodeTitle->labelError = conflictNaming;
         }
         addNodeToEntryExternList(entryNExternalList, newEntryExternNode);
@@ -109,7 +125,8 @@ void addDefinitionToList(lexTree* thisLexTree, labelOrDefinitionList* labelNDefi
     if(isTileAppearInEntryExternAsExternDeclarationList(
             newDefinitionNode->title, entryNExternalList)){
         newDefinitionNode->labelError = cantUseEntryLabelOrDefinitionNameToAlreadyExistExternalDeclaration;
-        entryExternNode * detectedRepeatedNodeTitle = nodeWithThisTitle(newDefinitionNode->title, entryNExternalList);
+        entryExternNode * detectedRepeatedNodeTitle;
+        detectedRepeatedNodeTitle = nodeWithThisTitle(newDefinitionNode->title, entryNExternalList);
         detectedRepeatedNodeTitle->error = conflictNaming;
     }
     addLabelOrDefinitionNodeAtTheEnd(labelNDefinitionList, newDefinitionNode);
@@ -161,7 +178,8 @@ void externEntryListUpdating(entryExternList *entryNExternalList,
                              labelOrDefinitionList *openingLabelNDefinitionList){
     entryExternNode * current = entryNExternalList->head;
     while (current != NULL){
-        if (isTileAppearInLabelList(current->title, openingLabelNDefinitionList)){
+        if (current->type == entryDeclaration &&
+        isTileAppearInLabelList(current->title, openingLabelNDefinitionList)){
             labelNode* pointer = getNodeIfAppearInLabelList(current->title, openingLabelNDefinitionList);
             if(pointer->labelType != mDefine) /* <=> code image or data image*/
                 constructEntryDeclaredLine(current, pointer->value.PC);

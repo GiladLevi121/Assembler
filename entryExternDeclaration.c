@@ -24,20 +24,21 @@ entryExternNode * entryExternNodeConstructor(const char* title, nodeType thisNod
 }
 
 void freeEntryExternNode(entryExternNode * thisNodeToFree){
-    if(thisNodeToFree == NULL)
-        return;
-    if(thisNodeToFree->title != NULL)
-        free(thisNodeToFree->title);
-    if(thisNodeToFree->type == entryDeclaration && thisNodeToFree->amountOfLines != EMPTY)
+    free(thisNodeToFree->title);
+    if(thisNodeToFree->type == entryDeclaration && thisNodeToFree->amountOfLines != EMPTY){
         free(thisNodeToFree->content.declaredLine);
-    if (thisNodeToFree->type == externDeclaration ){
+        thisNodeToFree->content.declaredLine = NULL;
+    }else if (thisNodeToFree->type == externDeclaration){
         int i = ZEROISE_COUNTER;
         for(; i < thisNodeToFree->amountOfLines; i++){
             free(thisNodeToFree->content.usedLines[i]);
+            thisNodeToFree->content.usedLines[i] = NULL;
         }
         free(thisNodeToFree->content.usedLines);
+        thisNodeToFree->content.usedLines = NULL;
     }
     free(thisNodeToFree);
+    thisNodeToFree = NULL;
 }
 
 void addLineToExternUsedLines(entryExternNode * thisNode, const char* newLine){
@@ -109,6 +110,7 @@ void deallocatingEntryExternList(entryExternList* listToFree){
         freeEntryExternNode(currentHead);
         currentHead = temp;
     }
+    free(listToFree);
 }
 
 boolean isTileAppearInEntryExternAsExternDeclarationList(const char *titleToSearch, entryExternList *thisList){

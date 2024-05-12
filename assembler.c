@@ -9,18 +9,18 @@
 
 
 int main(int argc, char *argv[]) {
-    //int i = 0;
-    memoryImage *fileMemoryImage = memoryImageConstructor();
-    labelOrDefinitionList *openingLabelList = labelOrDefinitionListConstructor();
-    entryExternList* entryNExternDeclarationList = entryExternListConstructor();
+    printf("sdf");
+    memoryImage *fileMemoryImage;
+    labelOrDefinitionList *openingLabelList;
+    entryExternList* entryNExternDeclarationList;
+
+    fileMemoryImage = memoryImageConstructor();
+    openingLabelList = labelOrDefinitionListConstructor();
+    entryNExternDeclarationList = entryExternListConstructor();
 
     runFirstPass(argv[1], openingLabelList, entryNExternDeclarationList, fileMemoryImage);
-    printf("blabla");
-    runSecondPass(argv[1], openingLabelList, entryNExternDeclarationList, fileMemoryImage);
-    printf("blabla");
-    deallocatingEntryExternList(entryNExternDeclarationList);
-    deallocateLabelListElements(openingLabelList);
-    freeMemoryImage(fileMemoryImage);
+
+
 
     return 0;
 }

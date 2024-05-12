@@ -18,7 +18,7 @@ const char* opcodeString[] =          {"mov", "cmp","add","sub",
                                        "lea","not","clr","inc",
                                        "dec","jmp","bne","red",
                                        "prn","jsr","rts","hlt"};
-//TODO: Set labelType.pc
+
 lexTree *lexTreeConstructor(const assemblyLineCode *inputAssemblyLine, int instructionCounter,
                             size_t currentlyDataImagePC, size_t currentlyCodeImagePC){
     lexTree *newLexTree = (lexTree*)malloc(sizeof (lexTree));

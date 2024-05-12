@@ -14,7 +14,7 @@ assemblyLineCode *assemblyLineCodeConstructor(void){
 lineStatus getContentStatus(assemblyLineCode *thisAssemblyLineCode){
     lineStatus thisLineStatus = validLine;
     int counter = ZEROISE_COUNTER;
-    int lineLength = strlen(thisAssemblyLineCode->content);
+    int lineLength = (int)strlen(thisAssemblyLineCode->content);
     /*case that there are 80 char + /n in the 81nt => status is valid*/
     if((lineLength == LINE_LENGTH_WITH_N) && (thisAssemblyLineCode->content[lineLength]) == '\n')
         return thisLineStatus;
@@ -40,11 +40,12 @@ void setContent(assemblyLineCode* assemblyLine, const char* rawLine){
     assemblyLine->content[length] = END_OF_STRING;
 }
 
-void setStatus(assemblyLineCode* thisAssemblyLine){
+void setStatusForLineFromAmFile(assemblyLineCode* thisAssemblyLine){
     thisAssemblyLine->status = getContentStatus(thisAssemblyLine);
 }
 
 void setAssemblyLineCode(assemblyLineCode* assemblyLine, const char* rawLine){
     setContent(assemblyLine, rawLine);
-    setStatus(assemblyLine);
+    setStatusForLineFromAmFile(assemblyLine);
 }
+
