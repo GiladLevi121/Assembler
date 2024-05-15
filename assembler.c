@@ -9,7 +9,7 @@
 
 
 int main(int argc, char *argv[]) {
-    printf("sdf");
+
     memoryImage *fileMemoryImage;
     labelOrDefinitionList *openingLabelList;
     entryExternList* entryNExternDeclarationList;

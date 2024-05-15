@@ -5,9 +5,9 @@
 #include <stdlib.h>
 
 char *charToBinaryString(char ch) {
-    char *binaryStr = (char *)malloc(IMAGE_WORD_IN_MEMORY_LENGTH * sizeof(char));
+    char *binaryStr = (char *)malloc((IMAGE_WORD_IN_MEMORY_LENGTH + PADDING_CELL_LEN) * sizeof(char));
     binaryStr[IMAGE_WORD_IN_MEMORY_LENGTH] = END_OF_STRING;
-    int i = IMAGE_WORD_IN_MEMORY_LENGTH - LAST_CELL;
+    int i = IMAGE_WORD_IN_MEMORY_LENGTH - PADDING_CELL_LEN;
     for (; i >= FIRST_INDEX; i--) {
         binaryStr[i] = (ch & CURRENT_BIT) ? '1' : '0';
         ch >>= SHIFT;
@@ -19,14 +19,14 @@ char *charToBinaryString(char ch) {
 
 char *intToBinaryString(int num, int stringLength) {
     unsigned int absNum = abs(num);
-    char *binaryStr = (char*)malloc((stringLength + LAST_CELL) * sizeof(char));
+    char *binaryStr = (char*)malloc((stringLength + PADDING_CELL_LEN) * sizeof(char));
     int iteration;
 
     if (binaryStr == NULL)
         return NULL;
 
     binaryStr[stringLength] = END_OF_STRING;
-    for (iteration = stringLength - LAST_CELL; iteration >= FIRST_INDEX; iteration--) {
+    for (iteration = stringLength - PADDING_CELL_LEN; iteration >= FIRST_INDEX; iteration--) {
         binaryStr[iteration] = (absNum & CURRENT_BIT) ? '1' : '0';
         absNum >>= SHIFT;
     }
@@ -44,14 +44,14 @@ void complementToTwo(char *binaryStr, int stringLength){
     int carry = CARRY_EXIST;
     int iteration;
 
-    for (iteration = stringLength - LAST_CELL; iteration >= FIRST_INDEX; iteration--) {
+    for (iteration = stringLength - PADDING_CELL_LEN; iteration >= FIRST_INDEX; iteration--) {
         if (binaryStr[iteration] == '0')
             binaryStr[iteration] = '1';
         else
             binaryStr[iteration] = '0';
     }
 
-    for (iteration = stringLength - LAST_CELL; iteration >= FIRST_INDEX; iteration--) {
+    for (iteration = stringLength - PADDING_CELL_LEN; iteration >= FIRST_INDEX; iteration--) {
         if (binaryStr[iteration] == '0' && carry == CARRY_EXIST) {
             binaryStr[iteration] = '1';
             carry = ZEROISE_CARRY;

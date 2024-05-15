@@ -47,8 +47,9 @@ size_t getLabelLengthWithLabelIdentifier(const labelNode* thisLabelNode) {
 labelNode* labelDefinitionNodeConstructor(const char *enteredTitle, const char* enteredValue,
                                           int instructionCounter){
     labelNode *newDefinition = (labelNode *) malloc(sizeof(labelNode));
-    newDefinition->title = (char*) malloc((strlen(enteredTitle) + ANOTHER_CELL) * sizeof (char));
-    newDefinition->value.definitionValue = (char*) malloc((strlen(enteredValue) + ANOTHER_CELL) * sizeof (char ));
+    newDefinition->title = (char*) malloc((strlen(enteredTitle) + PADDING_CELL_LEN) * sizeof (char));
+    newDefinition->value.definitionValue = (char*) malloc(
+            (strlen(enteredValue) + PADDING_CELL_LEN) * sizeof (char ));
     strcpy(newDefinition->title, enteredTitle);
     strcpy(newDefinition->value.definitionValue, enteredValue);
     newDefinition->instructionCounter = instructionCounter;

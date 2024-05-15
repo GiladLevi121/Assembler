@@ -6,6 +6,7 @@
 #include "globaldefinitionsNStructures.h"
 
 #define ALL_WHITE_SPACES (-1)
+#define INIT_DEFAULT_VALUE (-1)
 
 
 int findFirstNonWhitespaceIndexFromEnd(const char*);

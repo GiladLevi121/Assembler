@@ -10,14 +10,13 @@
 
 int findFirstNonWhitespaceIndexFromEnd(const char* str) {
     size_t stringLength = strlen(str);
-    int counter = (int)stringLength;
-    while (counter != FIRST_INDEX || str[counter] != END_OF_STRING) {
-        if (!isspace(str[counter]) && counter < stringLength) {
-            return counter;
-        }
+    int counter = (int)stringLength - PADDING_CELL_LEN;
+
+    while (counter >= ZEROISE_COUNTER && isspace(str[counter])) {
         counter--;
     }
-    return ALL_WHITE_SPACES;
+
+    return counter;
 }
 
 int findFirstNonWhitespaceIndex(const char* str) {
@@ -76,10 +75,14 @@ boolean isThereMandatoryWhiteSpace(const char* line){
 char * getTokensUpToChar(const char* str, char knot){
     char *token = (char*)malloc(sizeof (char) * MAX_CHARS_IN_LINE);
     size_t tokenLength = ZEROISE_COUNTER;
-    if(strchr(str, knot) == NULL)
+    if(strchr(str, knot) == NULL){
+        free(token);
         return NULL;
-    if (strlen(str) == ZEROISE_COUNTER || str[FIRST_INDEX] == END_OF_STRING)
+    }
+    if (strlen(str) == ZEROISE_COUNTER || str[FIRST_INDEX] == END_OF_STRING){
+        free(token);
         return NULL;
+    }
     while (!isEndOfLine(&str[tokenLength])){
         while(str[tokenLength] != knot)
             tokenLength++;
@@ -88,7 +91,7 @@ char * getTokensUpToChar(const char* str, char knot){
     if(tokenLength == strlen(str))
         return NULL;
 
-    memcpy(token, str, tokenLength);
+    strncpy(token, str, tokenLength + PADDING_CELL_LEN);
     token[tokenLength] = END_OF_STRING;
     return token;
 }
@@ -103,7 +106,7 @@ char* getTokenUpToWhiteSpace(const char* str){
         if(!isspace(str[counter])){
             /*if (counter == )*/
             token[counter] = str[counter];
-            token[counter + ANOTHER_CELL] = END_OF_STRING;
+            token[counter + PADDING_CELL_LEN] = END_OF_STRING;
         }
         counter++;
     }
@@ -119,11 +122,11 @@ boolean isLegalXBitsNumber(const char* potentialNumber, int minRang, int maxRang
         endingIndex = findFirstNonWhitespaceIndexFromEnd(potentialNumber);
     }else{
         beginning = ZEROISE_COUNTER;
-        endingIndex = (int)strlen(potentialNumber) - LAST_CELL;
+        endingIndex = (int)strlen(potentialNumber) - PADDING_CELL_LEN;
     }
     thisNumber = strtol(&potentialNumber[beginning], &endingPointer, DECIMAL);
     if (potentialNumber[beginning] == '+' || potentialNumber[beginning] == '-') {
-        if (potentialNumber[beginning + LAST_CELL] == END_OF_STRING)
+        if (potentialNumber[beginning + PADDING_CELL_LEN] == END_OF_STRING)
             return END_OF_STRING;
         potentialNumber++;
     }
@@ -163,30 +166,57 @@ boolean is12BitsLegalNumberAsIs(const char* potentialNumber){
 
 
 char* trimLeadingNEndingWhitespace(const char* str) {
-    size_t start = FIRST_INDEX;
-    size_t len = strlen(str);
-    size_t end = len - LAST_CELL;
-    size_t trimmedLen = end - start + ANOTHER_CELL;
-    char* trimmedStr = (char*)malloc((trimmedLen + ANOTHER_CELL) * sizeof(char));
+    int strLength, start = ZEROISE_COUNTER;
+    int  end = ZEROISE_COUNTER;
+    char* trimmedStr = NULL;
     if (str == NULL)
         return NULL;
+    if (isEmptyString(str))
+        return "";
+    if(str != NULL)
+        strLength = (int)strlen(str);
+    while (isspace(str[start]) && start < strLength) {
+        start++;
+    }
+    while (isspace(str[strLength - end - PADDING_CELL_LEN])) {
+        end++;
+    }
+    if(strLength - start - end < ZERO_CHARACTERS)
+        return NULL;
+    trimmedStr = (char*)malloc((strLength + PADDING_CELL_LEN) * sizeof(char));
+    strncpy(trimmedStr, &str[start], (strLength - start - end));
+    trimmedStr[(strLength - start - end)] = END_OF_STRING;
+    return trimmedStr;
+    /*size_t len;
+    size_t start = FIRST_INDEX;
+    size_t end;
+    char* trimmedStr;
+    size_t trimmedLen;
+    if (str == NULL)
+        return NULL;
+    len = strlen(str);
     if (len == ZERO_CHARACTERS)
         return "";
-    while (isspace(str[start]))
+
+    while (isspace(str[start])) {
         start++;
-    while (end > start && isspace(str[end]))
+    }
+    end = len - PADDING_CELL_LEN;
+    while (end > start && isspace(str[end])) {
         end--;
-    trimmedLen = end - start + ANOTHER_CELL;
+    }
+    trimmedLen = end - start + PADDING_CELL_LEN;
+    trimmedStr = (char*)malloc((trimmedLen + PADDING_CELL_LEN) * sizeof(char));
     memcpy(trimmedStr, &str[start], trimmedLen);
     trimmedStr[trimmedLen] = END_OF_STRING;
 
-    return trimmedStr;
+    return trimmedStr;*/
 }
 
 boolean isEmptyString(const char *str) {
     if (str == NULL)
         return true;
-    while (*str != '\0') {
+    while (*str != END_OF_STRING) {
         if (!isspace(*str))
             return false;
         str++;

@@ -18,7 +18,7 @@
 #define FIFTH_WORD_INDEX 4
 #define FIVE_WORD_TO_CODE 5
 #define FIRST_FREE_WORD 100
-#define BLOCK_OF_MEMORY 512
+#define BLOCK_OF_MEMORY 128
 
 
 typedef struct {

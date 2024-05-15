@@ -129,14 +129,11 @@ void initNSetSourceOperand(lexTree*, const char*);
 
 /*------------------------------defines functions------------------------------*/
 
-/* Allocating memory for lexTree...value, according to definitionValueLength,
- * and copy definitionValue */
-void initNSetDefinitionValue(lexTree* thisLexTree, int definitionValueLength,
-                             const char* definitionValue);
+/* Allocating memory for lexTree...value and copy definitionValue */
+void initNSetDefinitionValue(lexTree* thisLexTree, const char* definitionValue);
 
-/* Allocating memory for lexTree...name, according to definitionValueLength,
- * and copy definitionName */
-void initNSetDefinitionName(lexTree*, int, const char* );
+/* Allocating memory for lexTree...name, and copy definitionName */
+void initNSetDefinitionName(lexTree*, const char* );
 
 /* Free allocated memory*/
 void freeLexTree(lexTree* );

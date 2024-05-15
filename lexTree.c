@@ -11,9 +11,9 @@ void initDataDeclarationDoublePointer(lexTree* thisLexTree, size_t pointersAmoun
     }
     else
         thisLexTree->content.directionSentence.content.dataDirection = (char **) malloc(
-                (pointersAmount + ANOTHER_CELL) * sizeof(char *));
+                (pointersAmount + PADDING_CELL_LEN) * sizeof(char *));
 
-    while(counter < pointersAmount + ANOTHER_CELL){
+    while(counter < pointersAmount + PADDING_CELL_LEN){
         thisLexTree->content.directionSentence.content.dataDirection[counter] = NULL;
         counter++;
     }
@@ -25,8 +25,8 @@ void addTokenToDataDirection(lexTree* thisLexTree, char* token){
         i++;
     }
     thisLexTree->content.directionSentence.content.dataDirection[i] =
-            (char *) malloc(strlen(token) * sizeof (char));
-    thisLexTree->content.directionSentence.content.dataDirection[i] = token;
+            (char *) malloc((strlen(token) + PADDING_CELL_LEN) * sizeof (char));
+    strcpy(thisLexTree->content.directionSentence.content.dataDirection[i], token);
 }
 
 void initNSetEntryDeclaration(lexTree* thisLexTree, const char* entryLabel){
@@ -34,7 +34,7 @@ void initNSetEntryDeclaration(lexTree* thisLexTree, const char* entryLabel){
         thisLexTree->content.directionSentence.content.entryLabel = NULL;
     } else{
         thisLexTree->content.directionSentence.content.entryLabel = (char*) malloc(
-                strlen(entryLabel) * sizeof(char));
+                (strlen(entryLabel) + PADDING_CELL_LEN) * sizeof(char));
         strcpy(thisLexTree->content.directionSentence.content.entryLabel, entryLabel);
     }
 }
@@ -44,7 +44,7 @@ void initNSetExternDeclaration(lexTree* thisLexTree, const char* externLabel){
         thisLexTree->content.directionSentence.content.externLabel = NULL;
     } else{
         thisLexTree->content.directionSentence.content.externLabel = (char*) malloc(
-                strlen(externLabel) * sizeof(char));
+                (strlen(externLabel) + PADDING_CELL_LEN) * sizeof(char));
         strcpy(thisLexTree->content.directionSentence.content.externLabel, externLabel);
     }
 }
@@ -54,7 +54,7 @@ void initNSetStringDeclaration(lexTree* thisLexTree, const char* assemblyStr){
         thisLexTree->content.directionSentence.content.stringContent = NULL;
     } else{
         thisLexTree->content.directionSentence.content.stringContent = (char*) malloc(
-                strlen(assemblyStr) * sizeof(char));
+                (strlen(assemblyStr) + PADDING_CELL_LEN) * sizeof(char));
         strcpy(thisLexTree->content.directionSentence.content.stringContent, assemblyStr);
     }
 }
@@ -64,7 +64,7 @@ void initNSetDestinationOperand(lexTree* thisLexTree, const char* destinationOpe
         thisLexTree->content.orderContent.destinationOperand = NULL;
     } else{
         thisLexTree->content.orderContent.destinationOperand = (char*) malloc(
-                strlen(destinationOperand) * sizeof(char));
+                (strlen(destinationOperand) + PADDING_CELL_LEN) * sizeof(char));
         strcpy(thisLexTree->content.orderContent.destinationOperand, destinationOperand);
     }
 }
@@ -74,32 +74,28 @@ void initNSetSourceOperand(lexTree* thisLexTree, const char* sourceOperand){
         thisLexTree->content.orderContent.sourceOperand = NULL;
     else{
         thisLexTree->content.orderContent.sourceOperand = (char*) malloc(
-                strlen(sourceOperand) * sizeof(char));
+                (strlen(sourceOperand) + PADDING_CELL_LEN) * sizeof(char));
         strcpy(thisLexTree->content.orderContent.sourceOperand, sourceOperand);
     }
 }
 
-void initNSetDefinitionName(lexTree* thisLexTree, int definitionNameLength,
-                            const char* definitionName){
+void initNSetDefinitionName(lexTree* thisLexTree, const char* definitionName){
     if(definitionName == NULL)
         thisLexTree->content.definitionContent.name = NULL;
     else{
-        thisLexTree->content.definitionContent.name = (char*) malloc(definitionNameLength * sizeof(char));
-        memcpy(thisLexTree->content.definitionContent.name, definitionName, definitionNameLength);
-        thisLexTree->content.definitionContent.name[definitionNameLength] = END_OF_STRING;
+        thisLexTree->content.definitionContent.name = (char*) malloc(
+                (strlen(definitionName) + PADDING_CELL_LEN) * sizeof(char));
+        strcpy(thisLexTree->content.definitionContent.name, definitionName);
     }
 }
 
-void initNSetDefinitionValue(lexTree* thisLexTree, int definitionValueLength,
-                             const char* definitionValue){
+void initNSetDefinitionValue(lexTree* thisLexTree, const char* definitionValue){
     if(definitionValue == NULL)
         thisLexTree->content.definitionContent.value = NULL;
     else{
-        thisLexTree->content.definitionContent.value = (char*)malloc(definitionValueLength * sizeof (char));
-        memcpy(thisLexTree->content.definitionContent.value,
-               definitionValue,/*definitionValueStartingIndex*/
-               definitionValueLength);
-        thisLexTree->content.definitionContent.value[definitionValueLength] = END_OF_STRING;
+        thisLexTree->content.definitionContent.value = (char*)malloc(
+                (strlen(definitionValue) + PADDING_CELL_LEN) * sizeof (char));
+        strcpy(thisLexTree->content.definitionContent.value,definitionValue);
     }
 }
 

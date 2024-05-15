@@ -79,11 +79,11 @@ addressMethod determineAddressMethod(const char * operand, labelOrDefinitionList
 boolean isFixedIndexAddressMethod(const char* operand,
                                   labelOrDefinitionList* openingLabelNDefinitionList){
     const char* indexOfSquareBrackets = strchr(operand, '['); /*gets the beginning of the inner index*/
-    if(operand[strlen(operand) - LAST_CELL] != ']')
+    if(operand[strlen(operand) - PADDING_CELL_LEN] != ']')
         return false;
     if(indexOfSquareBrackets != NULL){
         int arrayNameLength = (int)(indexOfSquareBrackets - operand);
-        int lengthOfInnerIndex = (int)(strlen(operand) - arrayNameLength) - ANOTHER_CELL - LAST_CELL;/*- len('[') - len(']')*/
+        int lengthOfInnerIndex = (int)(strlen(operand) - arrayNameLength) - PADDING_CELL_LEN - PADDING_CELL_LEN;/*- len('[') - len(']')*/
         if(arrayNameLength <= ZERO_CHARACTERS || lengthOfInnerIndex <= ZERO_CHARACTERS)
             return false; /* Size isn't right*/
         return setNCheckAssemblyArrayNIndex(operand, indexOfSquareBrackets, openingLabelNDefinitionList,
@@ -95,11 +95,11 @@ boolean isFixedIndexAddressMethod(const char* operand,
 boolean setNCheckAssemblyArrayNIndex(const char* operand, const char* indexOfSquareBrackets,
                                      labelOrDefinitionList* openingLabelNDefinitionList,
                                      int arrayNameLength, int lengthOfInnerIndex){
-    char* arrayName = (char*)malloc(sizeof (char) * (arrayNameLength + LAST_CELL));
-    char* indexName = (char*)malloc(sizeof (char) * (lengthOfInnerIndex));
-    strncpy(arrayName, operand, arrayNameLength + LAST_CELL);
+    char* arrayName = (char*)malloc(sizeof (char) * (arrayNameLength + PADDING_CELL_LEN));
+    char* indexName = (char*)malloc(sizeof (char) * (lengthOfInnerIndex + PADDING_CELL_LEN));
+    strncpy(arrayName, operand, arrayNameLength + PADDING_CELL_LEN);
     arrayName[arrayNameLength] = END_OF_STRING;
-    strncpy(indexName, indexOfSquareBrackets + LAST_CELL , lengthOfInnerIndex);
+    strncpy(indexName, indexOfSquareBrackets + PADDING_CELL_LEN , lengthOfInnerIndex);
     indexName[lengthOfInnerIndex] = END_OF_STRING;
     if(isLegalXBitsNumber(indexName, BEGINNING_ASSEMBLY_ARRAY_INDEX, MAX_NUMBERS_IN_DATA_DECLARATION, true) ||
             getDefinitionValueFromListIgnoreWhiteSpaces(openingLabelNDefinitionList, indexName) != NULL){
@@ -243,7 +243,7 @@ void validateDataDirectionSentence(lexTree *thisLexTree, labelOrDefinitionList* 
 
 void validateStringDirection(lexTree *thisLexTree){
     const char * assemblyStr = thisLexTree->content.directionSentence.content.stringContent;
-    size_t lastIndex = strlen(assemblyStr) - LAST_CELL;
+    size_t lastIndex = strlen(assemblyStr) - PADDING_CELL_LEN;
     if(assemblyStr[FIRST_INDEX] != '"' || assemblyStr[lastIndex] != '"' || lastIndex == FIRST_INDEX)
         thisLexTree->error = missingQuotationMarksInStringDeclaration;
 }

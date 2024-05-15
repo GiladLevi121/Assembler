@@ -149,28 +149,55 @@ void setEntryNExternContent(lexTree * newLexTree){
         initNSetEntryDeclaration(newLexTree, token);
 }
 
-void setDataDirectionContent(lexTree* newLexTree){
+void setDataDirectionContent(lexTree* newLexTree) {
     size_t tokensAmount = getDataArgumentAmount(newLexTree);
     initDataDeclarationDoublePointer(newLexTree, tokensAmount);
     size_t tokenLength;
-    const char* rawLine = newLexTree->rawLine->content;
-    char* token;
-    do {
+    const char *rawLine = newLexTree->rawLine->content;
+    char *token, *temp;
+    char someValueToPoint = 'a';
+    int i = ZEROISE_COUNTER;
+    for (; i < tokensAmount; i++) {
+        size_t rawLineIndex = newLexTree->rawLineInnerIndex;
+        if (strchr(&rawLine[rawLineIndex], ',') != NULL) {
+            token = getTokensUpToChar(&rawLine[rawLineIndex], ',');
+            tokenLength = strlen(token) + PADDING_CELL_LEN;  /*PADDING_CELL = len(',')*/
+            token = trimLeadingNEndingWhitespace(token);
+            if (token[FIRST_INDEX] != END_OF_STRING)
+                addTokenToDataDirection(newLexTree, token);
+            resetInnerIndex(newLexTree, tokenLength);
+            free(token);
+        }else{
+            token = trimLeadingNEndingWhitespace(&rawLine [rawLineIndex]);
+            if (token[FIRST_INDEX] != END_OF_STRING)
+                addTokenToDataDirection(newLexTree, token);
+            break;
+        }
+    }
+}
+    /*do {
         size_t rawLineIndex = newLexTree->rawLineInnerIndex;
         if(strchr(&rawLine[rawLineIndex], ',') != NULL){
             token = getTokensUpToChar(&rawLine[rawLineIndex], ',');
-            tokenLength = strlen(token) + ANOTHER_CELL; /* ANOTHER_CELL = len(',')*/
+            tokenLength = strlen(token) + PADDING_CELL;  ANOTHER_CELL = len(',')
             token = trimLeadingNEndingWhitespace(token);
-            addTokenToDataDirection(newLexTree, token);
+            if (token[FIRST_INDEX] != END_OF_STRING)
+                addTokenToDataDirection(newLexTree, token);
             resetInnerIndex(newLexTree, tokenLength);
+            temp = token;
+            token = &someValueToPoint;
+            free(temp);
         }
         else{
             token = trimLeadingNEndingWhitespace(&rawLine [rawLineIndex]);
-            addTokenToDataDirection(newLexTree, token);
+            if (token[FIRST_INDEX] != END_OF_STRING)
+                addTokenToDataDirection(newLexTree, token);
+            temp = token;
+            token = &someValueToPoint;
+            free(temp);
             break;
         }
-    }while(token != NULL);
-}
+    }while(token != NULL);*/
 
 size_t getDataArgumentAmount(lexTree* newLexTree){
     const char* relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
@@ -240,7 +267,7 @@ void setFirstGroup(lexTree* newLexTree){
     }
     firstOperand = trimLeadingNEndingWhitespace(token);
     initNSetSourceOperand(newLexTree, firstOperand);
-    resetInnerIndex(newLexTree,strlen(token) + LAST_CELL);
+    resetInnerIndex(newLexTree, strlen(token) + PADDING_CELL_LEN);
     relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
     secondOperand = trimLeadingNEndingWhitespace(relevantRawLine);
     initNSetDestinationOperand(newLexTree, secondOperand);
@@ -303,41 +330,42 @@ void setDefinitionLexTreeContent(lexTree *newLexTree){
 
 void setDefinitionName(lexTree* newLexTree){
     const char *relevantRawLine, *definitionName;
+    char* rawDefinitionName;
     int definitionNameStartingIndex, definitionNameEndIndex, definitionNameLength;
     resetInnerIndex(newLexTree, DEFINE_SENTENCE_IDENTIFIER_LENGTH);
     relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
     definitionNameStartingIndex = findFirstNonWhitespaceIndex(relevantRawLine);
-    definitionName = getTokensUpToChar(&relevantRawLine[definitionNameStartingIndex], '=');
+    rawDefinitionName = getTokensUpToChar(&relevantRawLine[definitionNameStartingIndex], '=');
     if(!isThereMandatoryWhiteSpace(relevantRawLine)){
         newLexTree->error = mandatoryWhiteCharAfterKeyWord;
-        initNSetDefinitionName(newLexTree, ZEROISE_COUNTER, NULL);
+        initNSetDefinitionName(newLexTree, NULL);
         return;
     }
-    if(definitionName == NULL){
+    if(rawDefinitionName == NULL){
         newLexTree->error = MissingEqualKnotInDefineSentence;
-        initNSetDefinitionName(newLexTree, ZEROISE_COUNTER, NULL);
+        initNSetDefinitionName(newLexTree, NULL);
         return;
     }
-    definitionNameEndIndex = findFirstNonWhitespaceIndexFromEnd(definitionName);
-    definitionNameLength = definitionNameEndIndex + LAST_CELL;
-    initNSetDefinitionName(newLexTree, definitionNameLength, definitionName);
-    resetInnerIndex(newLexTree, strlen(definitionName) + LAST_CELL + definitionNameStartingIndex);
+    definitionName = trimLeadingNEndingWhitespace(rawDefinitionName);
+    initNSetDefinitionName(newLexTree, definitionName);
+    resetInnerIndex(newLexTree, strlen(rawDefinitionName) + PADDING_CELL_LEN + definitionNameStartingIndex);
 }
 
 void setDefinitionValue(lexTree* newLexTree){
-    const char *relevantRawLine, *definitionValue;
+    const char *relevantRawLine, *definitionValue, * rawDefinitionValue;
     int definitionValueStartingIndex, definitionValueEndIndex, definitionValueLength;
     if(newLexTree->content.definitionContent.name == NULL){
-        initNSetDefinitionValue(newLexTree, ZEROISE_COUNTER, NULL);
+        initNSetDefinitionValue(newLexTree, NULL);
         return;
     }
     relevantRawLine = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
     definitionValueStartingIndex = findFirstNonWhitespaceIndex(relevantRawLine);
     definitionValueEndIndex = findFirstNonWhitespaceIndexFromEnd(relevantRawLine);
     resetInnerIndex(newLexTree, definitionValueStartingIndex);
-    definitionValue = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
-    definitionValueLength = definitionValueEndIndex + LAST_CELL - definitionValueStartingIndex;
-    initNSetDefinitionValue(newLexTree, definitionValueLength, definitionValue);
+    rawDefinitionValue = &newLexTree->rawLine->content[newLexTree->rawLineInnerIndex];
+    definitionValue = trimLeadingNEndingWhitespace(rawDefinitionValue);
+    definitionValueLength = definitionValueEndIndex + PADDING_CELL_LEN - definitionValueStartingIndex;
+    initNSetDefinitionValue(newLexTree, definitionValue);
 }
 
 

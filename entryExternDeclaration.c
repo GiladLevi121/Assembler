@@ -14,7 +14,7 @@ entryExternNode * entryExternNodeConstructor(const char* title, nodeType thisNod
     newNode->type = thisNodeType;
     newNode->amountOfLines = ZEROISE_COUNTER;
     if(newNode->error == valid){
-        newNode->title = (char*) malloc((strlen(title) + ANOTHER_CELL) * sizeof(char));
+        newNode->title = (char*) malloc((strlen(title) + PADDING_CELL_LEN) * sizeof(char));
         strcpy(newNode->title, title);
         return newNode;
     }else{
@@ -58,7 +58,7 @@ void constructExternUsedLines(entryExternNode* thisNode){
 }
 
 void constructEntryDeclaredLine(entryExternNode* thisNode, const char* lineDeclared){
-    thisNode->content.declaredLine = (char*) malloc(strlen(lineDeclared) * sizeof(char));
+    thisNode->content.declaredLine = (char*) malloc((strlen(lineDeclared) + PADDING_CELL_LEN) * sizeof(char));
     if (lineDeclared == NULL){
         free(thisNode->content.declaredLine);
         return;

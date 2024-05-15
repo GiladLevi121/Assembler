@@ -50,16 +50,16 @@ char **getBinaryRepresentationOfData(lexTree *thisLexTree, int *wordsOfMemoryInT
 char **getBinaryRepresentationOfString(lexTree *thisLexTree,
                                        int *wordsOfMemoryInThisDirection){
     DirectionSentence thisString = thisLexTree->content.directionSentence;
-    int i = ZEROISE_COUNTER + ANOTHER_CELL;/* stringContent[0] = '"'*/
+    int i = ZEROISE_COUNTER + PADDING_CELL_LEN;/* stringContent[0] = '"'*/
     /* <=> strlen(string) - len('"') - len('"') + len(endOfString) = len - 1 - 1 + 1*/
-    size_t amountOfSinglePointers = strlen(thisString.content.stringContent) - ANOTHER_CELL;
+    size_t amountOfSinglePointers = strlen(thisString.content.stringContent) - PADDING_CELL_LEN;
     char** stringInBinary = (char**)malloc(amountOfSinglePointers * sizeof (char*));
     for(; thisString.content.stringContent[i] != '"'; i++){
-        stringInBinary[i - ANOTHER_CELL] = charToBinaryString(thisString.content.stringContent[i]);
+        stringInBinary[i - PADDING_CELL_LEN] = charToBinaryString(thisString.content.stringContent[i]);
     }
-    stringInBinary[i - ANOTHER_CELL] = (char*) malloc(IMAGE_WORD_IN_MEMORY_LENGTH * sizeof(char));
-    strcpy(stringInBinary[i - ANOTHER_CELL], "00000000000000");
-    *wordsOfMemoryInThisDirection = amountOfSinglePointers;
+    stringInBinary[i - PADDING_CELL_LEN] = (char*) malloc((IMAGE_WORD_IN_MEMORY_LENGTH + PADDING_CELL_LEN) * sizeof(char));
+    strcpy(stringInBinary[i - PADDING_CELL_LEN], "00000000000000");
+    *wordsOfMemoryInThisDirection = (int)amountOfSinglePointers;
     return stringInBinary;
 }
 
@@ -200,7 +200,7 @@ char** getTheRestBinaryInstruction(char * firstMemoryWord, char **fixedIndexSour
 }
 
 char* getBothOperandDirectRegisterWord(const char* sourceOperand,const char* destinationOperand){
-    char *word = (char*)malloc(IMAGE_WORD_IN_MEMORY_LENGTH * sizeof (char));
+    char *word = (char*)malloc((IMAGE_WORD_IN_MEMORY_LENGTH + PADDING_CELL_LEN) * sizeof (char));
     char *sourceInBinary, *destinationInBinary;
     int counter = ZEROISE_COUNTER;
     sourceInBinary = getDirectRegisterWord(sourceOperand , true);
@@ -218,7 +218,7 @@ char* getBothOperandDirectRegisterWord(const char* sourceOperand,const char* des
 }
 
 char* getDirectRegisterWord(const char* operand, boolean sourceOrDestination){ /* Source = true*/
-    char *word = (char*) malloc(IMAGE_WORD_IN_MEMORY_LENGTH * sizeof (char));
+    char *word = (char*) malloc((IMAGE_WORD_IN_MEMORY_LENGTH + PADDING_CELL_LEN)* sizeof (char));
     char * ARE = "00", *endPointer;
     char *lastSixBits = "000000";
     char *threeNotUsedBits = "000";
@@ -227,7 +227,7 @@ char* getDirectRegisterWord(const char* operand, boolean sourceOrDestination){ /
     for(; i < REGISTERS_AMOUNT; i++){
         if (!strcmp(reservedAssemblyWords[REGISTERS_FIRST_INDEX_IN_KEY_WORDS + i], operand)){
             regNumber = (int)strtol(
-                    reservedAssemblyWords[REGISTERS_FIRST_INDEX_IN_KEY_WORDS + i] + ANOTHER_CELL,/* skips 'r'*/
+                    reservedAssemblyWords[REGISTERS_FIRST_INDEX_IN_KEY_WORDS + i] + PADDING_CELL_LEN,/* skips 'r'*/
                     &endPointer, DECIMAL);
             if (*endPointer != END_OF_STRING && *endPointer != END_OF_ROW){
                 free(word);
@@ -252,25 +252,26 @@ char* getDirectRegisterWord(const char* operand, boolean sourceOrDestination){ /
 char** getTwoWordsOfFixedIndexAddress(
         const char* operand, labelOrDefinitionList* openingLabelNDefinitionList){
     char* firstWordSpaceHolder = getFixedAddressFirstWordSpaceHolder();
-    char* binarySecondWord = getBinaryIndexOfFixedIndex(operand, openingLabelNDefinitionList);
+    char* binarySecondWord = getBinaryIndexRepresentationOfFixedIndex(operand, openingLabelNDefinitionList);
     char** words = (char**)malloc(TWO_WORDS * sizeof (char*));
     words[FIRST_INDEX] = firstWordSpaceHolder;
     words[SECOND_CELL_INDEX] = binarySecondWord;
     return words;
 }
 
-char* getBinaryIndexOfFixedIndex(
-        const char* operand, labelOrDefinitionList* openingLabelNDefinitionList){
-    char *binaryWord = (char *)malloc(IMAGE_WORD_IN_MEMORY_LENGTH * sizeof (char));
+char* getBinaryIndexRepresentationOfFixedIndex(const char* operand,
+                                               labelOrDefinitionList* openingLabelNDefinitionList){
+    char *binaryWord = (char *)malloc((IMAGE_WORD_IN_MEMORY_LENGTH + PADDING_CELL_LEN) * sizeof (char));
     char *ARE = "00"; /* Like immediate addressing*/
     char* indexName, *definitionValue;
     char token[MAX_NUMBERS_IN_DATA_DECLARATION], *endPointer, *binaryOperand;
     int finalOperand;
     const char* indexOfSquareBrackets = strchr(operand, '['); /*gets the beginning of the inner index*/
     int arrayNameLength = (int)(indexOfSquareBrackets - operand);
-    int lengthOfInnerIndex = (int)(strlen(operand) - arrayNameLength) - ANOTHER_CELL - LAST_CELL;/*- len('[') - len(']')*/
+    int lengthOfInnerIndex = (int)(strlen(operand) - arrayNameLength) - PADDING_CELL_LEN - PADDING_CELL_LEN;/*- len('[') - len(']')*/
     indexName = (char*)malloc(sizeof (char) * (lengthOfInnerIndex));
-    strncpy(token, indexOfSquareBrackets + LAST_CELL , lengthOfInnerIndex);
+    strncpy(token, indexOfSquareBrackets + PADDING_CELL_LEN , lengthOfInnerIndex + PADDING_CELL_LEN);
+    token[lengthOfInnerIndex] = END_OF_STRING;
     indexName = trimLeadingNEndingWhitespace(token);
     /*indexName[lengthOfInnerIndex] = END_OF_STRING;*/
     if(is12BitsLegalNumberAsIs(indexName))
@@ -306,7 +307,7 @@ char* getSpaceHolder(){
 
 char* getImmediateAddressBinaryWord(
         const char* operand, labelOrDefinitionList* openingLabelNDefinitionList){
-    char* word = (char*) malloc(IMAGE_WORD_IN_MEMORY_LENGTH * sizeof (char));
+    char* word = (char*) malloc((IMAGE_WORD_IN_MEMORY_LENGTH + PADDING_CELL_LEN) * sizeof (char));
     char* ARE = "00";
     char* binaryOperand;
     char *endPointer;
@@ -333,7 +334,7 @@ char* getFirstWordInOrderImage(lexTree* thisLexTree, labelOrDefinitionList* open
     OrderSentence thisOrderSentence = thisLexTree->content.orderContent;
     char * binaryOpCode, *binarySourcesAddressingMethod, *binaryDestinationAddressingMethod,
     * ARE, * lastFourBits;
-    char *memoryWord = (char*)malloc(IMAGE_WORD_IN_MEMORY_LENGTH * sizeof (char));
+    char *memoryWord = (char*)malloc((IMAGE_WORD_IN_MEMORY_LENGTH + PADDING_CELL_LEN) * sizeof (char));
     addressMethod sourceOperandAddressMethod;
     addressMethod destinationOperandAddressMethod;
     ARE = "00"; /* First order word always 00*/

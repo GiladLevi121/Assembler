@@ -21,7 +21,7 @@ FILE *openFileByName(char *fileName, char *fileEnding, char *permissions) {
 
 char *connectFileNameWithEnding(char *fileName, char *fileEnding) {
     size_t fileLength = strlen(fileName) + strlen(fileEnding);
-    char *targetFileName = malloc(fileLength * sizeof(char));
+    char *targetFileName = malloc((fileLength + PADDING_CELL_LEN) * sizeof(char));
     if (targetFileName != NULL) {
         strcpy(targetFileName, fileName);
         strcat(targetFileName, fileEnding);

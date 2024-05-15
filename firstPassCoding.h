@@ -41,7 +41,7 @@ char** getTwoWordsOfFixedIndexAddress(const char*, labelOrDefinitionList*);
 char* getFixedAddressFirstWordSpaceHolder();
 
 /* Return binary word of the second word in fixed address method*/
-char* getBinaryIndexOfFixedIndex(const char*, labelOrDefinitionList*);
+char* getBinaryIndexRepresentationOfFixedIndex(const char *operand, labelOrDefinitionList *openingLabelNDefinitionList);
 
 /*main function to code for Code Image, assuming lexTree.type = order */
 char** getBinaryRepresentationOfThisOrder(lexTree *thisLexTree, int* wordsOfMemoryInThisOrder,

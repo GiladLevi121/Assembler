@@ -29,8 +29,8 @@ errorType isNotLegalTitle(const char* thisTitle){
 
 boolean isTitleCharsAreAllowed(const char* thisTitle){
     int counter = ZEROISE_COUNTER;
-    size_t labelLength = strlen(thisTitle);
-    for(; counter < labelLength; counter++){
+    size_t labelLength = strlen(thisTitle) /*+ PADDING_CELL_LEN*/;
+    for(; counter < labelLength /*|| thisTitle[counter] != END_OF_STRING*/; counter++){
         if(!isalpha(thisTitle[counter]) && !isdigit(thisTitle[counter]))
             return false;
     }
