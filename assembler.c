@@ -11,16 +11,18 @@
 int main(int argc, char *argv[]) {
 
     memoryImage *fileMemoryImage;
-    labelOrDefinitionList *openingLabelList;
-    entryExternList* entryNExternDeclarationList;
+    labelOrDefinitionList *openingLabelNDefinitionList;
+    entryExternList* entryNExternalList;
 
     fileMemoryImage = memoryImageConstructor();
-    openingLabelList = labelOrDefinitionListConstructor();
-    entryNExternDeclarationList = entryExternListConstructor();
+    openingLabelNDefinitionList = labelOrDefinitionListConstructor();
+    entryNExternalList = entryExternListConstructor();
 
-    runFirstPass(argv[1], openingLabelList, entryNExternDeclarationList, fileMemoryImage);
+    runFirstPass(argv[1], openingLabelNDefinitionList, entryNExternalList, fileMemoryImage);
 
 
-
+    deallocatingEntryExternList(entryNExternalList);
+    deallocateLabelListElements(openingLabelNDefinitionList);
+    freeMemoryImage(fileMemoryImage);
     return 0;
 }

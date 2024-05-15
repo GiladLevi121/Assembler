@@ -34,4 +34,12 @@ void addEntryOrExternToList(lexTree*, entryExternList *,labelOrDefinitionList* )
 /* For each entry declaration, sets its entryExternNode.content.declaredLine
  * according to labelList. If amountOfWord = 0, ...declaredLine = NULL */
 void externEntryListUpdating(entryExternList *,labelOrDefinitionList *);
+
+/* Execute operation on openningList, and entryExternList in case
+ * current entryExternNode is entry*/
+void entryListUpdating(entryExternNode *current, labelOrDefinitionList *openingLabelNDefinitionList);
+
+/* sets error if needed*/
+void setErrorIfExternDeclarationAppearAsInnerLabelOrDefinition
+        (entryExternNode * , labelOrDefinitionList *);
 #endif

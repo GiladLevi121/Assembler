@@ -50,12 +50,6 @@ void runFirstPass(char *fileName,
         else
             printf("%d) NULL\n", i + (int)fileMemoryImage->currentlyWordsInCodeImage);
     }
-
-
-    deallocatingEntryExternList(entryNExternalList);
-    deallocateLabelListElements(openingLabelNDefinitionList);
-    freeMemoryImage(fileMemoryImage);
-
     fclose(filePointer);
 }
 
@@ -159,19 +153,38 @@ void externEntryListUpdating(entryExternList *entryNExternalList,
                              labelOrDefinitionList *openingLabelNDefinitionList){
     entryExternNode * current = entryNExternalList->head;
     while (current != NULL){
-        if (current->type == entryDeclaration &&
-        isTileAppearInLabelList(current->title, openingLabelNDefinitionList)){
-            labelNode* pointer = getNodeIfAppearInLabelList(current->title, openingLabelNDefinitionList);
-            if(pointer->labelType != mDefine) /* <=> code image or data image*/
-                constructEntryDeclaredLine(current, pointer->value.PC);
-        } else if (!isTileAppearInLabelList(current->title, openingLabelNDefinitionList) &&
-        current->type == entryDeclaration){
-            current->error = declaredEntryLabelButDidntDeclaredLabelInFile;
-        }
+        if(current->type == entryDeclaration)
+            entryListUpdating(current, openingLabelNDefinitionList);
+
+        else/* (current->type == externDeclaration)*/
+            setErrorIfExternDeclarationAppearAsInnerLabelOrDefinition(current, openingLabelNDefinitionList);
+
         current = (entryExternNode *)current->next;
     }
 
 }
+
+void entryListUpdating(entryExternNode * current, labelOrDefinitionList *openingLabelNDefinitionList){
+    if (isTileAppearInLabelList(current->title, openingLabelNDefinitionList)){
+        labelNode* pointer = getNodeIfAppearInLabelList(current->title, openingLabelNDefinitionList);
+        if(pointer->labelType != mDefine) /* <=> code image or data image*/
+            constructEntryDeclaredLine(current, pointer->value.PC);
+    } else /* (!isTileAppearInLabelList(current->title, openingLabelNDefinitionList))*/
+        current->error = declaredEntryLabelButDidntDeclaredLabelInFile;
+}
+
+
+void setErrorIfExternDeclarationAppearAsInnerLabelOrDefinition
+(entryExternNode * current, labelOrDefinitionList *openingLabelNDefinitionList){
+    if (isTileAppearInLabelList(current->title, openingLabelNDefinitionList)){
+        labelNode* pointer = getNodeIfAppearInLabelList(current->title, openingLabelNDefinitionList);
+        pointer->labelError = cantUseExternalDeclarationNameToAlreadyExistLabelOrDefinition;
+        current->error = cantUseExternalDeclarationNameToAlreadyExistLabelOrDefinition;
+    }
+}
+
+
+
 /*
 labelNode *current = openingLabelNDefinitionList->head;
 while(current->next != NULL){

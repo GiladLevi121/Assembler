@@ -99,8 +99,7 @@ typedef enum {
     declaredEntryLabelButDidntDeclaredLabelInFile,
     unKnownLabelUsage,
     conflictNaming,
-    cantUseExternalDeclarationNameToAlreadyExistLabel,
-    cantUseEntryLabelOrDefinitionNameToAlreadyExistExternalDeclaration,
+    cantUseExternalDeclarationNameToAlreadyExistLabelOrDefinition,
     entryOrExternDeclarationCantAppearTwice,
     twoConsecutiveCommasFound,
     labelUsedIsNotDeclared,/*label used but not connected to any memory*/
