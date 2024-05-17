@@ -26,7 +26,7 @@ void codingThisLexTree(lexTree*, labelOrDefinitionList*, memoryImage*);
 void dataImageEndOfFirstPassUpdating(memoryImage*, labelOrDefinitionList*);
 
 /* Use-case for updatingLists function*/
-void addDefinitionToList(lexTree*, labelOrDefinitionList*, entryExternList* );
+void addDefinitionToList(lexTree*, labelOrDefinitionList*);
 
 /* Use-case for updatingLists function*/
 void addEntryOrExternToList(lexTree*, entryExternList *,labelOrDefinitionList* );

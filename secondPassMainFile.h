@@ -19,5 +19,18 @@ void runSecondPass(char *, /*boolean errorExist,*/
 void secondPassEveryLineOfAssemblyOperations(assemblyLineCode *, int, labelOrDefinitionList*,
                                              entryExternList *, memoryImage*);
 
+/* Check for second pass errors*/
 void additionValidationSecondPass(lexTree *,labelOrDefinitionList *,entryExternList*);
+
+/* Main function for second pass coding */
+void secondPassCoding(lexTree *, labelOrDefinitionList *, entryExternList *, memoryImage*);
+
+/* Creates the output files*/
+void createOutputFiles(memoryImage *, entryExternList *, const char*);
+
+/* Creates the output externNEntryFile*/
+void createEntNExtFile(entryExternList *, const char*);
+
+/* Creates the output obj file*/
+void createObjFile(memoryImage*, const char*);
 #endif

@@ -14,6 +14,7 @@ typedef enum{
 
 
 typedef struct {
+    int instructionCounter;
     errorType error;
     char* title;
     nodeType type;
@@ -33,9 +34,9 @@ typedef struct {
 
 /*------------------------------node functions------------------------------*/
 
-/* Setting new node with entered title. If title  isn't valid, return null. Also
+/* Setting new node with entered title and instructionCounter. If title  isn't valid, return null. Also
  * sets the node type*/
-entryExternNode * entryExternNodeConstructor(const char*, nodeType);
+entryExternNode * entryExternNodeConstructor(const char*, nodeType, int);
 
 /* Construct the content*/
 void constructNodeContent(entryExternNode *,nodeType);

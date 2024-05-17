@@ -9,6 +9,7 @@
 memoryImage *memoryImageConstructor(){
     memoryImage * newMemoryImage = (memoryImage*)malloc(sizeof (memoryImage));
     newMemoryImage->PC = FIRST_FREE_WORD;
+    newMemoryImage->secondPassCodeImageCounter = ZEROISE_COUNTER;
     newMemoryImage->dataImage = (char**) malloc(BLOCK_OF_MEMORY * sizeof (char*));
     newMemoryImage->codeImage = (char**) malloc(BLOCK_OF_MEMORY * sizeof (char*));
     newMemoryImage->currentlyAllocatedWordsCodeImage = BLOCK_OF_MEMORY;
@@ -66,7 +67,22 @@ void freeMemoryImage(memoryImage* thisMemoryImage){
 
 
 
-
+void printMemoryImage(memoryImage* thisMemoryImage) {
+    int i = ZEROISE_COUNTER;
+    for(; i < thisMemoryImage->currentlyWordsInCodeImage; i++){
+        if(thisMemoryImage->codeImage[i] != NULL)
+            printf("%d) %s\n", i, thisMemoryImage->codeImage[i]);
+        else
+            printf("%d) NULL\n", i);
+    }
+    i = ZEROISE_COUNTER;
+    for(; i < thisMemoryImage->currentlyWordsInDataImage; i++){
+        if(thisMemoryImage->dataImage[i] != NULL)
+            printf("%d) %s\n", i, thisMemoryImage->dataImage[i]);
+        else
+            printf("%d) NULL\n", i);
+    }
+}
 
 
 

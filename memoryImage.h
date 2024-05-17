@@ -23,6 +23,7 @@
 
 typedef struct {
     size_t PC;
+    size_t secondPassCodeImageCounter;
     size_t currentlyWordsInCodeImage;
     size_t currentlyWordsInDataImage;
     size_t currentlyAllocatedWordsCodeImage;
@@ -42,4 +43,7 @@ void addToDataImage(memoryImage*, char** , size_t);
 
 /*freeing memoryImage*/
 void freeMemoryImage(memoryImage*);
+
+/* Printing memory image nicely*/
+void printMemoryImage(memoryImage* thisMemoryImage);
 #endif

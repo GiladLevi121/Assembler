@@ -2,7 +2,12 @@
 #include "baseTransitionUtiles.h"
 #include "globaldefinitionsNStructures.h"
 #include <stdio.h>
+#include "string.h"
 #include <stdlib.h>
+
+/* The order corresponds with each other*/
+const char* fourBaseChars = "0123";
+const char* encryptedFourBaseChars = "*#%!";
 
 char *charToBinaryString(char ch) {
     char *binaryStr = (char *)malloc((IMAGE_WORD_IN_MEMORY_LENGTH + PADDING_CELL_LEN) * sizeof(char));
@@ -59,4 +64,33 @@ void complementToTwo(char *binaryStr, int stringLength){
             binaryStr[iteration] = '0';
     }
 }
+
+
+char* memoryWordToEncrypted4Base(const char *thisWord){
+    int counter = ZEROISE_COUNTER;
+    int index = ZEROISE_COUNTER;
+    char* encryptedFourBaseWord = (char*) malloc((BASE_FOUR_WORD_LENGTH + PADDING_CELL_LEN) * sizeof(char));
+    for (; counter < IMAGE_WORD_IN_MEMORY_LENGTH; counter += TWO_WORDS_AT_A_TIME) {
+        int firstDigit = thisWord[counter] - '0';
+        int secondDigit = thisWord[counter + ANOTHER_BIT] - '0';
+        int combineDigit = (firstDigit << SHIFT) | secondDigit; // Combine the two binary digits
+        char fourBaseValue = (char)('0' + combineDigit);
+        encryptedFourBaseWord[index++] = getEncryptedCharacter(fourBaseValue);
+    }
+    encryptedFourBaseWord[index] = END_OF_STRING;
+    return encryptedFourBaseWord;
+}
+
+
+char getEncryptedCharacter(char thisCh){
+    int endLoop = (int)strlen(fourBaseChars); /*3*/
+    int i = ZEROISE_COUNTER;
+    for(; i < endLoop; i++){
+        if(thisCh == fourBaseChars[i])
+            return encryptedFourBaseChars[i];
+    }
+    return ('4');
+}
+
+
 

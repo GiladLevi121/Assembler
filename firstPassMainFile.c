@@ -36,20 +36,6 @@ void runFirstPass(char *fileName,
     }
     externEntryListUpdating(entryNExternalList, openingLabelNDefinitionList);
     dataImageEndOfFirstPassUpdating(fileMemoryImage, openingLabelNDefinitionList);
-
-    for (; i < fileMemoryImage->currentlyWordsInCodeImage; i++) {
-        if(fileMemoryImage->codeImage[i] != NULL)
-            printf("%d) %s\n", i  ,fileMemoryImage->codeImage[i]);
-        else
-            printf("%d) NULL\n", i);
-    }
-    i = 0;
-    for (; i < fileMemoryImage->currentlyWordsInDataImage; i++) {
-        if(fileMemoryImage->dataImage[i] != NULL)
-            printf("%d) %s\n", i + (int)fileMemoryImage->currentlyWordsInCodeImage ,fileMemoryImage->dataImage[i]);
-        else
-            printf("%d) NULL\n", i + (int)fileMemoryImage->currentlyWordsInCodeImage);
-    }
     fclose(filePointer);
 }
 
@@ -78,7 +64,7 @@ void listsUpdating(labelOrDefinitionList* labelNDefinitionList,
         addLabelOrDefinitionNodeAtTheEnd(labelNDefinitionList, thisLexTree->potentialLabel);
     }
     if (thisLexTree->type == definition){
-        addDefinitionToList(thisLexTree, labelNDefinitionList, entryNExternalList);
+        addDefinitionToList(thisLexTree, labelNDefinitionList);
         return;
     }
     if(thisLexTree->type == direction){
@@ -91,24 +77,24 @@ void addEntryOrExternToList(lexTree* thisLexTree, entryExternList * entryNExtern
                             labelOrDefinitionList* labelNDefinitionList){
     if(thisLexTree->content.directionSentence.type == entryDirection){
         entryExternNode * newEntryExternNode = entryExternNodeConstructor(
-                thisLexTree->content.directionSentence.content.entryLabel, entryDeclaration);
+                thisLexTree->content.directionSentence.content.entryLabel, entryDeclaration,
+                thisLexTree->InstructionCounter);
         addNodeToEntryExternList(entryNExternalList, newEntryExternNode);
     }else if(thisLexTree->content.directionSentence.type == externDirection){
         entryExternNode * newEntryExternNode = entryExternNodeConstructor(
-                thisLexTree->content.directionSentence.content.externLabel, externDeclaration);
+                thisLexTree->content.directionSentence.content.externLabel, externDeclaration,
+                thisLexTree->InstructionCounter);
         constructExternUsedLines(newEntryExternNode);
         addNodeToEntryExternList(entryNExternalList, newEntryExternNode);
     }
 }
 
 
-void addDefinitionToList(lexTree* thisLexTree, labelOrDefinitionList* labelNDefinitionList,
-                         entryExternList* entryNExternalList){
+void addDefinitionToList(lexTree* thisLexTree, labelOrDefinitionList* labelNDefinitionList){
     labelNode * newDefinitionNode = labelDefinitionNodeConstructor(
             thisLexTree->content.definitionContent.name,
             thisLexTree->content.definitionContent.value,
             thisLexTree->InstructionCounter);
-
     addLabelOrDefinitionNodeAtTheEnd(labelNDefinitionList, newDefinitionNode);
 }
 
@@ -169,6 +155,10 @@ void entryListUpdating(entryExternNode * current, labelOrDefinitionList *opening
         labelNode* pointer = getNodeIfAppearInLabelList(current->title, openingLabelNDefinitionList);
         if(pointer->labelType != mDefine) /* <=> code image or data image*/
             constructEntryDeclaredLine(current, pointer->value.PC);
+        else /*pointer->labelType == mDefine*/{
+            current->error = cantUseEntryDeclarationToReferToDefinitionName;
+            pointer->labelError = cantUseEntryDeclarationToReferToDefinitionName;
+        }
     } else /* (!isTileAppearInLabelList(current->title, openingLabelNDefinitionList))*/
         current->error = declaredEntryLabelButDidntDeclaredLabelInFile;
 }

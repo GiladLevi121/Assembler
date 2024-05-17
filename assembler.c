@@ -12,16 +12,17 @@ int main(int argc, char *argv[]) {
 
     memoryImage *fileMemoryImage;
     labelOrDefinitionList *openingLabelNDefinitionList;
-    entryExternList* entryNExternalList;
+    entryExternList* entryExternLabelList;
 
     fileMemoryImage = memoryImageConstructor();
     openingLabelNDefinitionList = labelOrDefinitionListConstructor();
-    entryNExternalList = entryExternListConstructor();
+    entryExternLabelList = entryExternListConstructor();
 
-    runFirstPass(argv[1], openingLabelNDefinitionList, entryNExternalList, fileMemoryImage);
+    runFirstPass(argv[1], openingLabelNDefinitionList, entryExternLabelList, fileMemoryImage);
+    runSecondPass(argv[1], openingLabelNDefinitionList, entryExternLabelList, fileMemoryImage);
 
 
-    deallocatingEntryExternList(entryNExternalList);
+    deallocatingEntryExternList(entryExternLabelList);
     deallocateLabelListElements(openingLabelNDefinitionList);
     freeMemoryImage(fileMemoryImage);
     return 0;

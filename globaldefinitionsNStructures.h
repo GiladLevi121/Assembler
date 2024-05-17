@@ -101,6 +101,7 @@ typedef enum {
     conflictNaming,
     cantUseExternalDeclarationNameToAlreadyExistLabelOrDefinition,
     entryOrExternDeclarationCantAppearTwice,
+    cantUseEntryDeclarationToReferToDefinitionName,
     twoConsecutiveCommasFound,
     labelUsedIsNotDeclared,/*label used but not connected to any memory*/
     lineLengthIsTooLong

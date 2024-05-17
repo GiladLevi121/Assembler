@@ -65,4 +65,6 @@ char *getBinaryOpCode(commandOpcode);
 /*return string that represent the binary addressing method*/
 char* getBinaryAddressingMethod(addressMethod);
 
+
+
 #endif

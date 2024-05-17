@@ -1,5 +1,5 @@
-assembler: assembler.o baseTransitionUtiles.o entryExternDeclaration.o filesUtil.o firstPassCoding.o firstPassMainFile.o globaldefinitionsNStructures.o label.o labelNDefineValidation.o lexTree.o lexTreeValidation.o line.o memoryImage.o parser.o secondPassLexTreeValidation.o secondPassMainFile.o SettingLexTree.o
-	gcc -ansi -pedantic -Wall assembler.o baseTransitionUtiles.o entryExternDeclaration.o filesUtil.o firstPassCoding.o firstPassMainFile.o globaldefinitionsNStructures.o label.o labelNDefineValidation.o lexTree.o lexTreeValidation.o line.o memoryImage.o parser.o secondPassLexTreeValidation.o secondPassMainFile.o SettingLexTree.o -o assembler
+assembler: assembler.o baseTransitionUtiles.o entryExternDeclaration.o filesUtil.o firstPassCoding.o firstPassMainFile.o globaldefinitionsNStructures.o label.o labelNDefineValidation.o lexTree.o lexTreeValidation.o line.o memoryImage.o parser.o secondPassLexTreeValidation.o secondPassMainFile.o SettingLexTree.o secondPassCodding.o
+	gcc -ansi -pedantic -Wall assembler.o baseTransitionUtiles.o entryExternDeclaration.o filesUtil.o firstPassCoding.o firstPassMainFile.o globaldefinitionsNStructures.o label.o labelNDefineValidation.o lexTree.o lexTreeValidation.o line.o memoryImage.o parser.o secondPassLexTreeValidation.o secondPassMainFile.o SettingLexTree.o secondPassCodding.o -o assembler
 
 assembler.o: assembler.c secondPassMainFile.h entryExternDeclaration.h memoryImage.h label.h label.h firstPassMainFile.h globaldefinitionsNStructures.h
 	gcc -c -ansi -pedantic -Wall assembler.c -o assembler.o	
@@ -46,11 +46,14 @@ parser.o: parser.c parser.h globaldefinitionsNStructures.h
 secondPassLexTreeValidation.o: secondPassLexTreeValidation.c secondPassLexTreeValidation.h lexTreeValidation.h lexTree.h globaldefinitionsNStructures.h
 	gcc -c -ansi -pedantic -Wall secondPassLexTreeValidation.c -o secondPassLexTreeValidation.o
 
-secondPassMainFile.o: secondPassMainFile.c secondPassMainFile.h secondPassLexTreeValidation.h firstPassMainFile.h lexTreeValidation.h SettingLexTree.h lexTree.h filesUtil.h label.h globaldefinitionsNStructures.h memoryImage.h 
+secondPassMainFile.o: secondPassMainFile.c secondPassMainFile.h secondPassLexTreeValidation.h firstPassMainFile.h lexTreeValidation.h SettingLexTree.h lexTree.h filesUtil.h label.h globaldefinitionsNStructures.h memoryImage.h secondPassCodding.h
 	gcc -c -ansi -pedantic -Wall secondPassMainFile.c -o secondPassMainFile.o	
 
 SettingLexTree.o: SettingLexTree.c SettingLexTree.h parser.h label.h lexTree.h
 	gcc -c -ansi -pedantic -Wall SettingLexTree.c -o SettingLexTree.o
+
+secondPassCodding.o: baseTransitionUtiles.h firstPassCoding.h secondPassCodding.h secondPassCodding.c
+	gcc -c -ansi -pedantic -Wall secondPassCodding.c -o secondPassCodding.o
 
 
 

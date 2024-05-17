@@ -8,11 +8,12 @@
 
 /*------------------------------node------------------------------*/
 
-entryExternNode * entryExternNodeConstructor(const char* title, nodeType thisNodeType){
+entryExternNode * entryExternNodeConstructor(const char* title, nodeType thisNodeType, int instructionCounter){
     entryExternNode* newNode = (entryExternNode*) malloc(sizeof(entryExternNode));
     newNode->error = isNotLegalTitle(title);
     newNode->type = thisNodeType;
     newNode->amountOfLines = ZEROISE_COUNTER;
+    newNode->instructionCounter = instructionCounter;
     if(newNode->error == valid){
         newNode->title = (char*) malloc((strlen(title) + PADDING_CELL_LEN) * sizeof(char));
         strcpy(newNode->title, title);
