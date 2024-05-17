@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
 #include "firstPassMainFile.h"
 #include "filesUtil.h"
 #include "globaldefinitionsNStructures.h"
@@ -18,7 +17,6 @@ void runFirstPass(char *fileName,
                   labelOrDefinitionList* openingLabelNDefinitionList,
                   entryExternList * entryNExternalList,
                   memoryImage* fileMemoryImage){
-    int i = 0;
     FILE *filePointer = openFileByName(fileName, AS_ENDING, "r");
     assemblyLineCode *newAssemblyLine;
     int instructionCounter = ZEROISE_COUNTER;
@@ -34,7 +32,8 @@ void runFirstPass(char *fileName,
                                                entryNExternalList,
                                                fileMemoryImage);
     }
-    externEntryListUpdating(entryNExternalList, openingLabelNDefinitionList);
+    externEntryListUpdating(entryNExternalList, openingLabelNDefinitionList,
+                            fileMemoryImage->currentlyWordsInCodeImage);
     dataImageEndOfFirstPassUpdating(fileMemoryImage, openingLabelNDefinitionList);
     fclose(filePointer);
 }
@@ -136,11 +135,12 @@ void dataImageEndOfFirstPassUpdating(memoryImage *fileMemoryImage,
 
 
 void externEntryListUpdating(entryExternList *entryNExternalList,
-                             labelOrDefinitionList *openingLabelNDefinitionList){
+                             labelOrDefinitionList *openingLabelNDefinitionList,
+                             size_t wordsInCodeImage){
     entryExternNode * current = entryNExternalList->head;
     while (current != NULL){
         if(current->type == entryDeclaration)
-            entryListUpdating(current, openingLabelNDefinitionList);
+            entryListUpdating(current, openingLabelNDefinitionList, wordsInCodeImage);
 
         else/* (current->type == externDeclaration)*/
             setErrorIfExternDeclarationAppearAsInnerLabelOrDefinition(current, openingLabelNDefinitionList);
@@ -150,11 +150,20 @@ void externEntryListUpdating(entryExternList *entryNExternalList,
 
 }
 
-void entryListUpdating(entryExternNode * current, labelOrDefinitionList *openingLabelNDefinitionList){
+void entryListUpdating(entryExternNode * current,
+                       labelOrDefinitionList *openingLabelNDefinitionList, size_t wordsInCodeImage){
     if (isTileAppearInLabelList(current->title, openingLabelNDefinitionList)){
         labelNode* pointer = getNodeIfAppearInLabelList(current->title, openingLabelNDefinitionList);
-        if(pointer->labelType != mDefine) /* <=> code image or data image*/
+        if(pointer->labelType == code) /* <=> code image or data image*/
             constructEntryDeclaredLine(current, pointer->value.PC);
+        else if (pointer->labelType == data){
+            int PCAsInt;
+            char finalPcValue[CHARS_NEEDED_TO_REPRESENT_LAST_MEMORY_LINE];
+            char* endPointer;
+            PCAsInt = (int)(strtol(pointer->value.PC, &endPointer, DECIMAL) + wordsInCodeImage + FIRST_FREE_WORD);
+            sprintf(finalPcValue, "%d", PCAsInt);
+            constructEntryDeclaredLine(current, finalPcValue);
+        }
         else /*pointer->labelType == mDefine*/{
             current->error = cantUseEntryDeclarationToReferToDefinitionName;
             pointer->labelError = cantUseEntryDeclarationToReferToDefinitionName;

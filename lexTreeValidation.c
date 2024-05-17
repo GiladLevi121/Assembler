@@ -118,6 +118,7 @@ void setErrorForInCompatibleAddressingMethods(lexTree* thisLexTree,
     commandOpcode thisOpcode = thisLexTree->content.orderContent.opcode;
     setErrorForImmediateErrorIfNeeded(thisLexTree, sourceOperandAddressMethod,
                                       destinationOperandAddressMethod);
+    setErrorForFixedAddressMethodIfNeeded(thisLexTree, sourceOperandAddressMethod,destinationOperandAddressMethod);
     /* AddressMethods are legal, check combination*/
     if (thisOpcode == mov || thisOpcode == add || thisOpcode == sub)
         setErrorForMovAddSubIfNeeded(thisLexTree, sourceOperandAddressMethod,
@@ -211,6 +212,32 @@ void setErrorForPrnJsrIfNeeded(lexTree* thisLexTree,
         thisLexTree->error = inCompatibleOperand;
     if(destinationOperandAddressMethod == emptyOperand)
         thisLexTree->error = missingOperand;
+}
+
+errorType getErrorIfFixedAddressMethodArrayNameIllegal(const char* operand){
+    const char* indexOfSquareBrackets = strchr(operand, '[');
+    int arrayNameLength = (int)(indexOfSquareBrackets - operand);
+    char* arrayName = (char*)malloc(sizeof (char) * (arrayNameLength + PADDING_CELL_LEN));
+    strncpy(arrayName, operand, arrayNameLength + PADDING_CELL_LEN);
+    arrayName[arrayNameLength] = END_OF_STRING;
+    if(isAReservedWord(arrayName))
+        return forbiddenUseOfReservedWord;
+    return valid;
+}
+
+void setErrorForFixedAddressMethodIfNeeded(lexTree *thisLexTree,addressMethod sourceOperandAddressMethod,
+                                           addressMethod destinationOperandAddressMethod){
+    if(thisLexTree->error != valid)
+        return;
+    if (sourceOperandAddressMethod == fixedIndexAddressing){
+        thisLexTree->error = getErrorIfFixedAddressMethodArrayNameIllegal(
+                thisLexTree->content.orderContent.sourceOperand);
+        if (thisLexTree->error != valid)
+            return;
+    }
+    if(destinationOperandAddressMethod == fixedIndexAddressing)
+        thisLexTree->error = getErrorIfFixedAddressMethodArrayNameIllegal(
+                thisLexTree->content.orderContent.destinationOperand);
 }
 
 /*------------------------------direction validation functions------------------------------*/

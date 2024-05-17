@@ -24,7 +24,7 @@ void secondPassOrderCodingInToMemoryIfNeeded(lexTree *thisLexTree,
                                                    destAddressMethod, entryExternLabelList, fileMemoryImage,
                                                    openingLabelNDefinitionList);
     }else
-        fileMemoryImage->secondPassCodeImageCounter +=/* ONE_WORD_TO_CODE + /*First coded word*/
+        fileMemoryImage->secondPassCodeImageCounter +=
                 additionalWordsIncrementToPC(destAddressMethod, sourceAddressMethod);
 }
 
@@ -59,7 +59,10 @@ void reCodingThisSpacesHolder(const char* operand, addressMethod OperandAddressM
                               int *offset){
     char* thisWord;
     if (OperandAddressMethod == directAddressing){
-        thisWord = getSecondPassBinaryWord(operand, entryExternLabelList, openingLabelNDefinitionList);
+        thisWord = getSecondPassBinaryWord(
+                operand,
+                entryExternLabelList,openingLabelNDefinitionList,
+                *offset + (int)fileMemoryImage->secondPassCodeImageCounter + FIRST_FREE_WORD);
         reCodeThisWordToMemory(thisWord, fileMemoryImage, offset);
         *offset = ONE_WORD_TO_CODE;
     }
@@ -72,7 +75,7 @@ void reCodingThisSpacesHolder(const char* operand, addressMethod OperandAddressM
         arrayName = (char*)malloc(sizeof (char) * (arrayNameLength + PADDING_CELL_LEN));
         strncpy(arrayName, operand, arrayNameLength + PADDING_CELL_LEN);
         arrayName[arrayNameLength] = END_OF_STRING;
-        thisWord = getSecondPassBinaryWord(arrayName, entryExternLabelList, openingLabelNDefinitionList);
+        thisWord = getSecondPassBinaryWord(arrayName, entryExternLabelList, openingLabelNDefinitionList, *offset);
         free(arrayName);
         reCodeThisWordToMemory(thisWord, fileMemoryImage, offset);
         *offset = TWO_WORD_TO_CODE;
@@ -123,10 +126,15 @@ void resetSecondPassInnerIndex(int *innerPcIndex, addressMethod thisAddressMetho
 
 
 char* getSecondPassBinaryWord(const char* operandTitle, entryExternList *entryExternLabelList,
-                              labelOrDefinitionList* openingLabelNDefinitionList){
+                              labelOrDefinitionList* openingLabelNDefinitionList, int offset){
     char* ARE, *addressValue;
     char* newWord = (char*) malloc((IMAGE_WORD_IN_MEMORY_LENGTH + PADDING_CELL_LEN) * sizeof(char));
     if(isTileAppearInEntryExternAsExternDeclarationList(operandTitle, entryExternLabelList)){
+        char* usedLine = (char*) malloc(CHARS_NEEDED_TO_REPRESENT_LAST_MEMORY_LINE * sizeof (char));
+        sprintf(usedLine, "%d", offset);
+        entryExternNode * externNode = nodeWithThisTitle(operandTitle, entryExternLabelList);
+        addLineToExternUsedLines(externNode, usedLine);
+        free(usedLine);
         ARE = "01";
         addressValue = (char*) malloc((MEMORY_WORD_LENGTH_IN_CODE_IMAGE + PADDING_CELL_LEN) * sizeof (char));
         strcpy(addressValue, "000000000000");

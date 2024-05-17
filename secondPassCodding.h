@@ -35,7 +35,8 @@ void reCodingThisSpacesHolder(const char *, addressMethod, entryExternList *, la
                               memoryImage *, int *);
 
 
-char* getSecondPassBinaryWord(const char* , entryExternList *, labelOrDefinitionList* );
+/* Return binary representation*/
+char* getSecondPassBinaryWord(const char* , entryExternList *, labelOrDefinitionList*, int );
 
 /* Recoding the new word to code image to + offset index*/
 void reCodeThisWordToMemory(char*, memoryImage*, const int*);

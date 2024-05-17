@@ -8,7 +8,7 @@
 #include "globaldefinitionsNStructures.h"
 #include "line.h"
 
-FILE *openFileByName(char *fileName, char *fileEnding, char *permissions) {
+FILE *openFileByName(const char *fileName, char *fileEnding, char *permissions) {
     FILE *filePointer;
     char *targetFileName = connectFileNameWithEnding(fileName, fileEnding);
     filePointer = fopen(targetFileName, permissions);
@@ -19,7 +19,7 @@ FILE *openFileByName(char *fileName, char *fileEnding, char *permissions) {
     return filePointer;
 }
 
-char *connectFileNameWithEnding(char *fileName, char *fileEnding) {
+char *connectFileNameWithEnding(const char *fileName, char *fileEnding) {
     size_t fileLength = strlen(fileName) + strlen(fileEnding);
     char *targetFileName = malloc((fileLength + PADDING_CELL_LEN) * sizeof(char));
     if (targetFileName != NULL) {
@@ -43,3 +43,12 @@ assemblyLineCode *getNextAssemblyLine(FILE *filePointer) {
     setAssemblyLineCode(newAssemblyLineCode, buffer);
     return newAssemblyLineCode;
 }
+
+
+void writeStringToFile(FILE* filePointer, const char* line){
+    fprintf(filePointer, "%s", line);
+}
+
+
+
+

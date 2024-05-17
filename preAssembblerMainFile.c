@@ -1,5 +1,6 @@
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "preAssembblerMainFile.h"
 #include "filesUtil.h"
@@ -17,7 +18,11 @@ void runPreAssembler(char *fileName){
         return;
     }
     while ((newAssemblyLine = getNextAssemblyLine(filePointerToRead)) != NULL){
-
+        /*preAssemblerEveryLineOfAssemblyOperations(newAssemblyLine)*/
+        char* stringToWrite;
+        if(newAssemblyLine->status == startOfMacro)
+            /*addMacroToList*/
+        if(newAssemblyLine->status != commentLine)
     }
 }
 
@@ -30,7 +35,7 @@ void setAssemblyLineOfCodeStatusInPreAssemblerPass(assemblyLineCode* newAssembly
         newAssemblyLine->status = emptyLine;
     else if (isCommentLine(newAssemblyLine))
         newAssemblyLine->status = commentLine;
-
+    else (isBeginingOfMacro(newAssemblyLine))
 }
 
 boolean isEmptyLine(assemblyLineCode *newAssemblyLine){

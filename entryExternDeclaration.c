@@ -42,10 +42,10 @@ void freeEntryExternNode(entryExternNode * thisNodeToFree){
     thisNodeToFree = NULL;
 }
 
-void addLineToExternUsedLines(entryExternNode * thisNode, const char* newLine){
+void addLineToExternUsedLines(entryExternNode * thisNode, const char* newLineThisNodeUsed){
     thisNode->content.usedLines[thisNode->amountOfLines] =
-            (char*)malloc(strlen(newLine) * sizeof(char));
-    strcpy(thisNode->content.usedLines[thisNode->amountOfLines], newLine);
+            (char*)malloc((strlen(newLineThisNodeUsed) + PADDING_CELL_LEN) * sizeof(char));
+    strcpy(thisNode->content.usedLines[thisNode->amountOfLines], newLineThisNodeUsed);
     thisNode->amountOfLines++;
     if(thisNode->amountOfLines == INITIATE_SIZE_FOR_USED_LINE_EXTERN_LABEL){
         thisNode->content.usedLines = (char**) realloc(thisNode->content.usedLines,
@@ -68,6 +68,12 @@ void constructEntryDeclaredLine(entryExternNode* thisNode, const char* lineDecla
     thisNode->amountOfLines ++;
 }
 
+char* getDeclaredEntryLine(entryExternNode* thisEntryNode){
+    if(thisEntryNode->type != entryDeclaration)
+        return NULL;
+    return thisEntryNode->content.declaredLine;
+}
+
 /*------------------------------list------------------------------*/
 
 entryExternList* entryExternListConstructor(){
@@ -78,7 +84,6 @@ entryExternList* entryExternListConstructor(){
     return newList;
 }
 
-
 boolean setErrorIfEqualNodesNames(entryExternNode* newNode, entryExternNode* nodeToCmp){
     if (!strcmp(newNode->title, nodeToCmp->title)) {
         newNode->error = entryOrExternDeclarationCantAppearTwice;
@@ -87,22 +92,23 @@ boolean setErrorIfEqualNodesNames(entryExternNode* newNode, entryExternNode* nod
     return false;
 }
 
-
 void addNodeToEntryExternList(entryExternList* thisList, entryExternNode* nodeToAdd){
     entryExternNode *current = thisList->head;
     nodeToAdd->next = NULL;
+    nodeToAdd->lastOfItsTypeInList = true;
     if(thisList->head == NULL){
         nodeToAdd->next = NULL;
-        thisList->head = /*(entryExternNode*) */nodeToAdd;
+        thisList->head = nodeToAdd;
         return;
     }
     while (current->next != NULL){
         setErrorIfEqualNodesNames(nodeToAdd, current);
+        if (current->type == nodeToAdd->type)
+            current->lastOfItsTypeInList = false;
         current = (entryExternNode *) current->next;
     }
     current->next = (struct entryExternNode *)nodeToAdd;
 }
-
 
 void deallocatingEntryExternList(entryExternList* listToFree){
     entryExternNode *currentHead = listToFree->head;
@@ -137,3 +143,4 @@ entryExternNode * nodeWithThisTitle(const char *titleToSearch, entryExternList *
     }
     return NULL;
 }
+

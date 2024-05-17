@@ -30,7 +30,7 @@ boolean isNegative(int);
 /*perform two's complement if negative number */
 void complementToTwo(char *, int);
 
-/* Convert memory word in binary to 4 base word*/
+/* Convert memory word in binary to 4 base word, adds '\n' and after '\0'*/
 char* memoryWordToEncrypted4Base(const char *);
 
 /* Returns encrypted value of input char*/

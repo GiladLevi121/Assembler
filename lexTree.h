@@ -116,6 +116,8 @@ void freeDataDirectionContent(lexTree* );
 
 /* Returns how many arguments in dataContent, without the NULL terminator*/
 size_t getArgumentAmountInDataContent(lexTree*);
+
+
 /*------------------------------orders functions------------------------------*/
 
 

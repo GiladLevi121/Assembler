@@ -14,6 +14,7 @@ typedef enum{
 
 
 typedef struct {
+    boolean lastOfItsTypeInList;
     int instructionCounter;
     errorType error;
     char* title;
@@ -54,6 +55,9 @@ void freeEntryExternNode(entryExternNode *);
 void constructExternUsedLines(entryExternNode* thisNode);
 
 void constructEntryDeclaredLine(entryExternNode* , const char* );
+
+/* Return declaredLine or null if this.type == extern*/
+char* getDeclaredEntryLine(entryExternNode*);
 
 /*------------------------------list functions------------------------------*/
 

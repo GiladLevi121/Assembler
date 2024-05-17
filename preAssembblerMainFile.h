@@ -4,6 +4,8 @@
 
 #include "line.h"
 
+#define CHARS_TO_WRITE_10_LINES (10 * 80 +)
+
 /* PreAssembler main function.*/
 void runPreAssembler(char *);
 

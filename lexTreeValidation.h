@@ -58,6 +58,11 @@ void setErrorForJmpBneJsrIfNeeded(lexTree*, addressMethod, addressMethod);
 /* Checker for "setErrorForInCompatibleAddressingMethods" case*/
 void setErrorForPrnJsrIfNeeded(lexTree*, addressMethod, addressMethod);
 
+/* sets error in lexTree if invalid naming assembly array*/
+void setErrorForFixedAddressMethodIfNeeded(lexTree *,addressMethod, addressMethod);
+
+/* Check if array name isn't reserved word*/
+errorType getErrorIfFixedAddressMethodArrayNameIllegal(const char*);
 /*------------------------------direction validation functions------------------------------*/
 
 /* Main function for direction validation*/

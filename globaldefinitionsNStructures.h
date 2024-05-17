@@ -92,6 +92,7 @@ typedef enum {
     commaCantBeTheFirsCharAfterDirectionDeclaration,
     missingQuotationMarksInStringDeclaration,
 
+    forbiddenUseOfReservedWord,
     illegalNumber,
     definitionNamingIsIllegal,
     MissingEqualKnotInDefineSentence,

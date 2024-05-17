@@ -69,7 +69,8 @@ void complementToTwo(char *binaryStr, int stringLength){
 char* memoryWordToEncrypted4Base(const char *thisWord){
     int counter = ZEROISE_COUNTER;
     int index = ZEROISE_COUNTER;
-    char* encryptedFourBaseWord = (char*) malloc((BASE_FOUR_WORD_LENGTH + PADDING_CELL_LEN) * sizeof(char));
+    char* encryptedFourBaseWord = (char*) malloc((
+            BASE_FOUR_WORD_LENGTH + PADDING_CELL_LEN + PADDING_CELL_LEN) * sizeof(char));
     for (; counter < IMAGE_WORD_IN_MEMORY_LENGTH; counter += TWO_WORDS_AT_A_TIME) {
         int firstDigit = thisWord[counter] - '0';
         int secondDigit = thisWord[counter + ANOTHER_BIT] - '0';
@@ -77,7 +78,8 @@ char* memoryWordToEncrypted4Base(const char *thisWord){
         char fourBaseValue = (char)('0' + combineDigit);
         encryptedFourBaseWord[index++] = getEncryptedCharacter(fourBaseValue);
     }
-    encryptedFourBaseWord[index] = END_OF_STRING;
+    encryptedFourBaseWord[index] = END_OF_ROW;
+    encryptedFourBaseWord[++index] = END_OF_STRING;
     return encryptedFourBaseWord;
 }
 
