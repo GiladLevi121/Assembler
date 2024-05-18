@@ -6,6 +6,7 @@
 #include "memoryImage.h"
 #include "entryExternDeclaration.h"
 #include "secondPassMainFile.h"
+#include "preAssembblerMainFile.h"
 
 
 int main(int argc, char *argv[]) {
@@ -13,15 +14,21 @@ int main(int argc, char *argv[]) {
     memoryImage *fileMemoryImage;
     labelOrDefinitionList *openingLabelNDefinitionList;
     entryExternList* entryExternLabelList;
+    boolean fileErrorDetected;
 
+
+    fileErrorDetected = false;
+    macroList * thisMacrosList = macroListConstructor();
     fileMemoryImage = memoryImageConstructor();
     openingLabelNDefinitionList = labelOrDefinitionListConstructor();
     entryExternLabelList = entryExternListConstructor();
 
-    runFirstPass(argv[1], openingLabelNDefinitionList, entryExternLabelList, fileMemoryImage);
-    runSecondPass(argv[1], openingLabelNDefinitionList, entryExternLabelList, fileMemoryImage);
+    if (!runNReturnStatusOfPreAssembler(argv[1], thisMacrosList)){ /* enters if didn't find error*/
+        runFirstPass(argv[1], openingLabelNDefinitionList, entryExternLabelList, fileMemoryImage, thisMacrosList);
+        runSecondPass(argv[1], openingLabelNDefinitionList, entryExternLabelList, fileMemoryImage);
+    }
 
-
+    deAllocateMacroList(thisMacrosList);
     deallocatingEntryExternList(entryExternLabelList);
     deallocateLabelListElements(openingLabelNDefinitionList);
     freeMemoryImage(fileMemoryImage);

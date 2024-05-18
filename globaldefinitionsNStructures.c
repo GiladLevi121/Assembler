@@ -14,7 +14,7 @@ const char* reservedAssemblyWords[] = {"mov", "cmp","add","sub",
                                        "r1", "r2", "r3","r4",
                                        "r5","r6","r7", ".string",
                                        ".data",".entry",
-                                       ".define",".extern"};
+                                       ".define",".extern", "mcr", "endmcr"};
 
 
 

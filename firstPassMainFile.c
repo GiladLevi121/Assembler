@@ -16,7 +16,8 @@
 void runFirstPass(char *fileName,
                   labelOrDefinitionList* openingLabelNDefinitionList,
                   entryExternList * entryNExternalList,
-                  memoryImage* fileMemoryImage){
+                  memoryImage* fileMemoryImage,
+                  macroList* thisMacroList){
     FILE *filePointer = openFileByName(fileName, AS_ENDING, "r");
     assemblyLineCode *newAssemblyLine;
     int instructionCounter = ZEROISE_COUNTER;
@@ -26,11 +27,9 @@ void runFirstPass(char *fileName,
         return;
     }
     while ((newAssemblyLine = getNextAssemblyLine(filePointer)) != NULL){
-        firstPassEveryLineOfAssemblyOperations(newAssemblyLine,
-                                               ++instructionCounter,
-                                               openingLabelNDefinitionList,
-                                               entryNExternalList,
-                                               fileMemoryImage);
+        firstPassEveryLineOfAssemblyOperations(newAssemblyLine, ++instructionCounter,
+                                               openingLabelNDefinitionList, entryNExternalList,
+                                               fileMemoryImage, thisMacroList);
     }
     externEntryListUpdating(entryNExternalList, openingLabelNDefinitionList,
                             fileMemoryImage->currentlyWordsInCodeImage);
@@ -42,7 +41,7 @@ void runFirstPass(char *fileName,
 void firstPassEveryLineOfAssemblyOperations(assemblyLineCode *newAssemblyLine, int instructionCounter,
                          labelOrDefinitionList* openingLabelNDefinitionList,
                          entryExternList* entryNExternalList,
-                         memoryImage* fileMemoryImage){
+                         memoryImage* fileMemoryImage, macroList* thisMacroList){
 
     lexTree *thisLexTree = lexTreeConstructor(newAssemblyLine, instructionCounter,
                                               fileMemoryImage->currentlyWordsInDataImage,

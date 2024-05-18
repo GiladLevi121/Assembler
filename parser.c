@@ -113,6 +113,19 @@ char* getTokenUpToWhiteSpace(const char* str){
     return token;
 }
 
+char* getTokenWithoutFirstWordAndFollowedWhiteSpaces(const char* str){
+    char *token = (char*)malloc(sizeof (char) * MAX_CHARS_IN_LINE);
+    int firstNonWhiteSpaceIndex = findFirstNonWhitespaceIndex(str);
+    int counter = ZEROISE_COUNTER;
+    while (!isspace(str[firstNonWhiteSpaceIndex + counter])){
+        if(firstNonWhiteSpaceIndex + counter == strlen(str))
+            return NULL;
+        counter++;
+    }
+    strcpy(token, &str[firstNonWhiteSpaceIndex + counter]);
+    return token;
+}
+
 boolean isLegalXBitsNumber(const char* potentialNumber, int minRang, int maxRang, boolean ignoreFlag){
     int beginning, endingIndex, counter = ZEROISE_COUNTER;
     char *endingPointer;
@@ -187,30 +200,6 @@ char* trimLeadingNEndingWhitespace(const char* str) {
     strncpy(trimmedStr, &str[start], (strLength - start - end));
     trimmedStr[(strLength - start - end)] = END_OF_STRING;
     return trimmedStr;
-    /*size_t len;
-    size_t start = FIRST_INDEX;
-    size_t end;
-    char* trimmedStr;
-    size_t trimmedLen;
-    if (str == NULL)
-        return NULL;
-    len = strlen(str);
-    if (len == ZERO_CHARACTERS)
-        return "";
-
-    while (isspace(str[start])) {
-        start++;
-    }
-    end = len - PADDING_CELL_LEN;
-    while (end > start && isspace(str[end])) {
-        end--;
-    }
-    trimmedLen = end - start + PADDING_CELL_LEN;
-    trimmedStr = (char*)malloc((trimmedLen + PADDING_CELL_LEN) * sizeof(char));
-    memcpy(trimmedStr, &str[start], trimmedLen);
-    trimmedStr[trimmedLen] = END_OF_STRING;
-
-    return trimmedStr;*/
 }
 
 boolean isEmptyString(const char *str) {

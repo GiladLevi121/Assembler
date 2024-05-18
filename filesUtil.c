@@ -10,7 +10,7 @@
 
 FILE *openFileByName(const char *fileName, char *fileEnding, char *permissions) {
     FILE *filePointer;
-    char *targetFileName = connectFileNameWithEnding(fileName, fileEnding);
+    char *targetFileName = connect2strings(fileName, fileEnding);
     filePointer = fopen(targetFileName, permissions);
     if (filePointer == NULL) {
         return NULL;
@@ -19,7 +19,7 @@ FILE *openFileByName(const char *fileName, char *fileEnding, char *permissions) 
     return filePointer;
 }
 
-char *connectFileNameWithEnding(const char *fileName, char *fileEnding) {
+char *connect2strings(const char *fileName, char *fileEnding) {
     size_t fileLength = strlen(fileName) + strlen(fileEnding);
     char *targetFileName = malloc((fileLength + PADDING_CELL_LEN) * sizeof(char));
     if (targetFileName != NULL) {
@@ -44,10 +44,11 @@ assemblyLineCode *getNextAssemblyLine(FILE *filePointer) {
     return newAssemblyLineCode;
 }
 
-
 void writeStringToFile(FILE* filePointer, const char* line){
     fprintf(filePointer, "%s", line);
 }
+
+
 
 
 

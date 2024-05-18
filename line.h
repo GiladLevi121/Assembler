@@ -12,6 +12,7 @@ typedef enum {
     lineOutOfBounds,
     emptyLine, /* \n, spaces or \t, shorter then 80 chars.*/
     commentLine,
+    useOfMacro,
     startOfMacro,
     endOfMacro,
 }lineStatus;

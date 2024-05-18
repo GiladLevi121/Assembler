@@ -9,6 +9,9 @@
 #define INIT_DEFAULT_VALUE (-1)
 
 
+/* Return the token without the first word seperated with white space*/
+char* getTokenWithoutFirstWordAndFollowedWhiteSpaces(const char* );
+
 int findFirstNonWhitespaceIndexFromEnd(const char*);
 
 int findFirstNonWhitespaceIndex(const char*);

@@ -16,7 +16,8 @@ lineStatus getContentStatus(assemblyLineCode *thisAssemblyLineCode){
     int counter = ZEROISE_COUNTER;
     int lineLength = (int)strlen(thisAssemblyLineCode->content);
     /*case that there are 80 char + /n in the 81nt => status is valid*/
-    if((lineLength == LINE_LENGTH_WITH_N) && (thisAssemblyLineCode->content[lineLength]) == '\n')
+    if((lineLength == LINE_LENGTH_WITH_N + PADDING_CELL_LEN) &&
+    (thisAssemblyLineCode->content[LINE_LENGTH_WITH_N]) == END_OF_ROW)
         return thisLineStatus;
     if(lineLength > INPUT_LINE_LENGTH)
         thisLineStatus = lineOutOfBounds;
