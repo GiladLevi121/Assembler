@@ -7,7 +7,7 @@ The assembler mustn't stop it's execution under no circumstances, and creats all
 
 ## Further explantion
 
-The input to the Assembler is(are) a file(n) name in the project directory, without any ending. The Assembler has three pass over the source code three times and creates the necessary output files.
+The input to the Assembler is(are) a file(s) name in the project directory, without any ending. The Assembler has three pass over the source code three times and creates the necessary output files.
 In any time the Assembler finds an error in the current working file, it reports aboute it, don't continue 
 
 ### PreAssembly pass
