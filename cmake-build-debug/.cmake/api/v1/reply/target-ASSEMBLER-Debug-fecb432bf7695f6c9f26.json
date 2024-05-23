@@ -13,7 +13,8 @@
 	{
 		"commands" : 
 		[
-			"add_executable"
+			"add_executable",
+			"add_compile_options"
 		],
 		"files" : 
 		[
@@ -27,6 +28,12 @@
 			{
 				"command" : 0,
 				"file" : 0,
+				"line" : 8,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
 				"line" : 6,
 				"parent" : 0
 			}
@@ -39,6 +46,10 @@
 			[
 				{
 					"fragment" : "-g -fdiagnostics-color=always"
+				},
+				{
+					"backtrace" : 2,
+					"fragment" : "-Wall"
 				},
 				{
 					"fragment" : "-std=gnu90"
@@ -67,7 +78,14 @@
 				17,
 				19,
 				22,
-				24
+				24,
+				26,
+				28,
+				30,
+				31,
+				33,
+				35,
+				37
 			]
 		}
 	],
@@ -116,7 +134,14 @@
 				17,
 				19,
 				22,
-				24
+				24,
+				26,
+				28,
+				30,
+				31,
+				33,
+				35,
+				37
 			]
 		},
 		{
@@ -134,7 +159,14 @@
 				18,
 				20,
 				21,
-				23
+				23,
+				25,
+				27,
+				29,
+				32,
+				34,
+				36,
+				38
 			]
 		}
 	],
@@ -248,12 +280,12 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "codingToCodeImageFirstPass.c",
+			"path" : "firstPassCoding.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
-			"path" : "codingToCodeImageFirstPass.h",
+			"path" : "firstPassCoding.h",
 			"sourceGroupIndex" : 1
 		},
 		{
@@ -277,6 +309,83 @@
 			"compileGroupIndex" : 0,
 			"path" : "lexTree.c",
 			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "memoryImage.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "memoryImage.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "secondPassMainFile.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "secondPassMainFile.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "entryExternDeclaration.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "entryExternDeclaration.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "secondPassLexTreeValidation.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "secondPassLexTreeValidation.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "preAssembblerMainFile.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "preAssembblerMainFile.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "macroUtiles.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "macroUtiles.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "secondPassCodding.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "secondPassCodding.h",
+			"sourceGroupIndex" : 1
 		}
 	],
 	"type" : "EXECUTABLE"
