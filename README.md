@@ -20,4 +20,4 @@ In the "First pass", the Assembler interprest and validates most of the extends 
 In the second pass the Assembly interprets the, now-known-labels, saves it to the the data to the memory image, and "encrypte" the data. At the end it creates the output files and save them in the project directiory.
 
 
-### Repo has a full assignment description pdf file.
+### Repo has a full assignment description pdf file: "Assembler assignment (Hebrew)".
