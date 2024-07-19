@@ -7,8 +7,8 @@ The assembler mustn't stop it's execution under no circumstances, and creats all
 
 ## Further explantion
 
-The input to the Assembler is(are) a file(s) name in the project directory, without any ending. The Assembler has three pass over the source code three times and creates the necessary output files.
-In any time the Assembler finds an error in the current working file, it reports aboute it, don't continue 
+The input to the Assembler is(are) a file(s) name in the project directory, without any file ending. The Assembler has three passes over the source code, and creates the necessary output files for the next pass.
+In any time the Assembler finds an error in the current working file, it reports aboute it, and continue to next file.
 
 ### PreAssembly pass
 The first time the Assembler pass the assembly code "PreAssembly", it creates an "extension" source code file. It deletes comments, empty rows, and macros delarations, and extendes the macros.
@@ -18,3 +18,6 @@ In the "First pass", the Assembler interprest and validates most of the extends 
 
 ### Second pass 
 In the second pass the Assembly interprets the, now-known-labels, saves it to the the data to the memory image, and "encrypte" the data. At the end it creates the output files and save them in the project directiory.
+
+
+### Repo has a full assignment description pdf file.
